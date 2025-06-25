@@ -1,0 +1,168 @@
+// =============================================
+//      Схема БД для проекта "Печник" v3.0
+//      (с компонентной моделью конструктора)
+// =============================================
+Project "Stovemaker" {
+  database_type: 'PostgreSQL'
+  Note: 'Схема БД, спроектированная для гибкого конструктора печей.'
+}
+
+
+// --- Перечисления (Enums) ---
+
+Enum user_role {
+  CUSTOMER  // Заказчик
+  CRAFTSMAN // Печник (Администратор)
+}
+
+Enum order_status {
+  DRAFT       // Черновик в личном кабинете, не виден Печнику
+  PLACED      // Размещен, ожидает реакции Печника
+  IN_PROGRESS // В работе
+  COMPLETED   // Завершен
+  CANCELLED   // Отменен
+}
+
+
+// --- Основные таблицы пользователей и заказов ---
+
+Table users {
+  id bigserial [pk]
+  full_name varchar(255) [not null]
+  email varchar(255) [unique, not null]
+  phone_number varchar(50) [unique, not null]
+  password_hash varchar [not null]
+  role user_role [not null, default: 'CUSTOMER']
+  created_at timestamp [not null, default: `now()`]
+}
+
+
+Table orders {
+  id bigserial [pk]
+  user_id bigint [ref: > users.id, not null]
+  configuration_id bigint [ref: > configurations.id, not null]
+  
+  status order_status [not null, default: 'PLACED']
+  
+  customer_name varchar(255) [not null]
+  customer_phone varchar(50) [not null]
+  object_address text
+  customer_comment text
+  
+  final_price decimal(10, 2)
+  
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+}
+
+
+// --- "Мозг" конструктора: типы, компоненты и их варианты ---
+
+Table stove_types {
+  id int [pk, increment]
+  name varchar(255) [unique, not null]
+  description text
+  base_price decimal(10, 2) [not null, default: 0, note: 'Базовая стоимость сборки, без материалов']
+  image_url varchar
+  Note: 'Тип строения: Помпейская печь, Барбекю и т.д.'
+}
+
+
+// Структурные части, из которых состоит каждый тип строения.
+Table components {
+  id int [pk, increment]
+  stove_type_id int [ref: > stove_types.id, not null]
+  
+  name varchar(255) [not null, note: 'Например: "Основание", "Купол", "Топка", "Облицовка купола"']
+  description text
+  is_required boolean [not null, default: true, note: 'Обязателен ли выбор для этого компонента?']
+  allow_multiple_choices boolean [not null, default: false, note: 'Можно ли выбрать несколько вариантов (например, для облицовки)?']
+  
+  Note: 'Компоненты - это шаги в конструкторе.'
+}
+
+
+// Конкретные варианты реализации для каждого компонента.
+Table component_options {
+  id int [pk, increment]
+  component_id int [ref: > components.id, not null]
+  
+  name varchar(255) [not null, note: 'Например: "Из красного кирпича", "На металлическом каркасе"']
+  price_modifier decimal(10, 2) [not null, default: 0, note: 'Как этот выбор влияет на цену (может быть и отрицательным)']
+  image_url varchar
+  is_default boolean [not null, default: false, note: 'Выбран ли этот вариант по умолчанию?']
+
+  Note: 'Это "кнопки" выбора для каждого компонента.'
+}
+
+
+// --- Таблицы для хранения пользовательских конфигураций ---
+
+// Конфигурация - это "контейнер" для пользовательского выбора.
+Table configurations {
+  id bigserial [pk]
+  stove_type_id int [ref: > stove_types.id, not null]
+  author_id bigint [ref: <> users.id]
+  
+  is_template boolean [not null, default: false]
+  is_locked boolean [not null, default: false, note: 'Заблокирована, т.к. привязана к заказу']
+  
+  name varchar(255)
+  created_at timestamp [not null, default: `now()`]
+}
+
+
+// Хранит конкретный выбор пользователя для его конфигурации.
+Table configuration_choices {
+  configuration_id bigint [ref: > configurations.id]
+  option_id int [ref: > component_options.id]
+  quantity int [note: 'Используется, если выбор подразумевает количество. Чаще всего NULL.']
+  
+  indexes {
+    (configuration_id, option_id) [pk]
+  }
+}
+
+
+// --- Таблицы для доп. опций, портфолио и избранного ---
+
+// Общие доп. услуги, не привязанные к конкретному компоненту
+Table addons {
+  id int [pk, increment]
+  name varchar(255) [unique, not null]
+  description text
+  price decimal(10, 2) [not null]
+  Note: 'Например, "Доставка", "Уборка территории после строительства".'
+}
+
+
+// Какие доп. услуги выбраны для конфигурации
+Table configuration_addons {
+  configuration_id bigint [ref: > configurations.id]
+  addon_id int [ref: > addons.id]
+  
+  indexes {
+    (configuration_id, addon_id) [pk]
+  }
+}
+
+
+Table favorites {
+  user_id bigint [ref: > users.id]
+  configuration_id bigint [ref: > configurations.id]
+  added_at timestamp [not null, default: `now()`]
+  
+  indexes {
+    (user_id, configuration_id) [pk] 
+  }
+}
+
+
+Table portfolio_items {
+  id int [pk, increment]
+  configuration_id bigint [ref: > configurations.id, not null, note: 'Должна ссылаться на конфигурацию с is_template=true']
+  title varchar(255) [not null]
+  description text
+  main_image_url varchar
+  completion_date date
+}

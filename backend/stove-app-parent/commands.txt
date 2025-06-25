@@ -1,0 +1,39 @@
+
+// запускаем из дериктории docker-compose.yml файла
+docker-compose up -d
+
+// посмотреть логи
+docker-compose logs -f kafka
+docker-compose logs -f zookeeper
+
+// создание топиков
+docker-compose exec kafka kafka-topics --create \
+  --topic t1_demo_metrics \
+  --bootstrap-server localhost:9092 \
+  --replication-factor 1 \
+  --partitions 1
+
+// какие топики у нас есть
+t1_demo_metrics
+t1_demo_transaction_accept
+t1_demo_transaction_result
+t1_demo_transactions
+t1_demo_errors
+
+// просмотреть какие топики есть
+docker-compose exec kafka kafka-topics --list --bootstrap-server localhost:9092
+
+docker-compose stop #остановить
+docker-compose down #остановить и удалить
+docker-compose down -v #остановить, удалить и volumes тоже удалить
+
+// принимаем сообщения из топика
+docker-compose exec kafka /usr/bin/kafka-console-consumer \
+  --bootstrap-server localhost:9092 \
+  --topic t1_demo_metrics \
+  --from-beginning \
+  --property print.headers=true \
+  --property print.key=true \
+  --property value.deserializer=org.apache.kafka.common.serialization.StringDeserializer
+
+docker-compose down -v --rmi all --remove-orphans

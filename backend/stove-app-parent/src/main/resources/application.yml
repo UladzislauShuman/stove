@@ -1,0 +1,57 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: stove-app
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/stove-postgres-db
+    username: postgres
+    password: 12341234
+
+
+  # БД
+  ################################
+  # пока для быстроты разработки использую ddl-auto: update
+  # это позволяет Hibernate автоматически изменять БД относительно Java классов
+  # в последствии когда я захочу закрепить результат и отослать в репу
+  # я в liquibase в log пишу все изменения и Hibernate ставлю на validate
+  # чтобы он сверялся со схемой, а не автоматом менял ее
+  jpa:
+    hibernate:
+      ddl-auto: update # validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  # при изменении полей обеспечит миграцию данных
+  # и в случае если откат схемы и тп
+  liquibase:
+    enabled: false
+    change-log: db/changelog/db.changelog-master.xml
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  ################################
+
+  output:
+    ansi:
+      enabled: always
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+  security:
+    user:
+      name: user
+      password: password
+
+logging:
+  level:
+    ROOT: ${LOG_LEVEL:INFO}
+
+
+
