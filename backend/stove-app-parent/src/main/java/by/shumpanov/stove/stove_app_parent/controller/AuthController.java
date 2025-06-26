@@ -1,0 +1,32 @@
+package by.shumpanov.stove.stove_app_parent.controller;
+
+import by.shumpanov.stove.stove_app_parent.dto.AuthResponse;
+import by.shumpanov.stove.stove_app_parent.dto.LoginRequest;
+import by.shumpanov.stove.stove_app_parent.dto.RegisterRequest;
+import by.shumpanov.stove.stove_app_parent.service.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api/v1/auth")
+public class AuthController {
+    private final AuthService authService;
+
+    @Autowired
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
+
+    @PostMapping("/register")
+    public AuthResponse register(@RequestBody RegisterRequest request) {
+        return authService.register(request);
+    }
+
+    @PostMapping("/login")
+    public AuthResponse login(@RequestBody LoginRequest request) {
+        return authService.login(request);
+    }
+}

@@ -37,3 +37,10 @@ docker-compose exec kafka /usr/bin/kafka-console-consumer \
   --property value.deserializer=org.apache.kafka.common.serialization.StringDeserializer
 
 docker-compose down -v --rmi all --remove-orphans
+
+ответ на вопрос, куда деть JWT-Secret
+    3. Безопасность конфигурации: JWT Secret
+    Проблема: Ваш jwt.secret хранится в application.properties. Любой, кто получит доступ к вашему репозиторию, сможет подписывать свои JWT-токены.
+    Решение (Best Practice): Секреты никогда не должны храниться в коде. Используйте переменные окружения (environment variables).
+    В application.properties: jwt.secret=${JWT_SECRET}
+    При запуске приложения (в Docker, на сервере) вы устанавливаете переменную окружения JWT_SECRET=MyVerySecretKey.... Spring Boot автоматически ее подхватит.
