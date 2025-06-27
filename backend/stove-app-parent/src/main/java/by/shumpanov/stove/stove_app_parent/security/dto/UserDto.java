@@ -1,6 +1,6 @@
-package by.shumpanov.stove.stove_app_parent.dto;
+package by.shumpanov.stove.stove_app_parent.security.dto;
 
-import by.shumpanov.stove.stove_app_parent.model.User;
+import by.shumpanov.stove.stove_app_parent.security.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

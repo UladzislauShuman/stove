@@ -1,4 +1,4 @@
-package by.shumpanov.stove.stove_app_parent.security;
+package by.shumpanov.stove.stove_app_parent.security.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

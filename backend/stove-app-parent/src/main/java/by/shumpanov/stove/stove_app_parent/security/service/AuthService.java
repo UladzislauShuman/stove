@@ -1,11 +1,11 @@
-package by.shumpanov.stove.stove_app_parent.service;
+package by.shumpanov.stove.stove_app_parent.security.service;
 
-import by.shumpanov.stove.stove_app_parent.dto.AuthResponse;
-import by.shumpanov.stove.stove_app_parent.dto.LoginRequest;
-import by.shumpanov.stove.stove_app_parent.dto.RegisterRequest;
-import by.shumpanov.stove.stove_app_parent.model.User;
-import by.shumpanov.stove.stove_app_parent.reposytory.UserRepository;
-import by.shumpanov.stove.stove_app_parent.security.JwtService;
+import by.shumpanov.stove.stove_app_parent.security.dto.AuthResponse;
+import by.shumpanov.stove.stove_app_parent.security.dto.LoginRequest;
+import by.shumpanov.stove.stove_app_parent.security.dto.RegisterRequest;
+import by.shumpanov.stove.stove_app_parent.security.model.User;
+import by.shumpanov.stove.stove_app_parent.security.repository.UserRepository;
+import by.shumpanov.stove.stove_app_parent.security.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

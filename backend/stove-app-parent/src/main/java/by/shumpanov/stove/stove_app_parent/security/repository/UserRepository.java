@@ -1,6 +1,6 @@
-package by.shumpanov.stove.stove_app_parent.reposytory;
+package by.shumpanov.stove.stove_app_parent.security.repository;
 
-import by.shumpanov.stove.stove_app_parent.model.User;
+import by.shumpanov.stove.stove_app_parent.security.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

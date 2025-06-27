@@ -1,4 +1,4 @@
-package by.shumpanov.stove.stove_app_parent.model;
+package by.shumpanov.stove.stove_app_parent.security.model;
 
 import jakarta.persistence.*;
 import lombok.*;

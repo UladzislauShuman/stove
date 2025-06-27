@@ -1,9 +1,9 @@
-package by.shumpanov.stove.stove_app_parent.service;
+package by.shumpanov.stove.stove_app_parent.security.service;
 
-import by.shumpanov.stove.stove_app_parent.dto.UserDto;
-import by.shumpanov.stove.stove_app_parent.exception.UserNotFoundException;
-import by.shumpanov.stove.stove_app_parent.model.User;
-import by.shumpanov.stove.stove_app_parent.reposytory.UserRepository;
+import by.shumpanov.stove.stove_app_parent.security.dto.UserDto;
+import by.shumpanov.stove.stove_app_parent.security.exception.UserNotFoundException;
+import by.shumpanov.stove.stove_app_parent.security.model.User;
+import by.shumpanov.stove.stove_app_parent.security.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,5 +43,10 @@ public class UserService {
                 .phoneNumber(user.getPhoneNumber())
                 .role(user.getUserRole())
                 .build();
+    }
+
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("Пользователь с email: " + email + " не найдена"));
     }
 }

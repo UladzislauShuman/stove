@@ -1,9 +1,9 @@
-package by.shumpanov.stove.stove_app_parent.controller;
+package by.shumpanov.stove.stove_app_parent.security.controller;
 
-import by.shumpanov.stove.stove_app_parent.dto.AuthResponse;
-import by.shumpanov.stove.stove_app_parent.dto.LoginRequest;
-import by.shumpanov.stove.stove_app_parent.dto.RegisterRequest;
-import by.shumpanov.stove.stove_app_parent.service.AuthService;
+import by.shumpanov.stove.stove_app_parent.security.dto.AuthResponse;
+import by.shumpanov.stove.stove_app_parent.security.dto.LoginRequest;
+import by.shumpanov.stove.stove_app_parent.security.dto.RegisterRequest;
+import by.shumpanov.stove.stove_app_parent.security.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
