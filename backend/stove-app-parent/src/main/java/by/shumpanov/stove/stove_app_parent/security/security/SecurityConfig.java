@@ -1,4 +1,4 @@
-package by.shumpanov.stove.stove_app_parent.security;
+package by.shumpanov.stove.stove_app_parent.security.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
