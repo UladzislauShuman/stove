@@ -5,6 +5,7 @@ import by.shumpanov.stove.stove_app_parent.constructor.dto.CreateConfigurationRe
 import by.shumpanov.stove.stove_app_parent.constructor.service.ConfigurationService;
 import by.shumpanov.stove.stove_app_parent.security.model.User;
 import by.shumpanov.stove.stove_app_parent.security.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class ConfigurationController {
 
     @PostMapping
     public ResponseEntity<ConfigurationResponse> createConfiguration(
-            @RequestBody CreateConfigurationRequest request,
+            @Valid @RequestBody CreateConfigurationRequest request,
             @AuthenticationPrincipal UserDetails userDetails) {
         User currentUser = userService.findUserByEmail(userDetails.getUsername());
 
@@ -43,7 +44,7 @@ public class ConfigurationController {
     @PutMapping("/{id}")
     public ResponseEntity<ConfigurationResponse> updateConfiguration(
         @PathVariable Long id,
-        @RequestBody CreateConfigurationRequest request,
+        @Valid @RequestBody CreateConfigurationRequest request,
         @AuthenticationPrincipal UserDetails userDetails) {
         User currentUser = userService.findUserByEmail(userDetails.getUsername());
         ConfigurationResponse response = configurationService.update(id, request, currentUser);

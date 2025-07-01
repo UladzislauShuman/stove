@@ -7,7 +7,7 @@ import by.shumpanov.stove.stove_app_parent.constructor.model.ConfigurationAddon;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {StoveTypeMapper.class, AddonMapper.class})
+@Mapper(componentModel = "spring", uses = {StoveTypeMapper.class, ComponentOptionMapper.class, AddonMapper.class})
 public interface ConfigurationMapper {
 
     @Mapping(target = "totalPrice", ignore = true)

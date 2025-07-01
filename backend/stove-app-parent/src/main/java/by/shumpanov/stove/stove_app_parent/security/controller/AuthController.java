@@ -4,6 +4,7 @@ import by.shumpanov.stove.stove_app_parent.security.dto.AuthResponse;
 import by.shumpanov.stove.stove_app_parent.security.dto.LoginRequest;
 import by.shumpanov.stove.stove_app_parent.security.dto.RegisterRequest;
 import by.shumpanov.stove.stove_app_parent.security.service.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,12 +22,12 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public AuthResponse register(@RequestBody RegisterRequest request) {
+    public AuthResponse register(@Valid @RequestBody RegisterRequest request) {
         return authService.register(request);
     }
 
     @PostMapping("/login")
-    public AuthResponse login(@RequestBody LoginRequest request) {
+    public AuthResponse login(@Valid @RequestBody LoginRequest request) {
         return authService.login(request);
     }
 }
