@@ -30,9 +30,17 @@
   (*Kafka*, *Zookeeper*, *Prometheus*, *Liquibase*)
 
 # Как запустить проект
-* для начала запускаем PostgreSQL через Docker из родительской папки проекта\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`docker-compose up -d postgres`
-* запускаем приложение через Intellij IDEA
+* как обычно -- выполнить клонирование репозитория и перейти в папку проекта
+```git 
+  git clone <...>
+  cd stove-app-parent
+```
+* перешли в `stove-app-parent`,  запускаем PostgreSQL через Docker из родительской папки проекта
+```
+  docker-compose up -d postgres
+```
+* настраиваем переменные окружения ("в разработке")
+* запускаем приложение (рекомендую через Intellij IDEA)
 
 # Как протестировать
 * **Аутентификацию и Авторизацию**:
@@ -50,6 +58,7 @@
 * **Конфигуратор**
   * все тото же [Postman](https://vladlox-7644620.postman.co/workspace/vladlox's-Workspace~b809a4f1-7ddc-4ff0-8e7a-a131f87758aa/request/44627851-59ed8c01-aac4-467f-9991-e0ba512eb602?action=share&creator=44627851&ctx=documentation)
   * иначе опять [Gemini](https://docs.google.com/document/d/1XAxtrv3bLI4KJ0ialwsE9vLOIO4CSRZnopScChQDBO0/edit?usp=sharing)
+  * либо посмотреть в раздел [API с авторизацией](#с-авторизацией)
   * Но прежде всего прошу
     * Регаете пользователя
     * логинетесь
@@ -305,12 +314,37 @@ JWT токен нужно выполнить такой запрос
 * `order` (еще в разработке)
   * хранит в себе функционал, что реализует операции над заказами
 
+## Как устроен `security`
+* `controller` -- хранит контроллеры, что обрабатывают запросы. 
+  * [AuthController.java](src/main/java/by/shumpanov/stove/stove_app_parent/security/controller/AuthController.java) -- для аутентификации (register и login)
+  * [UserController.java](src/main/java/by/shumpanov/stove/stove_app_parent/security/controller/UserController.java) -- для работы с пользователем 
+* `dto` -- хранит все DTO классы. о каждом чутка по подробнее
+  * [UserDto.java](src/main/java/by/shumpanov/stove/stove_app_parent/security/dto/UserDto.java) -- DTO для передачи пользователя
+  * [LoginRequest.java](src/main/java/by/shumpanov/stove/stove_app_parent/security/dto/LoginRequest.java) 
+-- DTO с всех необходимой информацией для логина
+  * [RegisterRequest.java](src/main/java/by/shumpanov/stove/stove_app_parent/security/dto/RegisterRequest.java)
+-- аналогично, только для регистрации
+  * [AuthResponse.java](src/main/java/by/shumpanov/stove/stove_app_parent/security/dto/AuthResponse.java)
+    -- ответ при успешном входе (возвращает токен)
+* `model` -- классы-модели для взаимодействия с БД
+* `repository` -- хранит в себе JPA-интерфейсы для доступа к данным из БД
+* `service` -- хранит в себе сервисы
+  * [AuthService.java](src/main/java/by/shumpanov/stove/stove_app_parent/security/service/AuthService.java)
+    * обрабатывает request-ы dto и возвращает токен
+  * [CustomUserDetailsService.java](src/main/java/by/shumpanov/stove/stove_app_parent/security/service/CustomUserDetailsService.java)
+    * реализация UserDetailsService для нашего сценария
+  * [UserService.java](src/main/java/by/shumpanov/stove/stove_app_parent/security/service/UserService.java)
+    * поиск пользователя по почте
+    * обновление пользователя
+
 ## Как устроен `constructor`
 * `config` -- хранит файлы конфигурации. на данный момент там
 лежит конфиг на Демо данные.
-* `controller` -- хранит контроллеры, что обрабатывают запросы. \
-  * `ConstructorDataController` -- обрабатывает запросы на выдачу данных о формировании Конструктора
-  * `ConfigurationController` -- возвращают ConfigurationResponse (DTO такой). CRUD операции по работе с Configuration
+* `controller` -- хранит контроллеры, что обрабатывают запросы. 
+  * [ConstructorDataController.java](src/main/java/by/shumpanov/stove/stove_app_parent/constructor/controller/ConstructorDataController.java)
+-- обрабатывает запросы на выдачу данных о формировании Конструктора
+  * [ConfigurationController.java](src/main/java/by/shumpanov/stove/stove_app_parent/constructor/controller/ConfigurationController.java) 
+-- возвращают ConfigurationResponse (DTO такой). CRUD операции по работе с Configuration
 * `dto` -- хранит все DTO классы. о каждом чутка по подробнее
   * [CreateConfigurationRequest.java](src/main/java/by/shumpanov/stove/stove_app_parent/constructor/dto/CreateConfigurationRequest.java)
     Основной DTO для создания или обновления конфигурации.
@@ -363,3 +397,11 @@ JWT токен нужно выполнить такой запрос
     и с помощью мапперов преобразует их в DTO для ConstructorDataController
 * `util`
   * `mapper` -- хранит в себе мапперы
+
+## Как устроен `order` (в разработке)
+* `config` -- хранит файлы конфигурации. 
+* `controller` -- хранит контроллеры, что обрабатывают запросы.
+* `dto` -- хранит все DTO классы. о каждом чутка по подробнее
+* `model` -- классы-модели для взаимодействия с БД
+* `repository` -- хранит в себе JPA-интерфейсы для доступа к данным из БД
+* `service` -- хранит в себе сервисы
