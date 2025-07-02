@@ -1,20 +1,49 @@
 package by.shumpanov.stove.stove_app_parent.constructor.util.mapper;
 
-import by.shumpanov.stove.stove_app_parent.constructor.dto.AddonDto;
+// Файл: .../constructor/util/mapper/ConfigurationMapper.java
+import by.shumpanov.stove.stove_app_parent.constructor.dto.ChosenComponentDto;
 import by.shumpanov.stove.stove_app_parent.constructor.dto.ConfigurationResponse;
 import by.shumpanov.stove.stove_app_parent.constructor.model.Configuration;
-import by.shumpanov.stove.stove_app_parent.constructor.model.ConfigurationAddon;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring", uses = {StoveTypeMapper.class, ComponentOptionMapper.class, AddonMapper.class})
-public interface ConfigurationMapper {
+import java.math.BigDecimal;
+import java.util.stream.Collectors;
 
-    @Mapping(target = "totalPrice", ignore = true)
-    @Mapping(target = "components", ignore = true)
-    @Mapping(source = "addons", target = "addons")
-    ConfigurationResponse toDto(Configuration entity);
+@Component
+@RequiredArgsConstructor
+public class ConfigurationMapper {
 
-    @Mapping(source = "addon", target = ".")
-    AddonDto mapConfigurationAddonToAddonDto(ConfigurationAddon source);
+    private final StoveTypeMapper stoveTypeMapper;
+    private final AddonMapper addonMapper;
+    private final ComponentOptionMapper componentOptionMapper;
+
+    public ConfigurationResponse toResponseDto(Configuration configuration, BigDecimal totalPrice) {
+        if (configuration == null) {
+            return null;
+        }
+
+        var chosenComponents = configuration.getChoices().stream()
+                .map(choice -> ChosenComponentDto.builder()
+                        .componentName(choice.getOption().getComponent().getName())
+                        .chosenOption(componentOptionMapper.toDto(choice.getOption()))
+                        .build())
+                .collect(Collectors.toList());
+
+        var addons = configuration.getAddons().stream()
+                .map(configAddon -> addonMapper.toDto(configAddon.getAddon()))
+                .collect(Collectors.toList());
+
+        return ConfigurationResponse.builder()
+                .id(configuration.getId())
+                .name(configuration.getName())
+                .isTemplate(configuration.isTemplate())
+                .isLocked(configuration.isLocked())
+                .createdAt(configuration.getCreatedAt())
+                .totalPrice(totalPrice)
+                .stoveType(stoveTypeMapper.toDto(configuration.getStoveType()))
+                .components(chosenComponents)
+                .addons(addons)
+                .build();
+    }
 }

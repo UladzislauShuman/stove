@@ -7,6 +7,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -48,10 +49,10 @@ public class SecurityExceptionHandler {
         return buildErrorResponse(HttpStatus.CONFLICT, ex.getMessage(), request);
     }
 
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ErrorResponse> handleBadCredentials(BadCredentialsException ex, WebRequest request) {
-        log.info("Failed login attempt for request: {}", request.getDescription(false));
-        return buildErrorResponse(HttpStatus.UNAUTHORIZED, "Неверный email или пароль", request);
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex, WebRequest request) {
+        log.warn("Authentication failed: {}. Request: {}", ex.getMessage(), request.getDescription(false));
+        return buildErrorResponse(HttpStatus.UNAUTHORIZED, "Ошибка аутентификации: неверный email или пароль.", request);
     }
 
     @ExceptionHandler(Exception.class)

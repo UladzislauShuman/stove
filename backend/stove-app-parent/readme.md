@@ -1,24 +1,49 @@
 # Версии
 
 ## todo
-* API оформления заказа (Спринт 4)
 * разработать больше данных
 * провести рефакторинг 2
+  * перепроверить исключения (не лишние ли, может где-то не поставил и так далее)
+  * выделить параметры в property
+  * пересмотреть order
+* исправить доку
+  * изменить порядок оглавлений в [API](#api)
+  * добавить ссылки где нужно
+  * придерживаться единого стиля
+* улучшения
+  * валидация
+  * перекинуть по папкам и сделать меньше зависимостей между папками
+  * разбить папки на микросервисы
+* order
+  * отмена заказа
+* тестирование
+  
 
-## v0.0.3
+## v0.4.0
+* добавил минимально необходимый функционал для работы с заказами
+  * создать
+  * посмотреть
+* настроил кафку на новее версию
+
+## v0.3.1
+* рефакторинг 
+* добавил логирование
+* добавил обработку исключений (локальную и глобальную)
+
+## v0.3.0
 * добавил API для работы с конфигуратором
 * чтобы протестировать посмотри тут [тут](#как-протестировать)
 * еще разбил на две "независимые" папки -- потенциально выглядят как два разных
 микросервиса
 
-## v0.0.2
+## v0.2.0
 * добавил endpoint-ы для запроса данных, необходимых для отображения
 элементов в конструкторе\
   (Компоненты, Опции компонентов, Дополнения(Addons), Виды строений)
 * добавил немного тестовых данных через Java
 * чтобы протестировать посмотри тут [тут](#как-протестировать)
 
-## v0.0.1
+## v0.1.0
 * добавил аутентификацию и авторизацию
 * чтобы протестировать посмотри тут [тут](#как-протестировать) 
 
@@ -34,12 +59,24 @@
   git clone <...>
   cd stove-app-parent
 ```
-* перешли в `stove-app-parent`,  запускаем PostgreSQL через Docker из родительской папки проекта
+* перешли в `stove-app-parent`,  запускаем `PostgreSQL`, `Kafka` + `Zookeeper` через `Docker` из родительской папки проекта
 ```
-  docker-compose up -d postgres
+  docker-compose up -d
 ```
+* проверяем, что все контейнеры запущены (иногда при одновременном запуске всего
+ложиться кафка. для решения этой проблемы -- до 2 минут включительно запускайте и запускайте)
 * настраиваем переменные окружения ("в разработке")
-* запускаем приложение (рекомендую через Intellij IDEA)
+* запускаем приложение (рекомендую через `Intellij IDEA`)
+* тестовая прослушка топиков `Kafka` из консоли:
+```
+docker-compose exec kafka /usr/bin/kafka-console-consumer \
+  --bootstrap-server localhost:9092 \
+  --topic new_orders \
+  --from-beginning \
+  --property print.headers=true \
+  --property print.key=true \
+  --property value.deserializer=org.apache.kafka.common.serialization.StringDeserializer
+```
 
 # Как протестировать
 * **Аутентификацию и Авторизацию**:
@@ -55,28 +92,20 @@
     * http://localhost:8080/constructor-data/components/1/options
     * http://localhost:8080/constructor-data/addons
 * **Конфигуратор**
-  * все тото же [Postman](https://vladlox-7644620.postman.co/workspace/vladlox's-Workspace~b809a4f1-7ddc-4ff0-8e7a-a131f87758aa/request/44627851-59ed8c01-aac4-467f-9991-e0ba512eb602?action=share&creator=44627851&ctx=documentation)
+  * все тот же [Postman](https://vladlox-7644620.postman.co/workspace/vladlox's-Workspace~b809a4f1-7ddc-4ff0-8e7a-a131f87758aa/request/44627851-59ed8c01-aac4-467f-9991-e0ba512eb602?action=share&creator=44627851&ctx=documentation)
   * иначе опять [Gemini](https://docs.google.com/document/d/1XAxtrv3bLI4KJ0ialwsE9vLOIO4CSRZnopScChQDBO0/edit?usp=sharing)
   * либо посмотреть в раздел [API с авторизацией](#с-авторизацией)
   * Но прежде всего прошу
     * Регаете пользователя
     * логинетесь
     * полученный токен используете для авторизации (в Gemini все расписано)
+* **Заказы**
+  * все тот же [Postman](https://vladlox-7644620.postman.co/workspace/vladlox's-Workspace~b809a4f1-7ddc-4ff0-8e7a-a131f87758aa/request/44627851-59ed8c01-aac4-467f-9991-e0ba512eb602?action=share&creator=44627851&ctx=documentation)
+  * иначе опять [Gemini](https://docs.google.com/document/d/1SNt8ANuayPGzH1ZPFmo3BW9ikggqWcMXpbmdGGZZj4Q/edit?usp=sharing)
+  * еще можно глянуть в [API с авторизацией](#с-авторизацией-1)
+
 # Полезные команды
 как видишь, пока не добавил
-
-# Идеи
-## Рефакторинг
-* может стоит перенести логику model в БД?
-* вынести Precision и Scale во что-то другое
-* может перенести default значения в БД?
-* очистить лишние `import`-ы
-* вот есть как -- делаю репозиторий, и относительно него будто сервис\
-но ведь я использовал их и в других сервисах, не одноименных\
-мне получается использовать через сервис или через репозиторий нормально?
-* стоит ли AbstractPersistable убрать?
-* вынести `User currentUser = ...` из [ConfigurationController.java](src/main/java/by/shumpanov/stove/stove_app_parent/constructor/controller/ConfigurationController.java)
-
 
 # API
 тут будет все прописано в примерах
@@ -238,7 +267,7 @@ JWT токен нужно выполнить такой запрос
 пример ответа:
 ```json
 {
-    "id": 202,
+    "id": 1,
     "name": "Моя ЛУЧШАЯ печь для пиццы",
     "is_template": false,
     "is_locked": false,
@@ -300,9 +329,178 @@ JWT токен нужно выполнить такой запрос
 }
 ```
 
-* GET http://localhost:8080/api/v1/configurations/201 -- запрос на получение конкретной 
+* GET http://localhost:8080/api/v1/configurations/1 -- запрос на получение конкретной 
 конфигурации \
 пример ответа: созданная Конфигурация выше
+
+## Заказы 
+### с авторизацией
+* прежде всего регистрируемся и логинимся. с полученным токеном продолжаем работу
+* создаем конфигурацию заказа
+* POST http://localhost:8080/api/v1/orders Auth: JWT, Body:
+```json
+{
+  "configuration_id": 1,
+  "customer_name": "Иван Заказчиков",
+  "customer_phone": "+375441234567",
+  "object_address": "Минская обл., д. Тестовая, ул. Программная, д. 1",
+  "customer_comment": "Прошу связаться со мной после 18:00 для уточнения деталей."
+}
+```
+в результате получаем
+```json
+{
+    "id": 1,
+    "status": "PLACED",
+    "final_price": 0,
+    "created_at": "2025-07-02T18:20:46.47761",
+    "configuration": {
+        "id": 1,
+        "name": "Моя ЛУЧШАЯ печь для пиццы",
+        "is_template": false,
+        "is_locked": true,
+        "created_at": "2025-07-02T18:19:08.525535",
+        "total_price": 9950,
+        "stove_type": {
+            "id": 1,
+            "name": "Помпейская печь",
+            "description": "Классическая дровяная печь для пиццы и выпечки.",
+            "base_price": 5000,
+            "image_url": "https://example.com/images/pompei.jpg"
+        },
+        "components": [
+            {
+                "component_name": "Основание",
+                "chosen_option": {
+                    "id": 1,
+                    "name": "На кирпичном постаменте",
+                    "price_modifier": 2500,
+                    "image_url": "https://example.com/images/base_brick.jpg",
+                    "is_default": false
+                }
+            },
+            {
+                "component_name": "Купол",
+                "chosen_option": {
+                    "id": 4,
+                    "name": "Из красного огнеупорного кирпича",
+                    "price_modifier": 1500,
+                    "image_url": "https://example.com/images/dome_red.jpg",
+                    "is_default": false
+                }
+            },
+            {
+                "component_name": "Утепление купола",
+                "chosen_option": {
+                    "id": 7,
+                    "name": "Вермикулит + цемент",
+                    "price_modifier": 600,
+                    "image_url": "https://example.com/images/ins_vermiculite.jpg",
+                    "is_default": false
+                }
+            }
+        ],
+        "addons": [
+            {
+                "id": 2,
+                "name": "Строительство дымохода (за метр)",
+                "description": "Цена указана за 1 метр кирпичного дымохода.",
+                "price": 250
+            },
+            {
+                "id": 1,
+                "name": "Доставка в пределах 50 км",
+                "description": "Привезем все материалы на ваш участок.",
+                "price": 100
+            }
+        ]
+    }
+}
+```
+теперь наша конфигурация имеет параметр `"is_locked": true` \
+это значит, что изменить конфигурацию (PUT) уже не получиться 
+(на нее ссылаются и это вызовет проблемы)
+если мы повторим эту операцию снова, то получим ответ:
+```json
+{
+    "status_code": 500,
+    "timestamp": "2025-07-02T18:22:13.454105",
+    "message": "Конфигурация с таким id уже занята",
+    "path": "/api/v1/orders"
+}
+```
+* GET http://localhost:8080/api/v1/orders Auth: JWT -- запрос на получение списка ваших заказов:
+```json
+[
+    {
+        "id": 1,
+        "status": "PLACED",
+        "final_price": 0,
+        "created_at": "2025-07-02T18:20:46.47761",
+        "configuration": {
+            "id": 1,
+            "name": "Моя ЛУЧШАЯ печь для пиццы",
+            "is_template": false,
+            "is_locked": true,
+            "created_at": "2025-07-02T18:19:08.525535",
+            "total_price": 9950,
+            "stove_type": {
+                "id": 1,
+                "name": "Помпейская печь",
+                "description": "Классическая дровяная печь для пиццы и выпечки.",
+                "base_price": 5000,
+                "image_url": "https://example.com/images/pompei.jpg"
+            },
+            "components": [
+                {
+                    "component_name": "Основание",
+                    "chosen_option": {
+                        "id": 1,
+                        "name": "На кирпичном постаменте",
+                        "price_modifier": 2500,
+                        "image_url": "https://example.com/images/base_brick.jpg",
+                        "is_default": false
+                    }
+                },
+                {
+                    "component_name": "Купол",
+                    "chosen_option": {
+                        "id": 4,
+                        "name": "Из красного огнеупорного кирпича",
+                        "price_modifier": 1500,
+                        "image_url": "https://example.com/images/dome_red.jpg",
+                        "is_default": false
+                    }
+                },
+                {
+                    "component_name": "Утепление купола",
+                    "chosen_option": {
+                        "id": 7,
+                        "name": "Вермикулит + цемент",
+                        "price_modifier": 600,
+                        "image_url": "https://example.com/images/ins_vermiculite.jpg",
+                        "is_default": false
+                    }
+                }
+            ],
+            "addons": [
+                {
+                    "id": 2,
+                    "name": "Строительство дымохода (за метр)",
+                    "description": "Цена указана за 1 метр кирпичного дымохода.",
+                    "price": 250
+                },
+                {
+                    "id": 1,
+                    "name": "Доставка в пределах 50 км",
+                    "description": "Привезем все материалы на ваш участок.",
+                    "price": 100
+                }
+            ]
+        }
+    }
+]
+```
 
 # Как устроен проект
 *пока что это не все* \
@@ -311,10 +509,15 @@ JWT токен нужно выполнить такой запрос
   * хранит в себе весь необходимый функционал для аутентификации и авторизации пользователя
 * `constructor`
   * реализацию функционала Выдачи необходимой информации для формирования Конструктора 
-* `order` (еще в разработке)
+* `order`
   * хранит в себе функционал, что реализует операции над заказами
 
 ## Как устроен `security`
+* `exception` -- хранит классы-исключения
+  * [EmailAlreadyExistsException.java](src/main/java/by/shumpanov/stove/stove_app_parent/security/exception/EmailAlreadyExistsException.java)
+  -- выбрасывается, когда при регистрации используется Email, который уже занят и т.д.
+  * [ResourceNotFoundException.java](src/main/java/by/shumpanov/stove/stove_app_parent/security/exception/ResourceNotFoundException.java)
+  * [UserNotFoundException.java](src/main/java/by/shumpanov/stove/stove_app_parent/security/exception/UserNotFoundException.java)
 * `controller` -- хранит контроллеры, что обрабатывают запросы. 
   * [AuthController.java](src/main/java/by/shumpanov/stove/stove_app_parent/security/controller/AuthController.java) -- для аутентификации (register и login)
   * [UserController.java](src/main/java/by/shumpanov/stove/stove_app_parent/security/controller/UserController.java) -- для работы с пользователем 
@@ -338,6 +541,10 @@ JWT токен нужно выполнить такой запрос
     * обновление пользователя
 
 ## Как устроен `constructor`
+* `exception` -- хранит классы-исключения
+  * [ForbiddenException.java](src/main/java/by/shumpanov/stove/stove_app_parent/constructor/exception/ForbiddenException.java)
+-- выбрасывается, когда в логике программы выполняется изменения объекта, который нельзя изменять
+    (нельзя изменять дату создания аккаунта и т.д.)
 * `config` -- хранит файлы конфигурации. на данный момент там
 лежит конфиг на Демо данные.
 * `controller` -- хранит контроллеры, что обрабатывают запросы. 
@@ -399,12 +606,31 @@ JWT токен нужно выполнить такой запрос
   * `mapper` -- хранит в себе мапперы
 
 ## Как устроен `order` (в разработке)
+* `exception` -- хранит классы-исключения
+  * [ConfigurationAlreadyUsedException.java](src/main/java/by/shumpanov/stove/stove_app_parent/order/exception/ConfigurationAlreadyUsedException.java)
 * `config` -- хранит файлы конфигурации. 
 * `controller` -- хранит контроллеры, что обрабатывают запросы.
+  * [OrderController.java](src/main/java/by/shumpanov/stove/stove_app_parent/order/controller/OrderController.java)
+    принимает запросы на публикацию и получения заказов
 * `dto` -- хранит все DTO классы. о каждом чутка по подробнее
+  * [CreateOrderRequest.java](src/main/java/by/shumpanov/stove/stove_app_parent/order/dto/CreateOrderRequest.java)
+  -- dto-класс для работы с запросами на оформление заказа
+  * [OrderCreatedEventDto.java](src/main/java/by/shumpanov/stove/stove_app_parent/order/dto/OrderCreatedEventDto.java)
+  -- сообщение, которое мы отправляем в Kafka
+  * [OrderResponse.java](src/main/java/by/shumpanov/stove/stove_app_parent/order/dto/OrderResponse.java)
+  -- dto для класса Order, который возвращается в качестве ответа на http-запрос
 * `model` -- классы-модели для взаимодействия с БД
 * `repository` -- хранит в себе JPA-интерфейсы для доступа к данным из БД
 * `service` -- хранит в себе сервисы
+  * [OrderService.java](src/main/java/by/shumpanov/stove/stove_app_parent/order/service/OrderService.java) 
+  -- содержит в себе функции:
+    * создать заказ
+    * найти все заказы пользователя
+* `kafka` -- классы для работы с `Kafka`
+  * [KafkaConfig.java](src/main/java/by/shumpanov/stove/stove_app_parent/order/kafka/KafkaConfig.java)
+  -- класс конфигурации Кафки, в котором содержится описание создания топика
+  * [KafkaProducerService.java](src/main/java/by/shumpanov/stove/stove_app_parent/order/kafka/KafkaProducerService.java)
+  -- сервис для отправки сообщения в Кафку
 
 # Интересная информация
 * На этапе компиляции (до того, как Spring вообще увидит ваш код) 
@@ -420,3 +646,18 @@ Spring автоматически использует его для внедр�
 * делать валидацию DTO стоит для тех, что
 используются в качестве объектов запроса
 * метод JpaRepository.saveAndFlush
+
+# Идеи
+## Рефакторинг
+* может стоит перенести логику model в БД?
+* вынести Precision и Scale во что-то другое
+* может перенести default значения в БД?
+* очистить лишние `import`-ы
+* вот есть как -- делаю репозиторий, и относительно него будто сервис\
+  но ведь я использовал их и в других сервисах, не одноименных\
+  мне получается использовать через сервис или через репозиторий нормально?
+* стоит ли AbstractPersistable убрать?
+* вынести `User currentUser = ...` из [ConfigurationController.java](src/main/java/by/shumpanov/stove/stove_app_parent/constructor/controller/ConfigurationController.java)
+* model.Order -- уточнить связь с Configuration
+* вынести в отдельное место название топика
+* поставить где нужно @Builder.Default @CreatedDate

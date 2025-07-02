@@ -33,7 +33,6 @@ public class AuthService {
                 .phoneNumber(registerRequest.getPhoneNumber())
                 .passwordHash(passwordEncoder.encode(registerRequest.getPassword()))
                 .userRole(User.UserRole.CUSTOMER)
-                .createdAt(LocalDateTime.now())
                 .build();
 
         userRepository.save(user); // если уже есть, то выброситься DataIntegrityViolationException из-за ограничения unique

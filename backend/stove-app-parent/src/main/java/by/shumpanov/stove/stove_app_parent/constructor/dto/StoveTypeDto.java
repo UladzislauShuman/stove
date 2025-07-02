@@ -20,7 +20,6 @@ import java.util.List;
 public class StoveTypeDto implements Serializable {
 
     private Long id;
-
     @JsonProperty("name")
     private String name;
     @JsonProperty("description")
