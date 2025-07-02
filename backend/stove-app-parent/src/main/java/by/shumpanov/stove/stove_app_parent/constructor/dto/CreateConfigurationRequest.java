@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
@@ -13,7 +14,7 @@ import java.util.List;
 @Builder
 public class CreateConfigurationRequest {
 
-    @NotBlank(message = "ID типа строения не может быть пустым")
+    @NotNull(message = "ID типа строения не может быть пустым")
     @JsonProperty("stove_type_id")
     private Long stoveTypeId;
 

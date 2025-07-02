@@ -2,7 +2,9 @@ package by.shumpanov.stove.stove_app_parent.security.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.AbstractPersistable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -12,6 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "users")
 public class User extends AbstractPersistable<Long> {
 
@@ -29,10 +32,12 @@ public class User extends AbstractPersistable<Long> {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "user_role", nullable = false)
+    @Builder.Default
     private UserRole userRole = UserRole.CUSTOMER; // может потом на уровне БД поставлю
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now(); // может потом на уровне БД поставлю
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
     public enum UserRole {
         CUSTOMER,

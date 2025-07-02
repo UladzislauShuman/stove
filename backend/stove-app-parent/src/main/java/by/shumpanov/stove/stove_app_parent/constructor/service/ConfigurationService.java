@@ -182,8 +182,7 @@ public class ConfigurationService {
     }
 
     private ConfigurationResponse buildConfigurationResponse(Configuration configuration) {
-        ConfigurationResponse dto = configurationMapper.toDto(configuration);
-        dto.setTotalPrice(calculateTotalPrice(configuration));
+        ConfigurationResponse dto = configurationMapper.toResponseDto(configuration,calculateTotalPrice(configuration));
         List<ChosenComponentDto> chosenComponents = configuration.getChoices().stream().map(choice -> {
             ChosenComponentDto chosenDto = ChosenComponentDto.builder()
                     .componentName(choice.getOption().getComponent().getName())
@@ -195,7 +194,7 @@ public class ConfigurationService {
         return dto;
     }
 
-    private BigDecimal calculateTotalPrice(Configuration configuration) {
+        public BigDecimal calculateTotalPrice(Configuration configuration) {
         BigDecimal total = configuration.getStoveType().getBasePrice();
         if (configuration.getChoices() != null) {
             for (ConfigurationChoice choice : configuration.getChoices()) {
