@@ -3,9 +3,9 @@ package by.shumpanov.stove.stove_app_parent.security.model;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
@@ -16,7 +16,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "users")
-public class User extends AbstractPersistable<Long> {
+public class User implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_generator")
+    @SequenceGenerator(name = "users_generator", sequenceName = "users_id_seq", allocationSize = 1)
+    private Long id;
 
     @Column(name = "full_name", nullable = false)
     private String fullName;
@@ -33,7 +38,7 @@ public class User extends AbstractPersistable<Long> {
     @Enumerated(EnumType.STRING)
     @Column(name = "user_role", nullable = false)
     @Builder.Default
-    private UserRole userRole = UserRole.CUSTOMER; // может потом на уровне БД поставлю
+    private UserRole userRole = UserRole.CUSTOMER;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)

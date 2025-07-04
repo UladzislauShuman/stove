@@ -13,7 +13,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Builder
 @Table(name = "configuration_addons")
-public class ConfigurationAddon {
+public class ConfigurationAddon implements Serializable {
 
     @EmbeddedId
     private ConfigurationAddonId id;

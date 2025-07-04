@@ -12,7 +12,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Builder
 @Table(name = "configuration_choices")
-public class ConfigurationChoice {
+public class ConfigurationChoice implements Serializable{
 
     @EmbeddedId
     private ConfigurationChoiceId id;
