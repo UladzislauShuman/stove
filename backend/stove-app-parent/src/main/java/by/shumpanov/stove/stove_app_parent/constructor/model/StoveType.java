@@ -1,11 +1,9 @@
 package by.shumpanov.stove.stove_app_parent.constructor.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
@@ -15,7 +13,12 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 @Table(name = "stove_types")
-public class StoveType extends AbstractPersistable<Long> {
+public class StoveType implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "stove_types_generator")
+    @SequenceGenerator(name = "stove_types_generator", sequenceName = "stove_types_id_seq", allocationSize = 1)
+    private Long id;
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;

@@ -1,4 +1,3 @@
-// Файл: by.shumpanov.stove.stove_app_parent.constructor.model.Configuration.java
 package by.shumpanov.stove.stove_app_parent.constructor.model;
 
 import by.shumpanov.stove.stove_app_parent.security.model.User;
@@ -6,8 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,12 @@ import java.util.List;
 @Builder
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "configurations")
-public class Configuration extends AbstractPersistable<Long> {
+public class Configuration implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "configurations_generator")
+    @SequenceGenerator(name = "configurations_generator", sequenceName = "configurations_id_seq", allocationSize = 1)
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "stove_type_id", nullable = false)

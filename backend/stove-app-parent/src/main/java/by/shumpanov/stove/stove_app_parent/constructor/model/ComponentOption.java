@@ -1,10 +1,9 @@
 package by.shumpanov.stove.stove_app_parent.constructor.model;
 
-
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
@@ -13,7 +12,13 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ComponentOption extends AbstractPersistable<Long> {
+@Table(name = "component_options")
+public class ComponentOption implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "component_options_generator")
+    @SequenceGenerator(name = "component_options_generator", sequenceName = "component_options_id_seq", allocationSize = 1)
+    private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "component_id", nullable = false)
@@ -29,5 +34,5 @@ public class ComponentOption extends AbstractPersistable<Long> {
     private String imageUrl;
 
     @Column(name = "is_default", nullable = false)
-    private boolean isDefault = false; // может перенести в БД?
+    private boolean isDefault = false;
 }

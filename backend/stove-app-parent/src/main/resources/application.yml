@@ -23,7 +23,7 @@ spring:
   # чтобы он сверялся со схемой, а не автоматом менял ее
   jpa:
     hibernate:
-      ddl-auto: update # validate
+      ddl-auto: validate #update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -31,10 +31,8 @@ spring:
   # при изменении полей обеспечит миграцию данных
   # и в случае если откат схемы и тп
   liquibase:
-    enabled: false
+    enabled: true
     change-log: db/changelog/db.changelog-master.xml
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
   ################################
 
   output:
@@ -55,6 +53,9 @@ spring:
 logging:
   level:
     ROOT: ${LOG_LEVEL:INFO}
+    # Добавляем логирование для Hibernate сюда
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
 # потом надо будет убрать куда-нибудь
 jwt:
