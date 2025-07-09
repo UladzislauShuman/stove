@@ -1,0 +1,89 @@
+/* src/pages/ProfilePage.css */
+
+.profile-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #e5e7eb; /* Заглушка, если нет фото */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2em;
+    color: var(--dark-color);
+    font-weight: bold;
+}
+
+.profile-info h2 {
+    margin: 0;
+    color: var(--dark-color);
+}
+
+.profile-info p {
+    margin: 5px 0 0;
+    color: #6b7280;
+}
+
+.profile-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.profile-nav-link {
+    display: block;
+    padding: 15px 20px;
+    background-color: var(--light-color);
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--dark-color);
+    font-weight: 500;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+}
+
+.profile-nav-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}
+
+/* Стрелочка вправо */
+.profile-nav-link::after {
+    content: '→';
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+}
+
+.logout-button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 15px;
+    border: none;
+    background-color: #fee2e2;
+    color: #dc2626;
+    font-size: 1em;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.logout-button:hover {
+    background-color: #fecaca;
+}

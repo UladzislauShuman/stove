@@ -1,0 +1,32 @@
+/* src/styles/global.css */
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #f4f4f4; /* Светло-серый фон */
+}
+
+/* Идея из вашего ТЗ: тонкая текстура на фоне */
+/*
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('/path/to/your/subtle-brick-texture.png');
+  opacity: 0.05;
+  z-index: -1;
+}
+*/
+
+:root {
+    --primary-color: #f59e0b; /* Оранжевый, как в макетах */
+    --dark-color: #1f2937; /* Темно-серый */
+    --light-color: #ffffff;
+    --text-color: #374151;
+}
