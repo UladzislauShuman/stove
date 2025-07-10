@@ -3,7 +3,7 @@
 -- changeset your_name:1
 -- preConditions onFail:MARK_RAN
 -- precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM pg_type WHERE typname = 'user_role';
-CREATE TYPE user_role AS ENUM ('CUSTOMER', 'CRAFTSMAN');
+CREATE TYPE user_role AS ENUM ('CUSTOMER', 'STOVEMAKER');
 
 -- changeset your_name:2
 -- preConditions onFail:MARK_RAN

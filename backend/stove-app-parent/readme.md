@@ -1,46 +1,14 @@
 # Версии
 
 ## todo
-* API
-  * order
-    * отмена заказа
-  * constructor
-    * операции с favorite
-    * portfolio конфигурации
-* провести рефакторинг 2
-  * перепроверить исключения (не лишние ли, может где-то не поставил и так далее)
-  * выделить параметры в property
-  * пересмотреть order
-* исправить доку
-  * изменить порядок оглавлений в [API](#api)
-  * добавить ссылки где нужно
-  * придерживаться единого стиля
-* улучшения
-  * валидация
-  * перекинуть по папкам и сделать меньше зависимостей между папками
-  * разбить папки на микросервисы
-* тестирование
-* разработать больше данных
-
-## Идеи
-### Рефакторинг
-* может стоит перенести логику model в БД?
-* вынести Precision и Scale во что-то другое
-* может перенести default значения в БД?
-* очистить лишние `import`-ы
-* вот есть как -- делаю репозиторий, и относительно него будто сервис\
-  но ведь я использовал их и в других сервисах, не одноименных\
-  мне получается использовать через сервис или через репозиторий нормально?
-* вынести `User currentUser = ...` из [ConfigurationController.java](src/main/java/by/shumpanov/stove/stove_app_parent/constructor/controller/ConfigurationController.java)
-* model.Order -- уточнить связь с Configuration
-* вынести в отдельное место название топика
-* поставить где нужно @Builder.Default @CreatedDate
-* вероятно стоит сделать составной pk в components (id + stove_type_id)
+мы переехали в другой [файл](todo.md)
 
 ## v0.4.2
 * добавил конфигурацию CORS, чтобы frontend мог делать запрос к backend.
 разрешено для порта 3000
-* исправил проблему при регистрации (ошибка с передачей user_role)
+* исправил проблему с записью ролей
+* добавил API для Favorites и Portfolio
+* readme.md разбил на файлы
 
 ## v0.4.1
 * внедрил миграцию через `Liquibase`
@@ -121,7 +89,7 @@ docker-compose exec kafka /usr/bin/kafka-console-consumer \
 * **Конфигуратор**
   * все тот же [Postman](https://vladlox-7644620.postman.co/workspace/vladlox's-Workspace~b809a4f1-7ddc-4ff0-8e7a-a131f87758aa/request/44627851-59ed8c01-aac4-467f-9991-e0ba512eb602?action=share&creator=44627851&ctx=documentation)
   * иначе опять [Gemini](https://docs.google.com/document/d/1XAxtrv3bLI4KJ0ialwsE9vLOIO4CSRZnopScChQDBO0/edit?usp=sharing)
-  * либо посмотреть в раздел [API с авторизацией](#с-авторизацией)
+  * либо посмотреть в раздел API с авторизацией
   * Но прежде всего прошу
     * Регаете пользователя
     * логинетесь
@@ -129,405 +97,13 @@ docker-compose exec kafka /usr/bin/kafka-console-consumer \
 * **Заказы**
   * все тот же [Postman](https://vladlox-7644620.postman.co/workspace/vladlox's-Workspace~b809a4f1-7ddc-4ff0-8e7a-a131f87758aa/request/44627851-59ed8c01-aac4-467f-9991-e0ba512eb602?action=share&creator=44627851&ctx=documentation)
   * иначе опять [Gemini](https://docs.google.com/document/d/1SNt8ANuayPGzH1ZPFmo3BW9ikggqWcMXpbmdGGZZj4Q/edit?usp=sharing)
-  * еще можно глянуть в [API с авторизацией](#с-авторизацией-1)
+  * еще можно глянуть в API с авторизацией
 
 # Полезные команды
 как видишь, пока не добавил
 
 # API
-тут будет все прописано в примерах
-## Авторизация
-* POST http://localhost:8080/api/v1/auth/register Body: 
-```json
-{
-  "full_name": "Иван Петров",
-  "phone_number": "+375291112233",
-  "email": "ivan.petrov@example.com",
-  "password": "supersecretpassword"
-} 
-```
--- запрос на регистрацию. в ответ возвращается Jwt-токен
-* POST http://localhost:8080/api/v1/auth/login Body:
-```json
-  {
-      "email": "ivan.petrov@example.com",
-      "password": "supersecretpassword"
-  } 
-```
--- если вы уже есть в системе, то чтобы получить
-JWT токен нужно выполнить такой запрос
-
-* GET http://localhost:8080/api/v1/users/me Authorization: JWT-токен
--- получаете информацию о пользователе
-в формате JSON. пример ответа: 
-```json
-  {
-      "id": 1,
-      "full_name": "Иван Петров",
-      "email": "ivan.petrov@example.com",
-      "phone_number": "+375291112233",
-      "user_role": "CUSTOMER"
-  }
-```
-## Конструктор
-### получение публичных данных
-* GET http://localhost:8080/constructor-data/stove-types 
--- публичный запрос (не требует авторизации). в ответе массив из видов Строения. \
-пример: 
-  ```json
-  [
-      {
-          "id": 1,
-          "name": "Помпейская печь",
-          "description": "Классическая дровяная печь для пиццы и выпечки.",
-          "base_price": 5000,
-          "image_url": "https://example.com/images/pompei.jpg"
-      }
-  ]
-  ```
-* GET http://localhost:8080/constructor-data/stove-types/1/components --
-запрос на получение Компонент из которых состоит Строение. \
-пример ответа для Строение id=1 из прошлого ответа:
-```json
-[
-  {
-    "id": 1,
-    "name": "Основание",
-    "description": "На чем будет стоять ваша печь.",
-    "is_required": false,
-    "allow_multiple_choices": false,
-    "component_options": null
-  },
-  {
-    "id": 2,
-    "name": "Купол",
-    "description": "Материал основной камеры горения.",
-    "is_required": false,
-    "allow_multiple_choices": false,
-    "component_options": null
-  },
-  {
-    "id": 3,
-    "name": "Утепление купола",
-    "description": "Как долго печь будет держать тепло.",
-    "is_required": false,
-    "allow_multiple_choices": false,
-    "component_options": null
-  },
-  {
-    "id": 4,
-    "name": "Облицовка",
-    "description": "Внешний вид вашей печи.",
-    "is_required": false,
-    "allow_multiple_choices": false,
-    "component_options": null
-  }
-]
-```
-
-* GET http://localhost:8080/constructor-data/components/1/options 
--- запрос на получение Опций, которые можно применить к компоненту id=1 \
-пример ответа: 
-```json
-[
-    {
-        "id": 1,
-        "name": "На кирпичном постаменте",
-        "price_modifier": 2500,
-        "image_url": "https://example.com/images/base_brick.jpg",
-        "is_default": false
-    },
-    {
-        "id": 2,
-        "name": "На металлическом каркасе",
-        "price_modifier": 3500,
-        "image_url": "https://example.com/images/base_metal.jpg",
-        "is_default": false
-    },
-    {
-        "id": 3,
-        "name": "На готовом прицепе",
-        "price_modifier": 7000,
-        "image_url": "https://example.com/images/base_trailer.jpg",
-        "is_default": false
-    }
-]
-```
-
-* GET http://localhost:8080/constructor-data/addons 
--- запрос на получение Дополнений к Конфигурации в Конструкторе \
-пример ответа:
-```json
-[
-    {
-        "id": 1,
-        "name": "Доставка в пределах 50 км",
-        "description": "Привезем все материалы на ваш участок.",
-        "price": 100
-    },
-    {
-        "id": 2,
-        "name": "Строительство дымохода (за метр)",
-        "description": "Цена указана за 1 метр кирпичного дымохода.",
-        "price": 250
-    }
-]
-```
-### с авторизацией
-* POST http://localhost:8080/api/v1/configurations Auth: JWT, Body: (пример)
-```json
-{
-  "stove_type_id": 1,
-  "name": "Моя ЛУЧШАЯ печь для пиццы",
-  "choices": [
-    { "option_id": 1 }, 
-    { "option_id": 4 },
-    { "option_id": 7 }
-  ],
-  "addons": [
-    { "addon_id": 1 },
-    { "addon_id": 2 }
-  ]
-}
-```
--- запрос на создание Конфигурации \
-пример ответа:
-```json
-{
-    "id": 1,
-    "name": "Моя ЛУЧШАЯ печь для пиццы",
-    "is_template": false,
-    "is_locked": false,
-    "created_at": "2025-06-29T00:14:07.088565",
-    "total_price": 9950,
-    "stove_type": {
-        "id": 1,
-        "name": "Помпейская печь",
-        "description": "Классическая дровяная печь для пиццы и выпечки.",
-        "base_price": 5000,
-        "image_url": "https://example.com/images/pompei.jpg"
-    },
-    "components": [
-        {
-            "component_name": "Основание",
-            "chosen_option": {
-                "id": 1,
-                "name": "На кирпичном постаменте",
-                "price_modifier": 2500,
-                "image_url": "https://example.com/images/base_brick.jpg",
-                "is_default": true
-            }
-        },
-        {
-            "component_name": "Купол",
-            "chosen_option": {
-                "id": 4,
-                "name": "Из красного огнеупорного кирпича",
-                "price_modifier": 1500,
-                "image_url": "https://example.com/images/dome_red.jpg",
-                "is_default": true
-            }
-        },
-        {
-            "component_name": "Утепление купола",
-            "chosen_option": {
-                "id": 7,
-                "name": "Вермикулит + цемент",
-                "price_modifier": 600,
-                "image_url": "https://example.com/images/ins_vermiculite.jpg",
-                "is_default": false
-            }
-        }
-    ],
-    "addons": [
-        {
-            "id": 1,
-            "name": "Доставка в пределах 50 км",
-            "description": "Привезем все материалы на ваш участок.",
-            "price": 100
-        },
-        {
-            "id": 2,
-            "name": "Строительство дымохода (за метр)",
-            "description": "Цена указана за 1 метр кирпичного дымохода.",
-            "price": 250
-        }
-    ]
-}
-```
-
-* GET http://localhost:8080/api/v1/configurations/1 -- запрос на получение конкретной 
-конфигурации \
-пример ответа: созданная Конфигурация выше
-
-## Заказы 
-### с авторизацией
-* прежде всего регистрируемся и логинимся. с полученным токеном продолжаем работу
-* создаем конфигурацию заказа
-* POST http://localhost:8080/api/v1/orders Auth: JWT, Body:
-```json
-{
-  "configuration_id": 1,
-  "customer_name": "Иван Заказчиков",
-  "customer_phone": "+375441234567",
-  "object_address": "Минская обл., д. Тестовая, ул. Программная, д. 1",
-  "customer_comment": "Прошу связаться со мной после 18:00 для уточнения деталей."
-}
-```
-в результате получаем
-```json
-{
-    "id": 1,
-    "status": "PLACED",
-    "final_price": 0,
-    "created_at": "2025-07-02T18:20:46.47761",
-    "configuration": {
-        "id": 1,
-        "name": "Моя ЛУЧШАЯ печь для пиццы",
-        "is_template": false,
-        "is_locked": true,
-        "created_at": "2025-07-02T18:19:08.525535",
-        "total_price": 9950,
-        "stove_type": {
-            "id": 1,
-            "name": "Помпейская печь",
-            "description": "Классическая дровяная печь для пиццы и выпечки.",
-            "base_price": 5000,
-            "image_url": "https://example.com/images/pompei.jpg"
-        },
-        "components": [
-            {
-                "component_name": "Основание",
-                "chosen_option": {
-                    "id": 1,
-                    "name": "На кирпичном постаменте",
-                    "price_modifier": 2500,
-                    "image_url": "https://example.com/images/base_brick.jpg",
-                    "is_default": false
-                }
-            },
-            {
-                "component_name": "Купол",
-                "chosen_option": {
-                    "id": 4,
-                    "name": "Из красного огнеупорного кирпича",
-                    "price_modifier": 1500,
-                    "image_url": "https://example.com/images/dome_red.jpg",
-                    "is_default": false
-                }
-            },
-            {
-                "component_name": "Утепление купола",
-                "chosen_option": {
-                    "id": 7,
-                    "name": "Вермикулит + цемент",
-                    "price_modifier": 600,
-                    "image_url": "https://example.com/images/ins_vermiculite.jpg",
-                    "is_default": false
-                }
-            }
-        ],
-        "addons": [
-            {
-                "id": 2,
-                "name": "Строительство дымохода (за метр)",
-                "description": "Цена указана за 1 метр кирпичного дымохода.",
-                "price": 250
-            },
-            {
-                "id": 1,
-                "name": "Доставка в пределах 50 км",
-                "description": "Привезем все материалы на ваш участок.",
-                "price": 100
-            }
-        ]
-    }
-}
-```
-теперь наша конфигурация имеет параметр `"is_locked": true` \
-это значит, что изменить конфигурацию (PUT) уже не получиться 
-(на нее ссылаются и это вызовет проблемы)
-если мы повторим эту операцию снова, то получим ответ:
-```json
-{
-    "status_code": 500,
-    "timestamp": "2025-07-02T18:22:13.454105",
-    "message": "Конфигурация с таким id уже занята",
-    "path": "/api/v1/orders"
-}
-```
-* GET http://localhost:8080/api/v1/orders Auth: JWT -- запрос на получение списка ваших заказов:
-```json
-[
-    {
-        "id": 1,
-        "status": "PLACED",
-        "final_price": 0,
-        "created_at": "2025-07-02T18:20:46.47761",
-        "configuration": {
-            "id": 1,
-            "name": "Моя ЛУЧШАЯ печь для пиццы",
-            "is_template": false,
-            "is_locked": true,
-            "created_at": "2025-07-02T18:19:08.525535",
-            "total_price": 9950,
-            "stove_type": {
-                "id": 1,
-                "name": "Помпейская печь",
-                "description": "Классическая дровяная печь для пиццы и выпечки.",
-                "base_price": 5000,
-                "image_url": "https://example.com/images/pompei.jpg"
-            },
-            "components": [
-                {
-                    "component_name": "Основание",
-                    "chosen_option": {
-                        "id": 1,
-                        "name": "На кирпичном постаменте",
-                        "price_modifier": 2500,
-                        "image_url": "https://example.com/images/base_brick.jpg",
-                        "is_default": false
-                    }
-                },
-                {
-                    "component_name": "Купол",
-                    "chosen_option": {
-                        "id": 4,
-                        "name": "Из красного огнеупорного кирпича",
-                        "price_modifier": 1500,
-                        "image_url": "https://example.com/images/dome_red.jpg",
-                        "is_default": false
-                    }
-                },
-                {
-                    "component_name": "Утепление купола",
-                    "chosen_option": {
-                        "id": 7,
-                        "name": "Вермикулит + цемент",
-                        "price_modifier": 600,
-                        "image_url": "https://example.com/images/ins_vermiculite.jpg",
-                        "is_default": false
-                    }
-                }
-            ],
-            "addons": [
-                {
-                    "id": 2,
-                    "name": "Строительство дымохода (за метр)",
-                    "description": "Цена указана за 1 метр кирпичного дымохода.",
-                    "price": 250
-                },
-                {
-                    "id": 1,
-                    "name": "Доставка в пределах 50 км",
-                    "description": "Привезем все материалы на ваш участок.",
-                    "price": 100
-                }
-            ]
-        }
-    }
-]
-```
+мы переехали в другой [файл](API-doc.md)
 
 # Как устроен проект
 *пока что это не все* \
@@ -579,6 +155,10 @@ JWT токен нужно выполнить такой запрос
 -- обрабатывает запросы на выдачу данных о формировании Конструктора
   * [ConfigurationController.java](src/main/java/by/shumpanov/stove/stove_app_parent/constructor/controller/ConfigurationController.java) 
 -- возвращают ConfigurationResponse (DTO такой). CRUD операции по работе с Configuration
+  * [FavoriteController.java](src/main/java/by/shumpanov/stove/stove_app_parent/constructor/controller/FavoriteController.java)
+-- тоже возвращает ConfigurationResponse, отвечает за взаимодействие со списком Избранных у пользователей
+  * [PortfolioController.java](src/main/java/by/shumpanov/stove/stove_app_parent/constructor/controller/PortfolioController.java)
+-- возвращает PortfolioItemSummaryDto или PortfolioItemDetailDto, для взаимодействия со списком Портфолио
 * `dto` -- хранит все DTO классы. о каждом чутка по подробнее
   * [CreateConfigurationRequest.java](src/main/java/by/shumpanov/stove/stove_app_parent/constructor/dto/CreateConfigurationRequest.java)
     Основной DTO для создания или обновления конфигурации.
@@ -612,6 +192,10 @@ JWT токен нужно выполнить такой запрос
     Тоже самое, но для Компонента
   * [ComponentOptionDto.java](src/main/java/by/shumpanov/stove/stove_app_parent/constructor/dto/ComponentOptionDto.java)
     Тоже самое, но для конкретных вариантов Компонента
+  * [PortfolioItemDetailDto.java](src/main/java/by/shumpanov/stove/stove_app_parent/constructor/dto/PortfolioItemDetailDto.java)
+    dto, что хранит в себе более детализированную информацию о Конфигурации из Портфолио
+  * [PortfolioItemSummaryDto.java](src/main/java/by/shumpanov/stove/stove_app_parent/constructor/dto/PortfolioItemSummaryDto.java)
+    хранит в себе минимальную информацию о Конфигурации из Портфолио (отобразить кнопку, например)
 * `model` -- классы-модели для взаимодействия с БД
 * `repository` -- хранит в себе JPA-интерфейсы для доступа к данным из БД
 * `service` -- хранит в себе сервисы
@@ -629,6 +213,10 @@ JWT токен нужно выполнить такой запрос
   * [ConstructorDataService.java](src/main/java/by/shumpanov/stove/stove_app_parent/constructor/service/ConstructorDataService.java)
     Простой сервис, который через репозитории достает справочные данные 
     и с помощью мапперов преобразует их в DTO для ConstructorDataController
+  * [FavoriteService.java](src/main/java/by/shumpanov/stove/stove_app_parent/constructor/service/FavoriteService.java)
+    сервис для работы с списком Избранных у Пользователя (взять все из списка, добавить новый или удалить)
+  * [PortfolioService.java](src/main/java/by/shumpanov/stove/stove_app_parent/constructor/service/PortfolioService.java)
+    сервис для работы с Портфолио. предназначен только чтобы получать данные и никак их не изменять
 * `util`
   * `mapper` -- хранит в себе мапперы
 
