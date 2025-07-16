@@ -24,22 +24,38 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.stove.R
+import com.example.stove.navigation.NavigationDestination
 import com.example.stove.ui.theme.StoveTheme
 
+
+object HomeDestination : NavigationDestination {
+    override val route: String = "Home"
+    override val titleRes: Int = R.string.title_stoves
+}
+
+/**
+ * Разобраться со Spacer()
+ * */
 @Composable
-fun MainMenu() {
+fun HomeScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-//        Image(
-//            painter = painterResource(id = R.drawable.stove),
-//            contentDescription = "Кирпичная печь",
-//            modifier = Modifier
-//                .fillMaxWidth()
-//        )
-        Column(modifier = Modifier.padding(dimensionResource(R.dimen.padding_large))) {
+        Image(
+            painter = painterResource(id = R.drawable.stove),
+            contentDescription = "Кирпичная печь",
+            modifier = Modifier
+                .fillMaxWidth()
+        )
+        Column(
+            modifier = Modifier
+                .padding(
+                    start = dimensionResource(R.dimen.padding_large),
+                    end = dimensionResource(R.dimen.padding_large)
+                )
+        ) {
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
@@ -63,9 +79,11 @@ fun MainMenu() {
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Column(modifier = Modifier.padding(
-                top = dimensionResource(R.dimen.padding_large),
-                bottom = dimensionResource(R.dimen.padding_large))
+            Column(
+                modifier = Modifier.padding(
+                    top = dimensionResource(R.dimen.padding_large),
+                    bottom = dimensionResource(R.dimen.padding_large)
+                )
             ) {
                 Row(
                     modifier = Modifier.padding(dimensionResource(R.dimen.padding_large)),
@@ -139,70 +157,57 @@ fun MainMenu() {
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
             Text(
                 text = stringResource(R.string.title_contacts),
                 style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                modifier = Modifier.padding()
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             Column {
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Surface(
-                        color = MaterialTheme.colorScheme.secondaryContainer,
-                        shape = MaterialTheme.shapes.medium,
-                        modifier = Modifier
-                            .padding(dimensionResource(R.dimen.padding_large))
-                            .size(dimensionResource(R.dimen.background_icon_size))
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.phone_icon),
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
-//                            modifier = Modifier.size(dimensionResource(R.dimen.icon_size))
-                        )
-                    }
+                    IconWithBackground(
+                        painter = painterResource(R.drawable.phone_icon),
+                        contentDescription = null,
+                        modifier = Modifier.padding(end = dimensionResource(R.dimen.padding_large))
+                    )
                     Text(
                         text = stringResource(R.string.contact_phone),
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 }
+                Spacer(modifier = Modifier.height(16.dp))
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Surface(
-                        color = MaterialTheme.colorScheme.secondaryContainer,
-                        shape = MaterialTheme.shapes.medium,
-                        modifier = Modifier
-                            .padding(dimensionResource(R.dimen.padding_large))
-                            .size(dimensionResource(R.dimen.background_icon_size))
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.letter_icon),
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                            modifier = Modifier.size(dimensionResource(R.dimen.icon_size))
-
-                        )
-                    }
+                    IconWithBackground(
+                        painter = painterResource(R.drawable.letter_icon),
+                        contentDescription = null,
+                        modifier = Modifier.padding(end = dimensionResource(R.dimen.padding_large))
+                    )
                     Text(
                         text = stringResource(R.string.contact_email),
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                     )
                 }
+                Spacer(modifier = Modifier.height(20.dp))
                 Text(
                     text = stringResource(R.string.title_articles),
                     style = MaterialTheme.typography.headlineLarge,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
-                Column {
 
-                }
+                /**
+                 *
+                 *    To do LazyColumn of news
+                 *
+                 * */
             }
         }
     }
@@ -216,7 +221,7 @@ fun MainMenuPreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            MainMenu()
+            HomeScreen()
         }
     }
 }

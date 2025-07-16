@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,16 +17,19 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.stove.R
+import com.example.stove.StoveTopAppBar
 import com.example.stove.ui.theme.StoveTheme
 
 @Composable
 fun EntryScreen() {
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.padding(
-            start = dimensionResource(R.dimen.padding_large),
-            end = dimensionResource(R.dimen.padding_large)
-        )
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                start = dimensionResource(R.dimen.padding_large),
+                end = dimensionResource(R.dimen.padding_large)
+            )
     ) {
         Column {
             Column(
@@ -63,7 +67,7 @@ fun EntryScreen() {
                     textStyle = MaterialTheme.typography.labelLarge,
                     modifier = Modifier
                         .fillMaxWidth()
-//                        .height(dimensionResource(R.dimen.active_button_height))
+                        //                        .height(dimensionResource(R.dimen.active_button_height))
                         .padding(
                             top = dimensionResource(R.dimen.padding_medium),
                             bottom = dimensionResource(R.dimen.padding_medium)
@@ -112,7 +116,7 @@ fun EntryScreen() {
 fun EntryScreenPreview() {
     StoveTheme {
         Surface(
-            modifier = Modifier.fillMaxSize(),
+//            modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
             EntryScreen()

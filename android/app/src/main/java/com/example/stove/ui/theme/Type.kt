@@ -85,6 +85,13 @@ val Typography = Typography(
         letterSpacing = 0.5.sp
     ),
 
+    titleLarge = TextStyle(
+        fontFamily = Inter,
+        fontWeight = FontWeight.Medium,
+        fontSize = 12.sp,
+        lineHeight = 18.sp,
+        letterSpacing = 0.sp
+    ),
     titleMedium = TextStyle(
         fontFamily = Inter,
         fontWeight = FontWeight.Medium,
@@ -98,7 +105,5 @@ val Typography = Typography(
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.sp
-    ),
-
-
+    )
 )

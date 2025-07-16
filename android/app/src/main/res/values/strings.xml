@@ -56,5 +56,7 @@
     <string name="button_choose_favorite">Выбрать из избранного</string>
 
     <!-- Icon's & Image's content description-->
+    <string name="avatar_description">Аватар Вашего профиля</string>
+    <string name="arrow_backward_description">Вернуться назад</string>
 
 </resources>
