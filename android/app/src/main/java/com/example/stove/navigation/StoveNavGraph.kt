@@ -13,8 +13,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.stove.StoveBottomAppBar
 import com.example.stove.StoveTopAppBar
 import com.example.stove.model.StoveMenus
-import com.example.stove.ui.screens.DesignerEntryDestination
-import com.example.stove.ui.screens.DesignerEntryScreen
+import com.example.stove.ui.screens.designer.DesignerEntryDestination
+import com.example.stove.ui.screens.designer.DesignerEntryScreen
 import com.example.stove.ui.screens.HomeDestination
 import com.example.stove.ui.screens.HomeScreen
 import com.example.stove.ui.screens.ProfileDestination

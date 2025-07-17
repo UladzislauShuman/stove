@@ -1,6 +1,9 @@
 package com.example.stove.ui.screens
 
+import android.media.Image
 import android.net.Uri
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,6 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -19,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -103,7 +109,7 @@ fun IconWithBackground(
 }
 
 
-// New from server, need API now
+// New from the server, need API now
 @Composable
 fun Article(
     modifier: Modifier = Modifier,
@@ -128,3 +134,51 @@ fun Article(
     }
 }
 
+
+@Composable
+fun DesignerOptionCard(
+    title: String,
+    imageRes: Int,
+    isSelected: Boolean,
+    modifier: Modifier = Modifier
+) {
+    Card (
+        shape = MaterialTheme.shapes.medium,
+        colors = CardDefaults.cardColors(
+            containerColor =
+                if(isSelected) MaterialTheme.colorScheme.secondaryContainer
+                else MaterialTheme.colorScheme.background
+        ),
+        modifier = modifier
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+        ) {
+            Card(
+                elevation = CardDefaults.elevatedCardElevation(dimensionResource(R.dimen.card_elevation)),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.background
+                ),
+                shape = MaterialTheme.shapes.large,
+                modifier = Modifier
+//                .size(dimensionResource(R.dimen.card_size))
+                    .padding(
+                        bottom = dimensionResource(R.dimen.padding_medium)
+                    )
+            ) {
+                Image(
+                    painter = painterResource(imageRes),
+                    contentDescription = null,
+                    contentScale = ContentScale.Fit
+                )
+            }
+            Text(
+                text = title,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
+        }
+    }
+}

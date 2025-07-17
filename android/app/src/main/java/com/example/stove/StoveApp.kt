@@ -23,7 +23,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.stove.model.StoveMenus
 import com.example.stove.navigation.StoveNavGraph
-import com.example.stove.ui.screens.DesignerEntryDestination
+import com.example.stove.ui.screens.designer.DesignerEntryDestination
 import com.example.stove.ui.screens.HomeDestination
 import com.example.stove.ui.screens.ProfileDestination
 
