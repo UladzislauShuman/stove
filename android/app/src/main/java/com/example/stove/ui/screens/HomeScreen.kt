@@ -99,7 +99,8 @@ fun HomeScreen() {
                     )
                     Text(
                         text = stringResource(R.string.service_construction),
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 }
                 Row(
@@ -116,7 +117,8 @@ fun HomeScreen() {
                     )
                     Text(
                         text = stringResource(R.string.service_repair),
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 }
                 Row(
@@ -133,7 +135,8 @@ fun HomeScreen() {
                     )
                     Text(
                         text = stringResource(R.string.service_equipment),
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 }
             }
