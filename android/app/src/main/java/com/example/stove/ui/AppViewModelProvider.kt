@@ -1,0 +1,25 @@
+package com.example.stove.ui
+
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.room.util.appendPlaceholders
+import com.example.stove.StoveApplication
+import com.example.stove.ui.screens.designer.DesignerViewModel
+
+object AppViewModelProvider {
+    val Factory = viewModelFactory {
+        initializer {
+            DesignerViewModel(
+                stoveApplication().container.favouriteRepository
+            )
+        }
+    }
+}
+
+fun CreationExtras.stoveApplication() : StoveApplication =
+    (this[AndroidViewModelFactory.APPLICATION_KEY] as StoveApplication)

@@ -28,7 +28,9 @@ object DesignerEntryDestination : NavigationDestination {
 }
 
 @Composable
-fun DesignerEntryScreen() {
+fun DesignerEntryScreen(
+    startDesigner: () -> Unit
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(
@@ -57,7 +59,7 @@ fun DesignerEntryScreen() {
             labelId = R.string.button_create_new,
             textStyle = MaterialTheme.typography.labelLarge,
             isActiveButton = true,
-            onClickBehavior = { TODO() },
+            onClickBehavior = { startDesigner() },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
@@ -87,7 +89,7 @@ fun DesignerEntryScreenPreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            DesignerEntryScreen()
+//            DesignerEntryScreen()
         }
     }
 }

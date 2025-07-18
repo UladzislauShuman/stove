@@ -54,8 +54,11 @@
     <string name="caption_stove">Печь</string>
     <string name="caption_barbecue">Барбекю</string>
     <string name="caption_fire_pit">Кострище</string>
+    <string name="caption_brick">Кирпич</string>
+    <string name="caption_concrete">Бетон</string>
 
 
+    <string name="title_material">Материал</string>
     <string name="title_constructor">Конструктор</string>
     <string name="welcome_message">Приветствуем вас в нашей мастерской</string>
     <string name="subtitle_create">Начните создание своего уникального проекта печи или камина</string>

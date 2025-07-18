@@ -1,4 +1,4 @@
-package com.example.stove.ui.screens
+package com.example.stove.ui.screens.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -25,6 +25,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.stove.R
 import com.example.stove.navigation.NavigationDestination
+import com.example.stove.ui.screens.CustomButton
+import com.example.stove.ui.screens.IconWithBackground
 import com.example.stove.ui.theme.StoveTheme
 
 

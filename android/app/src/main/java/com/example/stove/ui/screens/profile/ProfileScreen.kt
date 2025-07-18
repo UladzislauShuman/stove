@@ -1,4 +1,4 @@
-package com.example.stove.ui.screens
+package com.example.stove.ui.screens.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -24,10 +24,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.stove.R
-import com.example.stove.StoveBottomAppBar
-import com.example.stove.StoveTopAppBar
-import com.example.stove.model.StoveMenus
 import com.example.stove.navigation.NavigationDestination
+import com.example.stove.ui.screens.IconWithBackground
 import com.example.stove.ui.theme.StoveTheme
 
 object ProfileDestination : NavigationDestination {

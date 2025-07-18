@@ -24,8 +24,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.stove.model.StoveMenus
 import com.example.stove.navigation.StoveNavGraph
 import com.example.stove.ui.screens.designer.DesignerEntryDestination
-import com.example.stove.ui.screens.HomeDestination
-import com.example.stove.ui.screens.ProfileDestination
+import com.example.stove.ui.screens.home.HomeDestination
+import com.example.stove.ui.screens.profile.ProfileDestination
 
 
 @Composable
@@ -37,7 +37,9 @@ fun StoveApp(navController: NavHostController = rememberNavController()) {
 
 @Composable
 fun StoveBottomAppBar(
-    navController: NavHostController,
+    navigateHome: () -> Unit,
+    navigateDesigner: () -> Unit,
+    navigateProfile: () -> Unit,
     isSelected: StoveMenus,
     modifier: Modifier = Modifier
 ) {
@@ -52,7 +54,7 @@ fun StoveBottomAppBar(
             ) {
                 Box(
                     modifier = Modifier.clickable {
-                        navController.navigate(HomeDestination.route)
+                        navigateHome()
                     }
                 )  {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -79,7 +81,7 @@ fun StoveBottomAppBar(
                 }
                 Box(
                     modifier = Modifier.clickable {
-                        navController.navigate(DesignerEntryDestination.route)
+                        navigateDesigner()
                     }
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -106,7 +108,7 @@ fun StoveBottomAppBar(
                 }
                 Box(
                     modifier = Modifier.clickable {
-                        navController.navigate(ProfileDestination.route)
+                        navigateProfile()
                     }
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {

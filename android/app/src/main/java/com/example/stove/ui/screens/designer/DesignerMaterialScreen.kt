@@ -1,6 +1,5 @@
 package com.example.stove.ui.screens.designer
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,24 +13,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.stove.R
 import com.example.stove.navigation.NavigationDestination
-import com.example.stove.ui.AppViewModelProvider
 import com.example.stove.ui.screens.CustomButton
 import com.example.stove.ui.screens.DesignerOptionCard
 import com.example.stove.ui.theme.StoveTheme
 
-object DesignerTypeDestination : NavigationDestination {
-    override val route: String = "DesignerType"
+object DesignerMaterialDestination : NavigationDestination {
+    override val route: String = "DesignerMaterial"
     override val titleRes: Int = R.string.title_constructor
 }
 
-
 @Composable
-fun DesignerTypeScreen(
-    viewModel: DesignerViewModel = viewModel(factory = AppViewModelProvider.Factory)
-) {
+fun DesignerMaterialScreen() {
     Column(
         modifier = Modifier.padding(
             start = dimensionResource(R.dimen.padding_large),
@@ -39,7 +33,7 @@ fun DesignerTypeScreen(
         )
     ) {
         Text(
-            text = stringResource(R.string.title_type),
+            text = stringResource(R.string.title_material),
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.onPrimaryContainer,
             modifier = Modifier.padding(
@@ -50,50 +44,20 @@ fun DesignerTypeScreen(
         Column {
             Row {
                 DesignerOptionCard(
-                    title = stringResource(R.string.caption_fireplace),
-                    imageRes = R.drawable.fireplace_card,
-                    isSelected = if(),
+                    title = stringResource(R.string.caption_brick),
+                    imageRes = R.drawable.brick,
+                    isSelected = false,
                     modifier = Modifier
                         .weight(1f)
                         .padding(dimensionResource(R.dimen.padding_large))
-                        .clickable {
-                            viewModel.updateType("Камин")
-                        }
                 )
                 DesignerOptionCard(
-                    title = stringResource(R.string.caption_stove),
-                    imageRes = R.drawable.stove_card,
+                    title = stringResource(R.string.caption_concrete),
+                    imageRes = R.drawable.concrete,
                     isSelected = true,
                     modifier = Modifier
                         .weight(1f)
                         .padding(dimensionResource(R.dimen.padding_large))
-                        .clickable {
-                            viewModel.updateType("Печь")
-                        }
-                )
-            }
-            Row {
-                DesignerOptionCard(
-                    title = stringResource(R.string.caption_barbecue),
-                    imageRes = R.drawable.barbecue_card,
-                    isSelected = false,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(dimensionResource(R.dimen.padding_large))
-                        .clickable {
-                            viewModel.updateType("Барбекю")
-                        }
-                )
-                DesignerOptionCard(
-                    title = stringResource(R.string.caption_fire_pit),
-                    imageRes = R.drawable.fire_pit_card,
-                    isSelected = false,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(dimensionResource(R.dimen.padding_large))
-                        .clickable {
-                            viewModel.updateType("Кострище")
-                        }
                 )
             }
             Row(modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_large))) {
@@ -122,13 +86,13 @@ fun DesignerTypeScreen(
 
 @Preview
 @Composable
-fun DesignerTypeScreenPreview() {
+fun DesignerMaterialScreenPreview() {
     StoveTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            DesignerTypeScreen()
+            DesignerMaterialScreen()
         }
     }
 }
