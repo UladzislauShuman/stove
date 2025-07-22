@@ -1,6 +1,7 @@
 package com.example.stove.ui.screens.profile
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,7 +35,9 @@ object ProfileDestination : NavigationDestination {
 }
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(
+    onClickFavourites: () -> Unit
+) {
     Column(
         modifier = Modifier.padding(
             start = dimensionResource(R.dimen.padding_large),
@@ -101,6 +104,7 @@ fun ProfileScreen() {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
                     .padding(bottom = dimensionResource(R.dimen.padding_large))
+                    .clickable{ onClickFavourites() }
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     IconWithBackground(
@@ -122,7 +126,8 @@ fun ProfileScreen() {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     IconWithBackground(
@@ -153,7 +158,7 @@ fun ProfileScreenPreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            ProfileScreen()
+//            ProfileScreen()
         }
     }
 }

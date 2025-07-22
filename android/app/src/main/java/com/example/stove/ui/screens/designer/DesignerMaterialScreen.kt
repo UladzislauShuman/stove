@@ -39,7 +39,8 @@ fun DesignerMaterialScreen(
     val selectedMaterial by viewModel.selectedMaterial.collectAsState()
 
     Column(
-        modifier = Modifier.padding(
+        modifier = Modifier
+            .padding(
             start = dimensionResource(R.dimen.padding_large),
             end = dimensionResource(R.dimen.padding_large)
         )

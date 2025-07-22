@@ -51,7 +51,7 @@ fun DesignerSummaryScreen(
             )
         )
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.padding(
                 top = dimensionResource(R.dimen.padding_medium),

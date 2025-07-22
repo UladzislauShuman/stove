@@ -27,6 +27,8 @@ import com.example.stove.ui.screens.designer.DesignerViewModel
 import com.example.stove.ui.screens.home.HomeDestination
 import com.example.stove.ui.screens.home.HomeScreen
 import com.example.stove.ui.screens.profile.ProfileDestination
+import com.example.stove.ui.screens.profile.ProfileFavouritesScreen
+import com.example.stove.ui.screens.profile.ProfileFavouritesViewModel
 import com.example.stove.ui.screens.profile.ProfileScreen
 
 @Composable
@@ -72,14 +74,14 @@ fun StoveNavGraph(
                     navController.navigate("designer_graph")
                 },
                 navigateProfile = {
-                    navController.navigate(ProfileDestination.route)
+                    navController.navigate("profile_graph")
                 },
                 modifier = Modifier,
                 isSelected =
                     when {
                         currentRoute == "Home" -> StoveMenus.HOME
                         currentRoute?.startsWith("designer_graph") == true -> StoveMenus.DESIGNER
-                        currentRoute == "Profile" -> StoveMenus.PROFILE
+                        currentRoute?.startsWith("profile_graph") == true-> StoveMenus.PROFILE
                         else -> StoveMenus.HOME
                     }
             )
@@ -90,9 +92,7 @@ fun StoveNavGraph(
             startDestination = HomeDestination.route,
             modifier = modifier.padding(innerPadding)
         ) {
-
             navigation(startDestination = "designer_graph/entry", route = "designer_graph") {
-
                 composable(route = "designer_graph/entry") {
                     DesignerEntryScreen(
                         startDesigner = { navController.navigate("designer_graph/type") },
@@ -139,15 +139,16 @@ fun StoveNavGraph(
                 }
             }
 
+            navigation(startDestination = "profile_graph/main", route = "profile_graph") {
+                composable(route = "profile_graph/main") {
+                    ProfileScreen(onClickFavourites = { navController.navigate("profile_graph/favourites") })
+                }
+                composable(route = "profile_graph/favourites") {
+                    ProfileFavouritesScreen()
+                }
+            }
             composable(route = HomeDestination.route) {
                 HomeScreen()
-            }
-
-
-            navigation(startDestination = "profile", route = "profile_graph") {
-                composable(route = "profile") {
-                    ProfileScreen()
-                }
             }
         }
     }
