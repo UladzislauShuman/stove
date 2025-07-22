@@ -40,7 +40,7 @@
     <string name="article_fireplace_description">Подробная инструкция по разжиганию камина для безопасного и эффективного горения.</string>
 
     <string name="title_contacts">Контакты</string>
-    <string name="contact_phone">+7 (916) 123-45-67</string>
+    <string name="contact_phone">+7 (916) 123–45-67</string>
     <string name="contact_email">info@pechnik.ru</string>
 
     <string name="title_profile">Профиль</string>
@@ -66,6 +66,9 @@
     <string name="button_next">Далее</string>
     <string name="button_back">Назад</string>
     <string name="button_choose_favorite">Выбрать из избранного</string>
+    <string name="title_summary">Итог</string>
+
+    <string name="button_add_to_favourites">Добавить в избранное</string>
 
     <!-- Icon's & Image's content description-->
     <string name="avatar_description">Аватар Вашего профиля</string>

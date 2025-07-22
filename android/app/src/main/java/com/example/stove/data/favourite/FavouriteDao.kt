@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface FavouriteDao {
     @Query("SELECT * FROM favourites")
-    suspend fun getAllFavourites() : Flow<List<Favourite>>
+    fun getAllFavourites() : Flow<List<Favourite>>
 
     @Delete
     suspend fun delete(favourite: Favourite)

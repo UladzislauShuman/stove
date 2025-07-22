@@ -2,8 +2,8 @@ package com.example.stove.data.favourite
 
 import kotlinx.coroutines.flow.Flow
 
-class OfflineFavouriteRepository(val dao: FavouriteDao) : FavouriteRepository {
-    override suspend fun getAllFavourites() : Flow<List<Favourite>> {
+class OfflineFavouriteRepository(private val dao: FavouriteDao) : FavouriteRepository {
+    override fun getAllFavourites() : Flow<List<Favourite>> {
         return dao.getAllFavourites()
     }
 

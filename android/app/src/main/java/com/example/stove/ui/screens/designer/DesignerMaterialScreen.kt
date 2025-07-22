@@ -1,21 +1,26 @@
 package com.example.stove.ui.screens.designer
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.stove.R
+import com.example.stove.model.StoveCharacteristics
+import com.example.stove.model.StoveProperties
 import com.example.stove.navigation.NavigationDestination
-import com.example.stove.ui.screens.CustomButton
+import com.example.stove.ui.screens.DesignerButtonsRow
 import com.example.stove.ui.screens.DesignerOptionCard
 import com.example.stove.ui.theme.StoveTheme
 
@@ -25,7 +30,14 @@ object DesignerMaterialDestination : NavigationDestination {
 }
 
 @Composable
-fun DesignerMaterialScreen() {
+fun DesignerMaterialScreen(
+    stoveMaterials: List<StoveCharacteristics> = StoveProperties.materials,
+    viewModel: DesignerViewModel,
+    backBehavior: () -> Unit,
+    nextBehavior: () -> Unit
+) {
+    val selectedMaterial by viewModel.selectedMaterial.collectAsState()
+
     Column(
         modifier = Modifier.padding(
             start = dimensionResource(R.dimen.padding_large),
@@ -41,46 +53,26 @@ fun DesignerMaterialScreen() {
                 bottom = dimensionResource(R.dimen.padding_small)
             )
         )
-        Column {
-            Row {
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(dimensionResource(R.dimen.cell_size)),
+        ) {
+            items(items = stoveMaterials, key = { material -> material.id }) { material ->
+                val materialName = stringResource(material.nameRes)
+
                 DesignerOptionCard(
-                    title = stringResource(R.string.caption_brick),
-                    imageRes = R.drawable.brick,
-                    isSelected = false,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(dimensionResource(R.dimen.padding_large))
-                )
-                DesignerOptionCard(
-                    title = stringResource(R.string.caption_concrete),
-                    imageRes = R.drawable.concrete,
-                    isSelected = true,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(dimensionResource(R.dimen.padding_large))
-                )
-            }
-            Row(modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_large))) {
-                CustomButton(
-                    labelId = R.string.button_back,
-                    textStyle = MaterialTheme.typography.labelLarge,
-                    isActiveButton = false,
-                    onClickBehavior = { TODO() },
-                    modifier = Modifier
-                        .padding(end = dimensionResource(R.dimen.padding_small))
-                        .weight(1f)
-                )
-                CustomButton(
-                    labelId = R.string.button_next,
-                    textStyle = MaterialTheme.typography.labelLarge,
-                    isActiveButton = true,
-                    onClickBehavior = { TODO() },
-                    modifier = Modifier
-                        .padding(end = dimensionResource(R.dimen.padding_small))
-                        .weight(1f)
+                    titleRes = material.nameRes,
+                    imageRes = material.imageRes,
+                    isSelected = selectedMaterial == materialName,
+                    onClickBehavior = {
+                        viewModel.updateMaterial(materialName)
+                    }
                 )
             }
         }
+        DesignerButtonsRow(
+            backBehavior = { backBehavior() },
+            nextBehavior = { nextBehavior() }
+        )
     }
 }
 
@@ -92,7 +84,7 @@ fun DesignerMaterialScreenPreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            DesignerMaterialScreen()
+//            DesignerMaterialScreen()
         }
     }
 }

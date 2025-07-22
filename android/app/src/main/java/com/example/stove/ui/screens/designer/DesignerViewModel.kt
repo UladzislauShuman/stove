@@ -1,52 +1,53 @@
 package com.example.stove.ui.screens.designer
 
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.stove.data.favourite.Favourite
 import com.example.stove.data.favourite.FavouriteRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
+
+/**
+ * Когда ViewModel начнёт расти, нужно сделать реализацию через UI-модель
+ */
 class DesignerViewModel(private val favouriteRepository: FavouriteRepository): ViewModel() {
 
-    private val selectedType = MutableStateFlow<String?>(null)
-    private val selectedMaterial = MutableStateFlow<String?>(null)
+    private val _selectedType = MutableStateFlow<String?>(null)
+    val selectedType: StateFlow<String?> = _selectedType
+
+    private val _selectedMaterial = MutableStateFlow<String?>(null)
+    val selectedMaterial: StateFlow<String?> = _selectedMaterial
+
 
     fun updateType(type: String) {
-        selectedType.update {
+        _selectedType.update {
             type
         }
     }
     fun updateMaterial(material: String) {
-        selectedMaterial.update {
+        _selectedMaterial.update {
             material
         }
     }
 
-    val summaryProject = combine(selectedType, selectedMaterial) { type, material ->
-        if(type != null && material != null) {
-            Favourite(
-                type = type,
-                material = material
-            )
-        } else
-            null
+    fun addToFavourites() {
+        val type = _selectedType.value
+        val material = _selectedMaterial.value
+
+        viewModelScope.launch {
+            if(type == null || material == null) {
+                return@launch
+            } else {
+                val favourite =
+                    Favourite(
+                        type = type,
+                        material = material
+                    )
+                favouriteRepository.insert(favourite)
+            }
+        }
     }
-
 }
-
-
-/**
- *
- * Я НЕ БУДУ ДЕЛАТЬ ЭТО КАК ГОВНО КОТОРОЕ ЩАС
- * Я СДЕЛАЮ НОРМАЛЬНО
- * НАХУЯ Я ПОСТАВИЛ СЕБЕ КАКИЕ-ТО ВРЕМЕННЫЙ РАМКИ ЧИЛЛ
- * А ТО КОД ПОЛНОЕ ГОВНИЩЕ
- *
- * СКОЛЬКО ЗАХАРДКОЖЕНО.....
- *
- * */

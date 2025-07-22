@@ -3,6 +3,7 @@ package com.example.stove.ui.screens
 import android.media.Image
 import android.net.Uri
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
@@ -137,9 +139,10 @@ fun Article(
 
 @Composable
 fun DesignerOptionCard(
-    title: String,
+    titleRes: Int,
     imageRes: Int,
     isSelected: Boolean,
+    onClickBehavior: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card (
@@ -147,9 +150,9 @@ fun DesignerOptionCard(
         colors = CardDefaults.cardColors(
             containerColor =
                 if(isSelected) MaterialTheme.colorScheme.secondaryContainer
-                else MaterialTheme.colorScheme.background
+                else MaterialTheme.colorScheme.background,
         ),
-        modifier = modifier
+        modifier = modifier.clickable{ onClickBehavior() }
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -157,13 +160,11 @@ fun DesignerOptionCard(
             modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
         ) {
             Card(
-                elevation = CardDefaults.elevatedCardElevation(dimensionResource(R.dimen.card_elevation)),
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.background
                 ),
                 shape = MaterialTheme.shapes.large,
                 modifier = Modifier
-//                .size(dimensionResource(R.dimen.card_size))
                     .padding(
                         bottom = dimensionResource(R.dimen.padding_medium)
                     )
@@ -175,10 +176,37 @@ fun DesignerOptionCard(
                 )
             }
             Text(
-                text = title,
+                text = stringResource(titleRes),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
         }
+    }
+}
+
+@Composable
+fun DesignerButtonsRow(
+    backBehavior: () -> Unit,
+    nextBehavior: () -> Unit
+) {
+    Row(modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_large))) {
+        CustomButton(
+            labelId = R.string.button_back,
+            textStyle = MaterialTheme.typography.labelLarge,
+            isActiveButton = false,
+            onClickBehavior = backBehavior,
+            modifier = Modifier
+                .padding(end = dimensionResource(R.dimen.padding_small))
+                .weight(1f)
+        )
+        CustomButton(
+            labelId = R.string.button_next,
+            textStyle = MaterialTheme.typography.labelLarge,
+            isActiveButton = true,
+            onClickBehavior = nextBehavior,
+            modifier = Modifier
+                .padding(end = dimensionResource(R.dimen.padding_small))
+                .weight(1f)
+        )
     }
 }

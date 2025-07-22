@@ -4,8 +4,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,12 +16,14 @@ import androidx.navigation.navigation
 import com.example.stove.StoveBottomAppBar
 import com.example.stove.StoveTopAppBar
 import com.example.stove.model.StoveMenus
+import com.example.stove.ui.AppViewModelProvider
 import com.example.stove.ui.screens.designer.DesignerEntryDestination
 import com.example.stove.ui.screens.designer.DesignerEntryScreen
-import com.example.stove.ui.screens.designer.DesignerMaterialDestination
 import com.example.stove.ui.screens.designer.DesignerMaterialScreen
-import com.example.stove.ui.screens.designer.DesignerTypeDestination
+import com.example.stove.ui.screens.designer.DesignerSummaryDestination
+import com.example.stove.ui.screens.designer.DesignerSummaryScreen
 import com.example.stove.ui.screens.designer.DesignerTypeScreen
+import com.example.stove.ui.screens.designer.DesignerViewModel
 import com.example.stove.ui.screens.home.HomeDestination
 import com.example.stove.ui.screens.home.HomeScreen
 import com.example.stove.ui.screens.profile.ProfileDestination
@@ -72,10 +76,10 @@ fun StoveNavGraph(
                 },
                 modifier = Modifier,
                 isSelected =
-                    when(currentRoute) {
-                        "Home" -> StoveMenus.HOME
-                        "designer_graph" -> StoveMenus.DESIGNER
-                        "Profile" -> StoveMenus.PROFILE
+                    when {
+                        currentRoute == "Home" -> StoveMenus.HOME
+                        currentRoute?.startsWith("designer_graph") == true -> StoveMenus.DESIGNER
+                        currentRoute == "Profile" -> StoveMenus.PROFILE
                         else -> StoveMenus.HOME
                     }
             )
@@ -86,24 +90,63 @@ fun StoveNavGraph(
             startDestination = HomeDestination.route,
             modifier = modifier.padding(innerPadding)
         ) {
+
+            navigation(startDestination = "designer_graph/entry", route = "designer_graph") {
+
+                composable(route = "designer_graph/entry") {
+                    DesignerEntryScreen(
+                        startDesigner = { navController.navigate("designer_graph/type") },
+                    )
+                }
+                composable(route = "designer_graph/type") { backStackEntry ->
+                    val parentEntry = remember(backStackEntry) {
+                        navController.getBackStackEntry("designer_graph")
+                    }
+                    val designerViewModel: DesignerViewModel = viewModel(parentEntry, factory = AppViewModelProvider.Factory)
+
+                    DesignerTypeScreen(
+                        backBehavior = { navController.navigate("designer_graph/entry") },
+                        nextBehavior = { navController.navigate("designer_graph/material") },
+                        viewModel = designerViewModel
+                    )
+                }
+                composable(route = "designer_graph/material") { backStackEntry ->
+                    val parentEntry = remember(backStackEntry) {
+                        navController.getBackStackEntry("designer_graph")
+                    }
+                    val designerViewModel: DesignerViewModel = viewModel(parentEntry, factory = AppViewModelProvider.Factory)
+
+                    DesignerMaterialScreen(
+                        backBehavior = { navController.navigate("designer_graph/type") },
+                        nextBehavior = { navController.navigate("designer_graph/summary") },
+                        viewModel = designerViewModel
+                    )
+                }
+                composable(route = "designer_graph/summary") { backStackEntry ->
+                    val parentEntry = remember(backStackEntry) {
+                        navController.getBackStackEntry("designer_graph")
+                    }
+                    val designerViewModel: DesignerViewModel = viewModel(parentEntry, factory = AppViewModelProvider.Factory)
+
+                    DesignerSummaryScreen (
+                        backBehavior = { navController.navigate("designer_graph/material") },
+                        nextBehavior = {
+                            designerViewModel.addToFavourites()
+                            navController.navigate("designer_graph")
+                        },
+                        viewModel = designerViewModel
+                    )
+                }
+            }
+
             composable(route = HomeDestination.route) {
                 HomeScreen()
             }
-            composable(route = ProfileDestination.route) {
-                ProfileScreen()
-            }
 
-            navigation(startDestination = DesignerEntryDestination.route, route = "designer_graph") {
-                composable(route = DesignerEntryDestination.route) {
-                    DesignerEntryScreen(
-                        startDesigner = { navController.navigate(DesignerTypeDestination.route) }
-                    )
-                }
-                composable(route = DesignerTypeDestination.route) {
-                    DesignerTypeScreen()
-                }
-                composable(route = DesignerMaterialDestination.route) {
-                    DesignerMaterialScreen()
+
+            navigation(startDestination = "profile", route = "profile_graph") {
+                composable(route = "profile") {
+                    ProfileScreen()
                 }
             }
         }

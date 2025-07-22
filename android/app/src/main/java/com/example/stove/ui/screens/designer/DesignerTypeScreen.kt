@@ -1,24 +1,30 @@
 package com.example.stove.ui.screens.designer
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.stove.R
+import com.example.stove.model.StoveCharacteristics
+import com.example.stove.model.StoveProperties
 import com.example.stove.navigation.NavigationDestination
 import com.example.stove.ui.AppViewModelProvider
-import com.example.stove.ui.screens.CustomButton
+import com.example.stove.ui.screens.DesignerButtonsRow
 import com.example.stove.ui.screens.DesignerOptionCard
 import com.example.stove.ui.theme.StoveTheme
 
@@ -27,13 +33,18 @@ object DesignerTypeDestination : NavigationDestination {
     override val titleRes: Int = R.string.title_constructor
 }
 
-
 @Composable
 fun DesignerTypeScreen(
-    viewModel: DesignerViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: DesignerViewModel,
+    stoveTypes: List<StoveCharacteristics> = StoveProperties.types,
+    backBehavior: () -> Unit,
+    nextBehavior: () -> Unit
 ) {
+    val selectedType by viewModel.selectedType.collectAsState()
+
     Column(
-        modifier = Modifier.padding(
+        modifier = Modifier
+            .padding(
             start = dimensionResource(R.dimen.padding_large),
             end = dimensionResource(R.dimen.padding_large)
         )
@@ -47,76 +58,27 @@ fun DesignerTypeScreen(
                 bottom = dimensionResource(R.dimen.padding_small)
             )
         )
-        Column {
-            Row {
+
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(dimensionResource(R.dimen.cell_size)),
+        ) {
+            items(items = stoveTypes, key = { type -> type.id}) { type ->
+                val typeName = stringResource(type.nameRes)
+
                 DesignerOptionCard(
-                    title = stringResource(R.string.caption_fireplace),
-                    imageRes = R.drawable.fireplace_card,
-                    isSelected = if(),
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(dimensionResource(R.dimen.padding_large))
-                        .clickable {
-                            viewModel.updateType("Камин")
-                        }
-                )
-                DesignerOptionCard(
-                    title = stringResource(R.string.caption_stove),
-                    imageRes = R.drawable.stove_card,
-                    isSelected = true,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(dimensionResource(R.dimen.padding_large))
-                        .clickable {
-                            viewModel.updateType("Печь")
-                        }
-                )
-            }
-            Row {
-                DesignerOptionCard(
-                    title = stringResource(R.string.caption_barbecue),
-                    imageRes = R.drawable.barbecue_card,
-                    isSelected = false,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(dimensionResource(R.dimen.padding_large))
-                        .clickable {
-                            viewModel.updateType("Барбекю")
-                        }
-                )
-                DesignerOptionCard(
-                    title = stringResource(R.string.caption_fire_pit),
-                    imageRes = R.drawable.fire_pit_card,
-                    isSelected = false,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(dimensionResource(R.dimen.padding_large))
-                        .clickable {
-                            viewModel.updateType("Кострище")
-                        }
-                )
-            }
-            Row(modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_large))) {
-                CustomButton(
-                    labelId = R.string.button_back,
-                    textStyle = MaterialTheme.typography.labelLarge,
-                    isActiveButton = false,
-                    onClickBehavior = { TODO() },
-                    modifier = Modifier
-                        .padding(end = dimensionResource(R.dimen.padding_small))
-                        .weight(1f)
-                )
-                CustomButton(
-                    labelId = R.string.button_next,
-                    textStyle = MaterialTheme.typography.labelLarge,
-                    isActiveButton = true,
-                    onClickBehavior = { TODO() },
-                    modifier = Modifier
-                        .padding(end = dimensionResource(R.dimen.padding_small))
-                        .weight(1f)
+                    titleRes = type.nameRes,
+                    imageRes = type.imageRes,
+                    isSelected = selectedType == typeName,
+                    onClickBehavior = {
+                        viewModel.updateType(typeName)
+                    }
                 )
             }
         }
+        DesignerButtonsRow(
+            backBehavior = { backBehavior() },
+            nextBehavior = { nextBehavior() }
+        )
     }
 }
 
@@ -128,7 +90,7 @@ fun DesignerTypeScreenPreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            DesignerTypeScreen()
+//            DesignerTypeScreen()
         }
     }
 }
