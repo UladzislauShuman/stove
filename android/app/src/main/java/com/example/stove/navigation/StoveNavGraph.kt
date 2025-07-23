@@ -1,12 +1,20 @@
 package com.example.stove.navigation
 
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -39,24 +47,31 @@ fun StoveNavGraph(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
+    val topLevelRoutes = setOf(
+        "designer_graph/entry",
+        "profile_graph/main"
+    )
+
     Scaffold(
         topBar = {
-            when(currentRoute) {
-                "Home" -> {
+            when {
+                currentRoute?.startsWith("designer_graph/") == true -> {
                     StoveTopAppBar(
-                        title = stringResource(HomeDestination.titleRes),
-                        canNavigateBack = false
+                        title = stringResource(DesignerEntryDestination.titleRes),
+                        canNavigateBack = currentRoute !in topLevelRoutes,
+                        navigateUp = { navController.navigateUp() }
                     )
                 }
-                "Profile" -> {
+                currentRoute?.startsWith("profile_graph/") == true -> {
                     StoveTopAppBar(
                         title = stringResource(ProfileDestination.titleRes),
-                        canNavigateBack = false
+                        canNavigateBack = currentRoute !in topLevelRoutes,
+                        navigateUp = { navController.navigateUp() }
                     )
                 }
                 else -> {
                     StoveTopAppBar(
-                        title = stringResource(DesignerEntryDestination.titleRes),
+                        title = stringResource(ProfileDestination.titleRes),
                         canNavigateBack = false
                     )
                 }
@@ -64,9 +79,7 @@ fun StoveNavGraph(
         },
         bottomBar = {
             StoveBottomAppBar(
-
                 /** Сделать оптимальным переход с графа на граф*/
-
                 navigateHome = {
                     navController.navigate(HomeDestination.route)
                 },
@@ -76,7 +89,7 @@ fun StoveNavGraph(
                 navigateProfile = {
                     navController.navigate("profile_graph")
                 },
-                modifier = Modifier,
+                modifier = Modifier.height(72.dp),
                 isSelected =
                     when {
                         currentRoute == "Home" -> StoveMenus.HOME
@@ -138,7 +151,6 @@ fun StoveNavGraph(
                     )
                 }
             }
-
             navigation(startDestination = "profile_graph/main", route = "profile_graph") {
                 composable(route = "profile_graph/main") {
                     ProfileScreen(onClickFavourites = { navController.navigate("profile_graph/favourites") })

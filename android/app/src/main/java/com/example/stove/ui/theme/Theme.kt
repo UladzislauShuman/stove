@@ -13,11 +13,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primaryContainer = Amber,
-    secondaryContainer = CloudGray,
-    onPrimaryContainer = RavenBlack,
-    onSecondaryContainer = SlateBlue,
-    background = White
+    primaryContainer = DarkPrimaryContainerColor,
+    onPrimaryContainer = OnDarkPrimaryContainerColor,
+    secondaryContainer = DarkSecondaryContainerColor,
+    onSecondaryContainer = OnDarkSecondaryContainerColor,
+    background = DarkBackgroundSurface,
+    surface = DarkBackgroundSurface
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -25,7 +26,8 @@ private val LightColorScheme = lightColorScheme(
     secondaryContainer = CloudGray,
     onPrimaryContainer = RavenBlack,
     onSecondaryContainer = SlateBlue,
-    background = White
+    background = White,
+    surface = White
 )
 
 @Composable
