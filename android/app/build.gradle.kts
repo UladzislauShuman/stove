@@ -1,8 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("com.google.devtools.ksp") version "2.0.20-1.0.24"
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -58,22 +59,32 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // Coil
+    implementation(libs.coil.compose)
+
     // Nav Host
     implementation("androidx.navigation:navigation-compose:2.8.4")
 
     //Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.11.0")
+    implementation("com.squareup.moshi:moshi:1.15.0")
     implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+    implementation(libs.gson)
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
     // Room
-    implementation("androidx.room:room-runtime:${rootProject.extra["room_version"]}")
-    implementation("androidx.core:core-ktx:1.15.0")
-    ksp("androidx.room:room-compiler:${rootProject.extra["room_version"]}")
-    implementation("androidx.room:room-ktx:${rootProject.extra["room_version"]}")
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+
+    //Hilt
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    ksp(libs.hilt.compiler)
 }

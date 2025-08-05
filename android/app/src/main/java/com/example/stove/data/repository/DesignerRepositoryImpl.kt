@@ -12,8 +12,9 @@ import com.example.stove.domain.model.designer.Option
 import com.example.stove.domain.model.designer.Type
 import com.example.stove.domain.repository.DesignerRepository
 import retrofit2.HttpException
+import javax.inject.Inject
 
-class DesignerRepositoryImpl(
+class DesignerRepositoryImpl @Inject constructor(
     private val apiService: DesignerApiService
 ) : DesignerRepository {
 
@@ -22,7 +23,7 @@ class DesignerRepositoryImpl(
             val remoteTypes = apiService.getTypes()
             Resource.SUCCESS(remoteTypes.map {it.toDomain()})
         } catch(e: HttpException) {
-            Resource.FAILURE("Http error: ${e.message()}")
+            Resource.FAILURE(e)
         }
     }
 

@@ -20,7 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.stove.domain.model.StoveMenus
+import com.example.stove.presentation.model.StoveMenus
 import com.example.stove.presentation.navigation.StoveNavGraph
 
 

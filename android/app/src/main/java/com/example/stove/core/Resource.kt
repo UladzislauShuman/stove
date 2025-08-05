@@ -1,7 +1,7 @@
 package com.example.stove.core
 
 sealed interface Resource<out T> {
-    data object LOADING : Resource<Nothing>
-    data class FAILURE(val message: String) : Resource<Nothing>
-    data class SUCCESS<out T>(val result: T) : Resource<T>
+    data class LOADING<out T>(val data: T? = null) : Resource<T>
+    data class SUCCESS<out T>(val data: T) : Resource<T>
+    data class FAILURE(val error: Throwable) : Resource<Nothing>
 }

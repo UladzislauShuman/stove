@@ -1,7 +1,6 @@
 package com.example.stove.presentation.ui.screens
 
 import android.net.Uri
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,10 +27,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.stove.R
 import com.example.stove.data.favourite.Favourite
 
@@ -141,8 +140,8 @@ fun Article(
 
 @Composable
 fun DesignerOptionCard(
-    titleRes: Int,
-    imageRes: Int,
+    title: String,
+    imageUri: Uri,
     isSelected: Boolean,
     onClickBehavior: () -> Unit,
     modifier: Modifier = Modifier
@@ -171,14 +170,14 @@ fun DesignerOptionCard(
                         bottom = dimensionResource(R.dimen.padding_medium)
                     )
             ) {
-                Image(
-                    painter = painterResource(imageRes),
+                AsyncImage(
+                    model = imageUri,
                     contentDescription = null,
                     contentScale = ContentScale.Fit
                 )
             }
             Text(
-                text = stringResource(titleRes),
+                text = title,
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )

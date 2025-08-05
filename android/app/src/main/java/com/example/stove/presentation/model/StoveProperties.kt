@@ -1,4 +1,4 @@
-package com.example.stove.domain.model
+package com.example.stove.presentation.model
 
 import com.example.stove.R
 

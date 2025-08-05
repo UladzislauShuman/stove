@@ -4,7 +4,9 @@ import android.app.Application
 import android.util.Log
 import com.example.stove.data.AppContainer
 import com.example.stove.data.AppDataContainer
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class StoveApplication : Application() {
 
     private var _container: AppContainer? = null

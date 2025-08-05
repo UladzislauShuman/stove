@@ -16,9 +16,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.net.toUri
 import com.example.stove.R
-import com.example.stove.domain.model.StoveCharacteristics
-import com.example.stove.domain.model.StoveProperties
+import com.example.stove.core.Resource
+import com.example.stove.presentation.model.StoveCharacteristics
+import com.example.stove.presentation.model.StoveProperties
+import com.example.stove.presentation.model.TypeUiModel
 import com.example.stove.presentation.navigation.NavigationDestination
 import com.example.stove.presentation.ui.screens.DesignerButtonsRow
 import com.example.stove.presentation.ui.screens.DesignerOptionCard
@@ -32,11 +35,11 @@ object DesignerTypeDestination : NavigationDestination {
 @Composable
 fun DesignerTypeScreen(
     viewModel: DesignerViewModel,
-    stoveTypes: List<StoveCharacteristics> = StoveProperties.types,
     backBehavior: () -> Unit,
     nextBehavior: () -> Unit
 ) {
     val selectedType by viewModel.selectedType.collectAsState()
+    val uiState by viewModel.designerUiState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -54,21 +57,25 @@ fun DesignerTypeScreen(
                 bottom = dimensionResource(R.dimen.padding_small)
             )
         )
+        val currentState = uiState
+        if(currentState is DesignerUiState.TYPE) {
+            if(currentState.types is Resource.SUCCESS) {
+                LazyVerticalGrid(
+                    columns = GridCells.Adaptive(dimensionResource(R.dimen.cell_size)),
+                ) {
+                    items(items = currentState.types.data, key = { type -> type.id}) { type ->
+                        val typeId = type.id
 
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(dimensionResource(R.dimen.cell_size)),
-        ) {
-            items(items = stoveTypes, key = { type -> type.id}) { type ->
-                val typeName = stringResource(type.nameRes)
-
-                DesignerOptionCard(
-                    titleRes = type.nameRes,
-                    imageRes = type.imageRes,
-                    isSelected = selectedType == typeName,
-                    onClickBehavior = {
-                        viewModel.updateType(typeName)
+                        DesignerOptionCard(
+                            title = type.name,
+                            imageUri = type.imageUrl.toUri(),
+                            isSelected = selectedType == typeId,
+                            onClickBehavior = {
+                                viewModel.updateType(typeId)
+                            }
+                        )
                     }
-                )
+                }
             }
         }
         DesignerButtonsRow(

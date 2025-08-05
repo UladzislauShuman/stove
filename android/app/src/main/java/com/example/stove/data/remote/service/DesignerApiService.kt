@@ -7,6 +7,7 @@ import com.example.stove.data.remote.dto.TypeDto
 import retrofit2.http.GET
 import retrofit2.http.Path
 
+
 interface DesignerApiService {
     @GET("stove-types")
     suspend fun getTypes() : List<TypeDto>

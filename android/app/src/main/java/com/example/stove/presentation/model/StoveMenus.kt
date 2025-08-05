@@ -1,4 +1,4 @@
-package com.example.stove.domain.model
+package com.example.stove.presentation.model
 
 enum class StoveMenus(val number: Int) {
     HOME(1),

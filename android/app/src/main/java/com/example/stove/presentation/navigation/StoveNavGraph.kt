@@ -9,6 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -17,7 +18,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navigation
 import com.example.stove.StoveBottomAppBar
 import com.example.stove.StoveTopAppBar
-import com.example.stove.domain.model.StoveMenus
+import com.example.stove.presentation.model.StoveMenus
 import com.example.stove.presentation.ui.AppViewModelProvider
 import com.example.stove.presentation.ui.screens.designer.DesignerEntryDestination
 import com.example.stove.presentation.ui.screens.designer.DesignerEntryScreen
@@ -31,6 +32,7 @@ import com.example.stove.presentation.ui.screens.profile.ProfileDestination
 import com.example.stove.presentation.ui.screens.profile.ProfileFavouritesScreen
 import com.example.stove.presentation.ui.screens.profile.ProfileScreen
 
+/** Добавить DI через Hilt сюда тоже */
 @Composable
 fun StoveNavGraph(
     navController: NavHostController,
@@ -98,17 +100,26 @@ fun StoveNavGraph(
             modifier = modifier.padding(innerPadding)
         ) {
             navigation(startDestination = "designer_graph/entry", route = "designer_graph") {
-                composable(route = "designer_graph/entry") {
+                composable(route = "designer_graph/entry") { backStackEntry ->
+                    val parentEntry = remember(backStackEntry) {
+                        navController.getBackStackEntry("designer_graph")
+                    }
+                    val designerViewModel: DesignerViewModel = hiltViewModel(
+                        viewModelStoreOwner = parentEntry
+                    )
                     DesignerEntryScreen(
-                        startDesigner = { navController.navigate("designer_graph/type") },
+                        startDesigner = {
+                            designerViewModel.loadTypes()
+                            navController.navigate("designer_graph/type") },
                     )
                 }
                 composable(route = "designer_graph/type") { backStackEntry ->
                     val parentEntry = remember(backStackEntry) {
                         navController.getBackStackEntry("designer_graph")
                     }
-                    val designerViewModel: DesignerViewModel = viewModel(parentEntry, factory = AppViewModelProvider.Factory)
-
+                    val designerViewModel: DesignerViewModel = hiltViewModel(
+                        viewModelStoreOwner = parentEntry
+                    )
                     DesignerTypeScreen(
                         backBehavior = { navController.navigate("designer_graph/entry") },
                         nextBehavior = { navController.navigate("designer_graph/material") },

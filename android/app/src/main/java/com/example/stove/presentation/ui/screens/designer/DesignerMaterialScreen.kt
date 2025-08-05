@@ -17,8 +17,8 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.stove.R
-import com.example.stove.domain.model.StoveCharacteristics
-import com.example.stove.domain.model.StoveProperties
+import com.example.stove.presentation.model.StoveCharacteristics
+import com.example.stove.presentation.model.StoveProperties
 import com.example.stove.presentation.navigation.NavigationDestination
 import com.example.stove.presentation.ui.screens.DesignerButtonsRow
 import com.example.stove.presentation.ui.screens.DesignerOptionCard
