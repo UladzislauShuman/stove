@@ -22,10 +22,10 @@ import com.example.stove.presentation.model.StoveMenus
 import com.example.stove.presentation.ui.AppViewModelProvider
 import com.example.stove.presentation.ui.screens.designer.DesignerEntryDestination
 import com.example.stove.presentation.ui.screens.designer.DesignerEntryScreen
-import com.example.stove.presentation.ui.screens.designer.DesignerMaterialScreen
+import com.example.stove.presentation.ui.screens.designer.DesignerComponentScreen
 import com.example.stove.presentation.ui.screens.designer.DesignerSummaryScreen
 import com.example.stove.presentation.ui.screens.designer.DesignerTypeScreen
-import com.example.stove.presentation.ui.screens.designer.DesignerViewModel
+import com.example.stove.presentation.ui.viewmodel.DesignerViewModel
 import com.example.stove.presentation.ui.screens.home.HomeDestination
 import com.example.stove.presentation.ui.screens.home.HomeScreen
 import com.example.stove.presentation.ui.screens.profile.ProfileDestination
@@ -122,17 +122,21 @@ fun StoveNavGraph(
                     )
                     DesignerTypeScreen(
                         backBehavior = { navController.navigate("designer_graph/entry") },
-                        nextBehavior = { navController.navigate("designer_graph/material") },
+                        nextBehavior = {
+                            designerViewModel.loadComponents()
+                            navController.navigate("designer_graph/component")
+                                       },
                         viewModel = designerViewModel
                     )
                 }
-                composable(route = "designer_graph/material") { backStackEntry ->
+                composable(route = "designer_graph/component") { backStackEntry ->
                     val parentEntry = remember(backStackEntry) {
                         navController.getBackStackEntry("designer_graph")
                     }
-                    val designerViewModel: DesignerViewModel = viewModel(parentEntry, factory = AppViewModelProvider.Factory)
-
-                    DesignerMaterialScreen(
+                    val designerViewModel: DesignerViewModel = hiltViewModel(
+                        viewModelStoreOwner = parentEntry
+                    )
+                    DesignerComponentScreen(
                         backBehavior = { navController.navigate("designer_graph/type") },
                         nextBehavior = { navController.navigate("designer_graph/summary") },
                         viewModel = designerViewModel
@@ -145,7 +149,7 @@ fun StoveNavGraph(
                     val designerViewModel: DesignerViewModel = viewModel(parentEntry, factory = AppViewModelProvider.Factory)
 
                     DesignerSummaryScreen (
-                        backBehavior = { navController.navigate("designer_graph/material") },
+                        backBehavior = { navController.navigate("designer_graph/component") },
                         nextBehavior = {
                             designerViewModel.addToFavourites()
                             navController.navigate("designer_graph")

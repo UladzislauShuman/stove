@@ -1,11 +1,12 @@
 package com.example.stove.data.remote.dto
 
+import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.SerialName
 
 data class TypeDto (
     val id: Int,
     val name: String,
     val description: String,
-    @SerialName("base_price") val basePrice: Int,
-    @SerialName("image_url") val imageUrl: String
+    @SerializedName("base_price") val basePrice: Int?,
+    @SerializedName("image_url") val imageUrl: String?
 )

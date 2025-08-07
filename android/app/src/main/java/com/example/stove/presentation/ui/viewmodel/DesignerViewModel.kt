@@ -1,12 +1,12 @@
-package com.example.stove.presentation.ui.screens.designer
+package com.example.stove.presentation.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.stove.core.Resource
-import com.example.stove.data.favourite.Favourite
 import com.example.stove.data.favourite.FavouriteRepository
+import com.example.stove.domain.usecase.GetComponentsUseCase
 import com.example.stove.domain.usecase.GetTypesUseCase
+import com.example.stove.presentation.model.ComponentUiModel
 import com.example.stove.presentation.model.TypeUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,19 +19,36 @@ import javax.inject.Inject
 sealed class DesignerUiState {
     data object ENTRY : DesignerUiState()
     data class TYPE(val types: Resource<List<TypeUiModel>>) : DesignerUiState()
+    data class COMPONENT(val components: Resource<List<ComponentUiModel>>) : DesignerUiState()
+
 }
+
+data class SelectedItems(
+    val typeId: Int = -1,
+    val componentId: Int = -1,
+    val optionId: Int = -1,
+    val addonId: Int = -1
+)
 
 /**
  * Когда ViewModel начнёт расти, нужно сделать реализацию через UI-модель
  */
 @HiltViewModel
-class DesignerViewModel(private val favouriteRepository: FavouriteRepository): ViewModel() {
+class DesignerViewModel @Inject constructor(
+    private val favouriteRepository: FavouriteRepository,
+): ViewModel() {
 
     private val _designerUiState = MutableStateFlow<DesignerUiState>(DesignerUiState.ENTRY)
     val designerUiState: StateFlow<DesignerUiState> = _designerUiState
 
+
+    private val _selectedItems = MutableStateFlow(SelectedItems())
+    val selectedItems: StateFlow<SelectedItems> = _selectedItems
+
     @Inject
-    private lateinit var getTypesCase: GetTypesUseCase
+    lateinit var getTypesCase: GetTypesUseCase
+    @Inject
+    lateinit var getComponentsCase: GetComponentsUseCase
 
     fun loadTypes() {
         viewModelScope.launch {
@@ -42,20 +59,23 @@ class DesignerViewModel(private val favouriteRepository: FavouriteRepository): V
         }
     }
 
-    private val _selectedType = MutableStateFlow<Int?>(null)
-    val selectedType: StateFlow<Int?> = _selectedType
-
-    private val _selectedMaterial = MutableStateFlow<String?>(null)
-    val selectedMaterial: StateFlow<String?> = _selectedMaterial
-
-    fun updateType(type: Int) {
-        _selectedType.update {
-            type
+    fun loadComponents() {
+        viewModelScope.launch {
+            _designerUiState.value = DesignerUiState.COMPONENT(Resource.LOADING())
+            _designerUiState.value = DesignerUiState.COMPONENT(
+                getComponentsCase.invoke(_selectedItems.value.typeId)
+            )
         }
     }
-    fun updateMaterial(material: String) {
-        _selectedMaterial.update {
-            material
+
+    fun updateType(typeId: Int) {
+        _selectedItems.update {
+            selectedItems -> selectedItems.copy(typeId = typeId)
+        }
+    }
+    fun updateComponent(componentId: Int) {
+        _selectedItems.update {
+            selectedItems -> selectedItems.copy(componentId = componentId)
         }
     }
 

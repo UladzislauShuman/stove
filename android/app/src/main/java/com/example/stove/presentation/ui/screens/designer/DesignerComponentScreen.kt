@@ -16,13 +16,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.net.toUri
 import com.example.stove.R
+import com.example.stove.core.Resource
 import com.example.stove.presentation.model.StoveCharacteristics
 import com.example.stove.presentation.model.StoveProperties
 import com.example.stove.presentation.navigation.NavigationDestination
 import com.example.stove.presentation.ui.screens.DesignerButtonsRow
 import com.example.stove.presentation.ui.screens.DesignerOptionCard
 import com.example.stove.presentation.ui.theme.StoveTheme
+import com.example.stove.presentation.ui.viewmodel.DesignerUiState
+import com.example.stove.presentation.ui.viewmodel.DesignerViewModel
 
 object DesignerMaterialDestination : NavigationDestination {
     override val route: String = "DesignerMaterial"
@@ -30,13 +34,14 @@ object DesignerMaterialDestination : NavigationDestination {
 }
 
 @Composable
-fun DesignerMaterialScreen(
+fun DesignerComponentScreen(
     stoveMaterials: List<StoveCharacteristics> = StoveProperties.materials,
     viewModel: DesignerViewModel,
     backBehavior: () -> Unit,
     nextBehavior: () -> Unit
 ) {
-    val selectedMaterial by viewModel.selectedMaterial.collectAsState()
+    val selectedItems by viewModel.selectedItems.collectAsState()
+    val uiState by viewModel.designerUiState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -46,7 +51,7 @@ fun DesignerMaterialScreen(
         )
     ) {
         Text(
-            text = stringResource(R.string.title_material),
+            text = stringResource(R.string.title_component),
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.onPrimaryContainer,
             modifier = Modifier.padding(
@@ -54,20 +59,25 @@ fun DesignerMaterialScreen(
                 bottom = dimensionResource(R.dimen.padding_small)
             )
         )
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(dimensionResource(R.dimen.cell_size)),
-        ) {
-            items(items = stoveMaterials, key = { material -> material.id }) { material ->
-                val materialName = stringResource(material.nameRes)
+        val currentState = uiState
+        if(currentState is DesignerUiState.COMPONENT) {
+            if(currentState.components is Resource.SUCCESS) {
+                LazyVerticalGrid(
+                    columns = GridCells.Adaptive(dimensionResource(R.dimen.cell_size)),
+                ) {
+                    items(items = currentState.components.data, key = { component -> component.id}) { component ->
+                        val componentId = component.id
 
-                DesignerOptionCard(
-                    titleRes = material.nameRes,
-                    imageRes = material.imageRes,
-                    isSelected = selectedMaterial == materialName,
-                    onClickBehavior = {
-                        viewModel.updateMaterial(materialName)
+                        DesignerOptionCard(
+                            title = component.name,
+                            imageUri = "".toUri(),
+                            isSelected = selectedItems.componentId == componentId,
+                            onClickBehavior = {
+                                viewModel.updateComponent(componentId)
+                            }
+                        )
                     }
-                )
+                }
             }
         }
         DesignerButtonsRow(

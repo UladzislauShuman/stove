@@ -19,13 +19,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.net.toUri
 import com.example.stove.R
 import com.example.stove.core.Resource
-import com.example.stove.presentation.model.StoveCharacteristics
-import com.example.stove.presentation.model.StoveProperties
-import com.example.stove.presentation.model.TypeUiModel
 import com.example.stove.presentation.navigation.NavigationDestination
 import com.example.stove.presentation.ui.screens.DesignerButtonsRow
 import com.example.stove.presentation.ui.screens.DesignerOptionCard
 import com.example.stove.presentation.ui.theme.StoveTheme
+import com.example.stove.presentation.ui.viewmodel.DesignerUiState
+import com.example.stove.presentation.ui.viewmodel.DesignerViewModel
 
 object DesignerTypeDestination : NavigationDestination {
     override val route: String = "DesignerType"
@@ -38,7 +37,7 @@ fun DesignerTypeScreen(
     backBehavior: () -> Unit,
     nextBehavior: () -> Unit
 ) {
-    val selectedType by viewModel.selectedType.collectAsState()
+    val selectedItems by viewModel.selectedItems.collectAsState()
     val uiState by viewModel.designerUiState.collectAsState()
 
     Column(
@@ -69,7 +68,7 @@ fun DesignerTypeScreen(
                         DesignerOptionCard(
                             title = type.name,
                             imageUri = type.imageUrl.toUri(),
-                            isSelected = selectedType == typeId,
+                            isSelected = selectedItems.typeId == typeId,
                             onClickBehavior = {
                                 viewModel.updateType(typeId)
                             }

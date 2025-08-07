@@ -1,6 +1,7 @@
 package com.example.stove.data.di
 
 import com.example.stove.data.remote.service.DesignerApiService
+import com.example.stove.domain.repository.DesignerRepository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -16,13 +17,18 @@ import javax.inject.Singleton
 object DataModule {
     @Provides
     @Singleton
-    fun getRetrofit() : Retrofit {
-        val moshi = Moshi.Builder()
+    fun getMoshi() : Moshi {
+        return Moshi.Builder()
             .add(KotlinJsonAdapterFactory())
             .build()
+    }
 
+
+    @Provides
+    @Singleton
+    fun getRetrofit(moshi: Moshi) : Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://localhost:8080/constructor-data")
+            .baseUrl("http://192.168.100.8:8080/constructor-data/")
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
     }

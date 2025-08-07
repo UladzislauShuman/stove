@@ -1,7 +1,7 @@
 [versions]
 agp = "8.11.1"
-kotlin = "2.2.0"
-ksp = "2.2.0-2.0.2"
+kotlin = "2.0.0"
+ksp = "2.0.0-1.0.21"
 coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -15,6 +15,7 @@ hilt-compose = "1.2.0"
 room = "2.6.1"
 gson = "2.13.1"
 coil-compose = "2.6.0"
+moshi = "1.15.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -39,6 +40,11 @@ hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hil
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-compose"}
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson"}
 retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
+moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "moshi" }
+moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
+moshi-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose"}
 
 [plugins]

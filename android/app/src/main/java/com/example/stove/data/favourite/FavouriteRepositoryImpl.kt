@@ -1,8 +1,13 @@
 package com.example.stove.data.favourite
 
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class OfflineFavouriteRepository(private val dao: FavouriteDao) : FavouriteRepository {
+@Singleton
+class FavouriteRepositoryImpl @Inject constructor(
+    private val dao: FavouriteDao
+) : FavouriteRepository {
     override fun getAllFavouritesStream() : Flow<List<Favourite>> {
         return dao.getAllFavouritesStream()
     }

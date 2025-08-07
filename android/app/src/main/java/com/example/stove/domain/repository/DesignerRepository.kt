@@ -9,7 +9,7 @@ import com.example.stove.domain.model.designer.Type
 interface DesignerRepository {
     suspend fun getTypes() : Resource<List<Type>>
 
-    suspend fun getComponents() : Resource<List<Component>>
+    suspend fun getComponents(typeId: Int) : Resource<List<Component>>
 
     suspend fun getOptions() : Resource<List<Option>>
 

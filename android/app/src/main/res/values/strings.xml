@@ -58,7 +58,7 @@
     <string name="caption_concrete">Бетон</string>
 
 
-    <string name="title_material">Материал</string>
+    <string name="title_component">Компоненты</string>
     <string name="title_constructor">Конструктор</string>
     <string name="welcome_message">Приветствуем вас в нашей мастерской</string>
     <string name="subtitle_create">Начните создание своего уникального проекта печи или камина</string>

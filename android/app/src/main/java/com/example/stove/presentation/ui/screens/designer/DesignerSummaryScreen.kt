@@ -20,6 +20,7 @@ import com.example.stove.R
 import com.example.stove.presentation.navigation.NavigationDestination
 import com.example.stove.presentation.ui.screens.CustomButton
 import com.example.stove.presentation.ui.theme.StoveTheme
+import com.example.stove.presentation.ui.viewmodel.DesignerViewModel
 
 object DesignerSummaryDestination : NavigationDestination {
     override val route: String = "DesignerSummary"
@@ -32,8 +33,8 @@ fun DesignerSummaryScreen(
     backBehavior: () -> Unit,
     nextBehavior: () -> Unit
 ) {
-    val selectedType = viewModel.selectedType.collectAsState()
-    val selectedMaterial = viewModel.selectedMaterial.collectAsState()
+//    val selectedType = viewModel.selectedType.collectAsState()
+//    val selectedMaterial = viewModel.selectedMaterial.collectAsState()
 
     Column(
         modifier = Modifier.padding(
@@ -41,63 +42,63 @@ fun DesignerSummaryScreen(
             end = dimensionResource(R.dimen.padding_large)
         )
     ) {
-        Text(
-            text = stringResource(R.string.title_summary),
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
-            modifier = Modifier.padding(
-                top = dimensionResource(R.dimen.padding_medium),
-                bottom = dimensionResource(R.dimen.padding_small)
-            )
-        )
-        Column(
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier.padding(
-                top = dimensionResource(R.dimen.padding_medium),
-                bottom = dimensionResource(R.dimen.padding_medium)
-            )
-        ) {
-            Text(
-                text = "Тип печи: " + selectedType.value,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
-                modifier = Modifier
-                    .padding(dimensionResource(R.dimen.padding_medium))
-                    .align(Alignment.CenterHorizontally)
-            )
-            Text(
-                text = "Материал печи: " + selectedMaterial.value,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
-                modifier = Modifier
-                    .padding(dimensionResource(R.dimen.padding_medium))
-                    .align(Alignment.CenterHorizontally)
-            )
-        }
-        CustomButton(
-            labelId = R.string.button_add_to_favourites,
-            textStyle = MaterialTheme.typography.labelMedium,
-            isActiveButton = true,
-            onClickBehavior = nextBehavior,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    top = dimensionResource(R.dimen.padding_large),
-                    bottom = dimensionResource(R.dimen.padding_medium)
-                )
-        )
-        CustomButton(
-            labelId = R.string.button_back,
-            textStyle = MaterialTheme.typography.labelLarge,
-            isActiveButton = false,
-            onClickBehavior = backBehavior,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    bottom = dimensionResource(R.dimen.padding_medium)
-                )
-        )
+//        Text(
+//            text = stringResource(R.string.title_summary),
+//            style = MaterialTheme.typography.headlineMedium,
+//            color = MaterialTheme.colorScheme.onPrimaryContainer,
+//            modifier = Modifier.padding(
+//                top = dimensionResource(R.dimen.padding_medium),
+//                bottom = dimensionResource(R.dimen.padding_small)
+//            )
+//        )
+//        Column(
+//            horizontalAlignment = Alignment.Start,
+//            verticalArrangement = Arrangement.Center,
+//            modifier = Modifier.padding(
+//                top = dimensionResource(R.dimen.padding_medium),
+//                bottom = dimensionResource(R.dimen.padding_medium)
+//            )
+//        ) {
+//            Text(
+//                text = "Тип печи: " + selectedType.value,
+//                style = MaterialTheme.typography.bodyLarge,
+//                color = MaterialTheme.colorScheme.onSecondaryContainer,
+//                modifier = Modifier
+//                    .padding(dimensionResource(R.dimen.padding_medium))
+//                    .align(Alignment.CenterHorizontally)
+//            )
+//            Text(
+//                text = "Материал печи: " + selectedMaterial.value,
+//                style = MaterialTheme.typography.bodyLarge,
+//                color = MaterialTheme.colorScheme.onSecondaryContainer,
+//                modifier = Modifier
+//                    .padding(dimensionResource(R.dimen.padding_medium))
+//                    .align(Alignment.CenterHorizontally)
+//            )
+//        }
+//        CustomButton(
+//            labelId = R.string.button_add_to_favourites,
+//            textStyle = MaterialTheme.typography.labelMedium,
+//            isActiveButton = true,
+//            onClickBehavior = nextBehavior,
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(
+//                    top = dimensionResource(R.dimen.padding_large),
+//                    bottom = dimensionResource(R.dimen.padding_medium)
+//                )
+//        )
+//        CustomButton(
+//            labelId = R.string.button_back,
+//            textStyle = MaterialTheme.typography.labelLarge,
+//            isActiveButton = false,
+//            onClickBehavior = backBehavior,
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(
+//                    bottom = dimensionResource(R.dimen.padding_medium)
+//                )
+//        )
     }
 }
 
