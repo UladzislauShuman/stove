@@ -6,7 +6,7 @@ import kotlinx.serialization.SerialName
 data class OptionDto(
     val id: Int,
     val name: String,
-    @SerializedName("price_modifier") val priceModifier: Int,
+    @SerializedName("price_modifier") val priceModifier: Int?,
     @SerializedName("image_url") val imageUrl: String?,
-    @SerializedName("is_default") val isDefault: Boolean
+    @SerializedName("is_default") val isDefault: Boolean?
 )

@@ -1,13 +1,11 @@
 package com.example.stove.presentation.ui.screens.designer
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -15,24 +13,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.net.toUri
 import com.example.stove.R
 import com.example.stove.core.Resource
-import com.example.stove.presentation.navigation.NavigationDestination
 import com.example.stove.presentation.ui.screens.DesignerButtonsRow
 import com.example.stove.presentation.ui.screens.DesignerOptionCard
-import com.example.stove.presentation.ui.theme.StoveTheme
 import com.example.stove.presentation.ui.viewmodel.DesignerUiState
 import com.example.stove.presentation.ui.viewmodel.DesignerViewModel
 
-object DesignerTypeDestination : NavigationDestination {
-    override val route: String = "DesignerType"
-    override val titleRes: Int = R.string.title_constructor
-}
-
 @Composable
-fun DesignerTypeScreen(
+fun DesignerOptionScreen(
     viewModel: DesignerViewModel,
     backBehavior: () -> Unit,
     nextBehavior: () -> Unit
@@ -43,12 +33,12 @@ fun DesignerTypeScreen(
     Column(
         modifier = Modifier
             .padding(
-            start = dimensionResource(R.dimen.padding_large),
-            end = dimensionResource(R.dimen.padding_large)
-        )
+                start = dimensionResource(R.dimen.padding_large),
+                end = dimensionResource(R.dimen.padding_large)
+            )
     ) {
         Text(
-            text = stringResource(R.string.title_type),
+            text = stringResource(R.string.title_option),
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.onPrimaryContainer,
             modifier = Modifier.padding(
@@ -57,21 +47,21 @@ fun DesignerTypeScreen(
             )
         )
         val currentState = uiState
-        if(currentState is DesignerUiState.TYPE) {
-            when(currentState.types) {
+        if(currentState is DesignerUiState.OPTION) {
+            when(currentState.options) {
                 is Resource.SUCCESS -> {
                     LazyVerticalGrid(
                         columns = GridCells.Adaptive(dimensionResource(R.dimen.cell_size)),
                     ) {
-                        items(items = currentState.types.data, key = { type -> type.id}) { type ->
-                            val typeId = type.id
+                        items(items = currentState.options.data, key = { option -> option.id}) { option ->
+                            val optionId = option.id
 
                             DesignerOptionCard(
-                                title = type.name,
-                                imageUri = type.imageUrl.toUri(),
-                                isSelected = selectedItems.typeId == typeId,
+                                title = option.name,
+                                imageUri = option.imageUrl.toUri(),
+                                isSelected = selectedItems.optionId == option.id,
                                 onClickBehavior = {
-                                    viewModel.updateType(typeId)
+                                    viewModel.updateOption(optionId)
                                 }
                             )
                         }
@@ -79,7 +69,7 @@ fun DesignerTypeScreen(
                 }
                 is Resource.FAILURE -> {
                     Text(
-                        text = "Ошибка загрузки: ${currentState.types.error.message}",
+                        text = "Ошибка загрузки: ${currentState.options.error.message}",
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                         modifier = Modifier.padding(
@@ -105,18 +95,5 @@ fun DesignerTypeScreen(
             backBehavior = { backBehavior() },
             nextBehavior = { nextBehavior() }
         )
-    }
-}
-
-@Preview
-@Composable
-fun DesignerTypeScreenPreview() {
-    StoveTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-//            DesignerTypeScreen()
-        }
     }
 }

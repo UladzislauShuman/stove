@@ -67,6 +67,8 @@
     <string name="button_back">Назад</string>
     <string name="button_choose_favorite">Выбрать из избранного</string>
     <string name="title_summary">Итог</string>
+    <string name="title_option">Опции</string>
+    <string name="title_addon">Дополнительно</string>
 
     <string name="button_add_to_favourites">Добавить в избранное</string>
 

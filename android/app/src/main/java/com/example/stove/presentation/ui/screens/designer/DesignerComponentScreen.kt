@@ -61,22 +61,48 @@ fun DesignerComponentScreen(
         )
         val currentState = uiState
         if(currentState is DesignerUiState.COMPONENT) {
-            if(currentState.components is Resource.SUCCESS) {
-                LazyVerticalGrid(
-                    columns = GridCells.Adaptive(dimensionResource(R.dimen.cell_size)),
-                ) {
-                    items(items = currentState.components.data, key = { component -> component.id}) { component ->
-                        val componentId = component.id
+            when(currentState.components) {
+                is Resource.SUCCESS -> {
+                    LazyVerticalGrid(
+                        columns = GridCells.Adaptive(dimensionResource(R.dimen.cell_size)),
+                    ) {
+                        items(items = currentState.components.data, key = { component -> component.id }) { component ->
+                            val componentId = component.id
 
-                        DesignerOptionCard(
-                            title = component.name,
-                            imageUri = "".toUri(),
-                            isSelected = selectedItems.componentId == componentId,
-                            onClickBehavior = {
-                                viewModel.updateComponent(componentId)
-                            }
-                        )
+                            DesignerOptionCard(
+                                title = component.name,
+                                imageUri = "".toUri(),
+                                isSelected = selectedItems.componentId == componentId,
+                                onClickBehavior = {
+                                    viewModel.updateComponent(componentId)
+                                }
+                            )
+                        }
                     }
+                }
+
+                is Resource.FAILURE -> {
+                    Text(
+                        text = "Ошибка загрузки: ${currentState.components.error.message}",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        modifier = Modifier.padding(
+                            top = dimensionResource(R.dimen.padding_medium),
+                            bottom = dimensionResource(R.dimen.padding_small)
+                        )
+                    )
+                }
+
+                is Resource.LOADING -> {
+                    Text(
+                        text = "Загрузка...",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        modifier = Modifier.padding(
+                            top = dimensionResource(R.dimen.padding_medium),
+                            bottom = dimensionResource(R.dimen.padding_small)
+                        )
+                    )
                 }
             }
         }

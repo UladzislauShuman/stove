@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.stove.presentation.model.StoveMenus
@@ -60,6 +61,7 @@ fun StoveBottomAppBar(
                     else
                         painterResource(R.drawable.home_passive),
                     contentDescription = null,
+                    modifier = Modifier.size(20.dp)
                 )
             },
             label = {
@@ -80,6 +82,8 @@ fun StoveBottomAppBar(
                     else
                         painterResource(R.drawable.designer_passive),
                     contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+
                 )
             },
             label = {
@@ -100,6 +104,7 @@ fun StoveBottomAppBar(
                     else
                         painterResource(R.drawable.profile_passive),
                     contentDescription = null,
+                    modifier = Modifier.size(24.dp)
                 )
             },
             label = {

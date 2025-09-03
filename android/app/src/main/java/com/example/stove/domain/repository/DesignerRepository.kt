@@ -11,7 +11,7 @@ interface DesignerRepository {
 
     suspend fun getComponents(typeId: Int) : Resource<List<Component>>
 
-    suspend fun getOptions() : Resource<List<Option>>
+    suspend fun getOptions(componentId: Int) : Resource<List<Option>>
 
     suspend fun getAddons() : Resource<List<Addon>>
 }

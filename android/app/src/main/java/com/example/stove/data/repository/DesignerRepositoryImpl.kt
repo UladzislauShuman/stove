@@ -35,29 +35,27 @@ class DesignerRepositoryImpl @Inject constructor(
             Resource.FAILURE(e)
         }
     }
-    override suspend fun getOptions(): Resource<List<Option>> {
-//        return try {
-//            val remoteOptions = apiService.getOptions()
-//            Resource.SUCCESS(remoteOptions.map {it.toDomain()})
-//        } catch(e: HttpException) {
-//            Resource.FAILURE("Http error: ${e.message()}")
-//        }
-        TODO()
+    override suspend fun getOptions(componentId: Int): Resource<List<Option>> {
+        return try {
+            val remoteOptions = apiService.getOptions(componentId)
+            Resource.SUCCESS(remoteOptions.map {it.toDomain()})
+        } catch(e: HttpException) {
+            Resource.FAILURE(e)
+        }
     }
     override suspend fun getAddons(): Resource<List<Addon>> {
-//        return try {
-//            val remoteTypes = apiService.getTypes()
-//            Resource.SUCCESS(remoteTypes.map {it.toDomain()})
-//        } catch(e: HttpException) {
-//            Resource.FAILURE("Http error: ${e.message()}")
-//        }
-        TODO()
+        return try {
+            val remoteTypes = apiService.getAddons()
+            Resource.SUCCESS(remoteTypes.map {it.toDomain()})
+        } catch(e: HttpException) {
+            Resource.FAILURE(e)
+        }
     }
 
     private fun TypeDto.toDomain() = Type(id, name, description, basePrice ?: 0, imageUrl ?: "")
     private fun ComponentDto.toDomain() = Component(id, name, description, isRequired ?: false, allowMultipleChoices ?: false, componentOptions ?: false)
 
-    private fun OptionDto.toDomain() = Option(id, name, priceModifier, imageUrl ?: "", isDefault)
+    private fun OptionDto.toDomain() = Option(id, name, priceModifier ?: 1, imageUrl ?: "", isDefault ?: true)
 
     private fun AddonDto.toDomain() = Addon(id, name, description, price ?: 0)
 }

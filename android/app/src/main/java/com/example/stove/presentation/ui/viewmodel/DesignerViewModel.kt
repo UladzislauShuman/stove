@@ -4,9 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stove.core.Resource
 import com.example.stove.data.favourite.FavouriteRepository
+import com.example.stove.domain.usecase.GetAddonsUseCase
 import com.example.stove.domain.usecase.GetComponentsUseCase
+import com.example.stove.domain.usecase.GetOptionsUseCase
 import com.example.stove.domain.usecase.GetTypesUseCase
+import com.example.stove.presentation.model.AddonUiModel
 import com.example.stove.presentation.model.ComponentUiModel
+import com.example.stove.presentation.model.OptionUiModel
 import com.example.stove.presentation.model.TypeUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,6 +24,9 @@ sealed class DesignerUiState {
     data object ENTRY : DesignerUiState()
     data class TYPE(val types: Resource<List<TypeUiModel>>) : DesignerUiState()
     data class COMPONENT(val components: Resource<List<ComponentUiModel>>) : DesignerUiState()
+    data class OPTION(val options: Resource<List<OptionUiModel>>) : DesignerUiState()
+    data class ADDON(val addons: Resource<List<AddonUiModel>>) : DesignerUiState()
+
 
 }
 
@@ -49,6 +56,10 @@ class DesignerViewModel @Inject constructor(
     lateinit var getTypesCase: GetTypesUseCase
     @Inject
     lateinit var getComponentsCase: GetComponentsUseCase
+    @Inject
+    lateinit var getOptionsCase: GetOptionsUseCase
+    @Inject
+    lateinit var getAddonsCase: GetAddonsUseCase
 
     fun loadTypes() {
         viewModelScope.launch {
@@ -58,7 +69,6 @@ class DesignerViewModel @Inject constructor(
             )
         }
     }
-
     fun loadComponents() {
         viewModelScope.launch {
             _designerUiState.value = DesignerUiState.COMPONENT(Resource.LOADING())
@@ -68,16 +78,48 @@ class DesignerViewModel @Inject constructor(
         }
     }
 
+    fun loadOptions() {
+        viewModelScope.launch {
+            _designerUiState.value = DesignerUiState.OPTION(Resource.LOADING())
+            _designerUiState.value = DesignerUiState.OPTION(
+                getOptionsCase.invoke(componentId = _selectedItems.value.componentId)
+            )
+        }
+    }
+
+    fun loadAddons() {
+        viewModelScope.launch {
+            _designerUiState.value = DesignerUiState.ADDON(Resource.LOADING())
+            _designerUiState.value = DesignerUiState.ADDON(
+                getAddonsCase.invoke()
+            )
+        }
+    }
+
     fun updateType(typeId: Int) {
         _selectedItems.update {
             selectedItems -> selectedItems.copy(typeId = typeId)
         }
     }
+
     fun updateComponent(componentId: Int) {
         _selectedItems.update {
             selectedItems -> selectedItems.copy(componentId = componentId)
         }
     }
+
+    fun updateOption(optionId: Int) {
+        _selectedItems.update {
+                selectedItems -> selectedItems.copy(optionId = optionId)
+        }
+    }
+
+    fun updateAddon(addonId: Int) {
+        _selectedItems.update {
+                selectedItems -> selectedItems.copy(addonId = addonId)
+        }
+    }
+
 
     fun addToFavourites() {
 //        val type = _selectedType.value

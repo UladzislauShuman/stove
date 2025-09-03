@@ -17,7 +17,7 @@ interface DesignerApiService {
         @Path("typeId") typeId: Int
     ) : List<ComponentDto>
 
-    @GET("stove-types/{componentId}/options")
+    @GET("components/{componentId}/options")
     suspend fun getOptions(
         @Path("componentId") componentId: Int
     ) : List<OptionDto>
