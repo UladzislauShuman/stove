@@ -1,0 +1,125 @@
+package com.example.stove.presentation.ui.screens.authorization
+
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.stove.R
+import com.example.stove.presentation.ui.screens.CustomButton
+import com.example.stove.presentation.ui.screens.InputField
+import com.example.stove.presentation.ui.theme.StoveTheme
+
+@Composable
+fun SignInScreen() {
+    Column(
+        verticalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                start = dimensionResource(R.dimen.padding_large),
+                end = dimensionResource(R.dimen.padding_large)
+            )
+    ) {
+        Column {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                InputField(
+                    labelId = R.string.hint_username,
+                    onValueChange = { TODO() },
+                    value = "",
+                    modifier = Modifier.fillMaxWidth().padding(
+                        top = dimensionResource(R.dimen.padding_medium),
+                        bottom = dimensionResource(R.dimen.padding_medium)
+                    )
+                )
+                InputField(
+                    labelId = R.string.hint_password,
+                    onValueChange = { TODO() },
+                    value = "",
+                    modifier = Modifier.fillMaxWidth().padding(
+                        bottom = dimensionResource(R.dimen.padding_medium)
+                    )
+                )
+            }
+            Text(
+                text = stringResource(R.string.link_forgot_password),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                modifier = Modifier.clickable { TODO() }
+            )
+            Column {
+                CustomButton(
+                    labelId = R.string.button_login,
+                    isActiveButton = true,
+                    onClickBehavior = { TODO() },
+                    textStyle = MaterialTheme.typography.labelLarge,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        //                        .height(dimensionResource(R.dimen.active_button_height))
+                        .padding(
+                            top = dimensionResource(R.dimen.padding_medium),
+                            bottom = dimensionResource(R.dimen.padding_medium)
+                        )
+                )
+                CustomButton(
+                    labelId = R.string.button_guest,
+                    isActiveButton = false,
+                    onClickBehavior = { TODO() },
+                    textStyle = MaterialTheme.typography.labelMedium,
+                    modifier = Modifier.fillMaxWidth().padding(
+                        bottom = dimensionResource(R.dimen.padding_medium)
+                    )
+                )
+            }
+        }
+        Column(
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = stringResource(R.string.text_no_account),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                modifier = Modifier.padding(
+                    top = dimensionResource(R.dimen.padding_medium),
+                    bottom = dimensionResource(R.dimen.padding_medium)
+                )
+            )
+            CustomButton(
+                labelId = R.string.button_register,
+                isActiveButton = false,
+                textStyle = MaterialTheme.typography.labelMedium,
+                modifier = Modifier.padding(
+                    top = dimensionResource(R.dimen.padding_medium),
+                    bottom = dimensionResource(R.dimen.padding_medium)
+                ),
+                onClickBehavior = { TODO() }
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun SignScreenPreview() {
+    StoveTheme {
+        Surface(
+//            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            SignInScreen()
+        }
+    }
+}

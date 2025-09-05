@@ -1,4 +1,4 @@
-package com.example.stove.presentation.ui.screens.profile
+package com.example.stove.presentation.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

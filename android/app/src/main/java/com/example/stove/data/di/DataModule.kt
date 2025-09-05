@@ -28,7 +28,7 @@ object DataModule {
     @Singleton
     fun getRetrofit(moshi: Moshi) : Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.100.8:8080/constructor-data/")
+            .baseUrl("https://orders-chamber-harley-furthermore.trycloudflare.com/constructor-data/")
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
     }

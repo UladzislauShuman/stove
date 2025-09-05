@@ -15,6 +15,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.stove.R
 import com.example.stove.presentation.ui.AppViewModelProvider
 import com.example.stove.presentation.ui.screens.FavouriteCard
+import com.example.stove.presentation.ui.viewmodel.ProfileFavouritesViewModel
 
 @Composable
 fun ProfileFavouritesScreen(
