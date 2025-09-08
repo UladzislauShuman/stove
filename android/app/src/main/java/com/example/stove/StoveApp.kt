@@ -1,5 +1,8 @@
 package com.example.stove
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -14,7 +17,9 @@ import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -30,6 +35,14 @@ fun StoveApp(navController: NavHostController = rememberNavController()) {
     StoveNavGraph(navController = navController)
 }
 
+
+private data class MainScreen(
+    val type: StoveMenus,
+    val passiveIconId: Int,
+    val activeIconId: Int,
+    val labelId: Int,
+    val navigate: () -> Unit
+)
 
 @Composable
 fun StoveBottomAppBar(
@@ -53,70 +66,63 @@ fun StoveBottomAppBar(
         modifier = modifier.navigationBarsPadding(),
         containerColor = MaterialTheme.colorScheme.background
     ) {
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    painter = if(isSelected == StoveMenus.HOME)
-                        painterResource(R.drawable.home_active)
-                    else
-                        painterResource(R.drawable.home_passive),
-                    contentDescription = null,
-                    modifier = Modifier.size(20.dp)
-                )
-            },
-            label = {
-                Text(
-                    text = stringResource(R.string.nav_home),
-                    style = MaterialTheme.typography.titleLarge
-                )
-            },
-            selected = isSelected == StoveMenus.HOME,
-            onClick = navigateHome,
-            colors = navigationIconColors
+        val screens = listOf(
+            MainScreen(
+                type = StoveMenus.HOME,
+                passiveIconId = R.drawable.home_passive,
+                activeIconId = R.drawable.home_active,
+                labelId = R.string.nav_home,
+                navigate = navigateHome
+            ),
+            MainScreen(
+                type = StoveMenus.DESIGNER,
+                passiveIconId = R.drawable.designer_passive,
+                activeIconId = R.drawable.designer_active,
+                labelId = R.string.nav_constructor,
+                navigate = navigateDesigner
+            ),
+            MainScreen(
+                type = StoveMenus.PROFILE,
+                passiveIconId = R.drawable.profile_passive,
+                activeIconId = R.drawable.profile_active,
+                labelId = R.string.nav_profile,
+                navigate = navigateProfile
+            )
         )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    painter = if(isSelected == StoveMenus.DESIGNER)
-                        painterResource(R.drawable.designer_active)
-                    else
-                        painterResource(R.drawable.designer_passive),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp)
+        screens.forEach { screen ->
+            val selected = screen.type == isSelected
 
+            val scale by animateFloatAsState(
+                targetValue = if(selected) 0.9f else 1.0f,
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessLow
                 )
-            },
-            label = {
-                Text(
-                    text = stringResource(R.string.nav_constructor),
-                    style = MaterialTheme.typography.titleLarge
-                )
-            },
-            selected = isSelected == StoveMenus.DESIGNER,
-            onClick = navigateDesigner,
-            colors = navigationIconColors
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    painter = if(isSelected == StoveMenus.PROFILE)
-                        painterResource(R.drawable.profile_active)
-                    else
-                        painterResource(R.drawable.profile_passive),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp)
-                )
-            },
-            label = {
-                Text(
-                    text = stringResource(R.string.nav_profile),
-                    style = MaterialTheme.typography.titleLarge
-                )
-            },
-            selected = isSelected == StoveMenus.PROFILE,
-            onClick = navigateProfile,
-            colors = navigationIconColors
-        )
+            )
+
+            NavigationBarItem(
+                icon = {
+                    Icon(
+                        painter = if(selected)
+                            painterResource(screen.activeIconId)
+                        else
+                            painterResource(screen.passiveIconId),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                label = {
+                    Text(
+                        text = stringResource(screen.labelId),
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                },
+                selected = selected,
+                onClick = screen.navigate,
+                colors = navigationIconColors,
+                modifier = Modifier.scale(scale)
+            )
+        }
     }
 }
 

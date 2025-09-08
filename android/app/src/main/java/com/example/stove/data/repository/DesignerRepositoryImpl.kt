@@ -1,10 +1,10 @@
 package com.example.stove.data.repository
 
 import com.example.stove.core.Resource
-import com.example.stove.data.remote.dto.AddonDto
-import com.example.stove.data.remote.dto.ComponentDto
-import com.example.stove.data.remote.dto.OptionDto
-import com.example.stove.data.remote.dto.TypeDto
+import com.example.stove.data.dto.AddonDto
+import com.example.stove.data.dto.ComponentDto
+import com.example.stove.data.dto.OptionDto
+import com.example.stove.data.dto.TypeDto
 import com.example.stove.data.remote.service.DesignerApiService
 import com.example.stove.domain.model.designer.Addon
 import com.example.stove.domain.model.designer.Component

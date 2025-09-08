@@ -1,4 +1,4 @@
-package com.example.stove.data.remote.dto
+package com.example.stove.data.dto
 
 import com.google.gson.annotations.SerializedName
 

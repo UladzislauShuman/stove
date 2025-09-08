@@ -16,12 +16,13 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.stove.R
+import com.example.stove.domain.model.auth.Login
 import com.example.stove.presentation.ui.screens.CustomButton
 import com.example.stove.presentation.ui.screens.InputField
 import com.example.stove.presentation.ui.theme.StoveTheme
 
 @Composable
-fun SignInScreen() {
+fun LoginScreen() {
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -67,7 +68,7 @@ fun SignInScreen() {
                     textStyle = MaterialTheme.typography.labelLarge,
                     modifier = Modifier
                         .fillMaxWidth()
-                        //                        .height(dimensionResource(R.dimen.active_button_height))
+                        //.height(dimensionResource(R.dimen.active_button_height))
                         .padding(
                             top = dimensionResource(R.dimen.padding_medium),
                             bottom = dimensionResource(R.dimen.padding_medium)
@@ -113,13 +114,13 @@ fun SignInScreen() {
 
 @Preview
 @Composable
-fun SignScreenPreview() {
+fun LoginScreenPreview() {
     StoveTheme {
         Surface(
 //            modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            SignInScreen()
+            LoginScreen()
         }
     }
 }

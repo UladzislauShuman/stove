@@ -1,8 +1,8 @@
 package com.example.stove.data.remote.service
 
-import com.example.stove.data.remote.dto.AuthResponse
-import com.example.stove.data.remote.dto.LoginRequest
-import com.example.stove.data.remote.dto.RegisterRequest
+import com.example.stove.data.dto.AuthResponse
+import com.example.stove.data.dto.LoginRequest
+import com.example.stove.data.dto.RegisterRequest
 import retrofit2.http.Body
 import retrofit2.http.POST
 

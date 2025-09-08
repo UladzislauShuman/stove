@@ -1,17 +1,16 @@
-package com.example.stove.domain.usecase
+package com.example.stove.domain.usecase.designer
 
 import com.example.stove.core.Resource
-import com.example.stove.domain.model.designer.Option
+import com.example.stove.domain.model.designer.Addon
 import com.example.stove.domain.repository.DesignerRepository
-import com.example.stove.presentation.model.OptionUiModel
+import com.example.stove.presentation.model.AddonUiModel
 import javax.inject.Inject
 
-class GetOptionsUseCase @Inject constructor(
-        private val repository: DesignerRepository
-    )
-{
-    suspend fun invoke(componentId: Int) : Resource<List<OptionUiModel>> {
-        val resource = repository.getOptions(componentId)
+class GetAddonsUseCase @Inject constructor(
+    private val repository: DesignerRepository
+) {
+    suspend fun invoke() : Resource<List<AddonUiModel>> {
+        val resource = repository.getAddons()
 
         return when(resource) {
             is Resource.LOADING -> Resource.LOADING()
@@ -22,6 +21,5 @@ class GetOptionsUseCase @Inject constructor(
 
     }
 
-    private fun Option.toUiModel() =
-        OptionUiModel(id, name, priceModifier, imageUrl, isDefault)
+    private fun Addon.toUiModel() = AddonUiModel(id, name, description, price)
 }

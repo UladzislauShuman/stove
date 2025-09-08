@@ -1,17 +1,17 @@
-package com.example.stove.domain.usecase
+package com.example.stove.domain.usecase.designer
 
 import com.example.stove.core.Resource
-import com.example.stove.domain.model.designer.Type
+import com.example.stove.domain.model.designer.Option
 import com.example.stove.domain.repository.DesignerRepository
-import com.example.stove.presentation.model.TypeUiModel
-import retrofit2.HttpException
+import com.example.stove.presentation.model.OptionUiModel
 import javax.inject.Inject
 
-class GetTypesUseCase @Inject constructor(
-    private val repository: DesignerRepository
-) {
-    suspend fun invoke() : Resource<List<TypeUiModel>> {
-        val resource = repository.getTypes()
+class GetOptionsUseCase @Inject constructor(
+        private val repository: DesignerRepository
+    )
+{
+    suspend fun invoke(componentId: Int) : Resource<List<OptionUiModel>> {
+        val resource = repository.getOptions(componentId)
 
         return when(resource) {
             is Resource.LOADING -> Resource.LOADING()
@@ -22,7 +22,6 @@ class GetTypesUseCase @Inject constructor(
 
     }
 
-    private fun Type.toUiModel() = TypeUiModel(id, name, description, basePrice, imageUrl)
+    private fun Option.toUiModel() =
+        OptionUiModel(id, name, priceModifier, imageUrl, isDefault)
 }
-
-

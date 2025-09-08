@@ -2,7 +2,9 @@ package com.example.stove.data.di
 
 import com.example.stove.data.favourite.FavouriteRepository
 import com.example.stove.data.favourite.FavouriteRepositoryImpl
+import com.example.stove.data.repository.AuthRepositoryImpl
 import com.example.stove.data.repository.DesignerRepositoryImpl
+import com.example.stove.domain.repository.AuthRepository
 import com.example.stove.domain.repository.DesignerRepository
 import dagger.Binds
 import dagger.Module
@@ -19,6 +21,12 @@ abstract class RepositoryModule {
     abstract fun bindDesignerRepository(
         designerRepositoryImpl: DesignerRepositoryImpl
     ) : DesignerRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindAuthRepository(
+        authRepositoryImpl: AuthRepositoryImpl
+    ) : AuthRepository
 
     @Singleton
     @Binds

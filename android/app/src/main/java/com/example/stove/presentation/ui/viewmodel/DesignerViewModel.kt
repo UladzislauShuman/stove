@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stove.core.Resource
 import com.example.stove.data.favourite.FavouriteRepository
-import com.example.stove.domain.usecase.GetAddonsUseCase
-import com.example.stove.domain.usecase.GetComponentsUseCase
-import com.example.stove.domain.usecase.GetOptionsUseCase
-import com.example.stove.domain.usecase.GetTypesUseCase
+import com.example.stove.domain.usecase.designer.GetAddonsUseCase
+import com.example.stove.domain.usecase.designer.GetComponentsUseCase
+import com.example.stove.domain.usecase.designer.GetOptionsUseCase
+import com.example.stove.domain.usecase.designer.GetTypesUseCase
 import com.example.stove.presentation.model.AddonUiModel
 import com.example.stove.presentation.model.ComponentUiModel
 import com.example.stove.presentation.model.OptionUiModel

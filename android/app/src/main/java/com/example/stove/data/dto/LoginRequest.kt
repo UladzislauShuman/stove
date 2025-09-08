@@ -1,4 +1,4 @@
-package com.example.stove.data.remote.dto
+package com.example.stove.data.dto
 
 data class LoginRequest(
     val email: String,
