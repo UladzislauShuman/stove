@@ -1,6 +1,4 @@
-package com.example.stove.domain.model.auth
-
-import com.google.gson.annotations.SerializedName
+package com.example.stove.domain.dto.auth
 
 data class Register(
     val fullName: String,

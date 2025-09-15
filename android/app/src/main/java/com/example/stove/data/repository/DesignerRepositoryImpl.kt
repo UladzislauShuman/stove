@@ -6,10 +6,10 @@ import com.example.stove.data.dto.ComponentDto
 import com.example.stove.data.dto.OptionDto
 import com.example.stove.data.dto.TypeDto
 import com.example.stove.data.remote.service.DesignerApiService
-import com.example.stove.domain.model.designer.Addon
-import com.example.stove.domain.model.designer.Component
-import com.example.stove.domain.model.designer.Option
-import com.example.stove.domain.model.designer.Type
+import com.example.stove.domain.dto.designer.Addon
+import com.example.stove.domain.dto.designer.Component
+import com.example.stove.domain.dto.designer.Option
+import com.example.stove.domain.dto.designer.Type
 import com.example.stove.domain.repository.DesignerRepository
 import retrofit2.HttpException
 import javax.inject.Inject

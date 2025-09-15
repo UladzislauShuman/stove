@@ -1,6 +1,6 @@
-package com.example.stove.presentation.model
+package com.example.stove.domain.dto.designer
 
-data class TypeUiModel(
+data class Type(
     val id: Int,
     val name: String,
     val description: String,

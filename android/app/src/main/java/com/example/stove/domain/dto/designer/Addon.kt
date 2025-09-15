@@ -1,6 +1,6 @@
-package com.example.stove.presentation.model
+package com.example.stove.domain.dto.designer
 
-data class AddonUiModel(
+data class Addon(
     val id: Int,
     val name: String,
     val description: String,

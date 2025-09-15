@@ -8,10 +8,10 @@ import com.example.stove.domain.usecase.designer.GetAddonsUseCase
 import com.example.stove.domain.usecase.designer.GetComponentsUseCase
 import com.example.stove.domain.usecase.designer.GetOptionsUseCase
 import com.example.stove.domain.usecase.designer.GetTypesUseCase
-import com.example.stove.presentation.model.AddonUiModel
-import com.example.stove.presentation.model.ComponentUiModel
-import com.example.stove.presentation.model.OptionUiModel
-import com.example.stove.presentation.model.TypeUiModel
+import com.example.stove.presentation.dto.AddonUiModel
+import com.example.stove.presentation.dto.ComponentUiModel
+import com.example.stove.presentation.dto.OptionUiModel
+import com.example.stove.presentation.dto.TypeUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

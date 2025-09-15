@@ -1,15 +1,16 @@
 package com.example.stove.domain.usecase.auth
 
 import com.example.stove.core.Resource
-import com.example.stove.data.dto.LoginRequest
-import com.example.stove.domain.dto.auth.Login
+import com.example.stove.data.dto.RegisterRequest
+import com.example.stove.domain.dto.auth.Register
 import com.example.stove.domain.repository.AuthRepository
 
-class LoginUseCase(
+class RegisterUseCase(
     private val repository: AuthRepository
 ) {
-    suspend fun invoke(request: Login) : Resource<Unit> {
-        val response = repository.login(request.toData())
+
+    suspend fun invoke(request: Register) : Resource<Unit> {
+        val response = repository.register(request.toData())
 
         return when(response) {
             is Resource.SUCCESS -> Resource.SUCCESS(Unit)
@@ -18,5 +19,5 @@ class LoginUseCase(
         }
     }
 
-    private fun Login.toData() = LoginRequest(email, password)
+    private fun Register.toData() = RegisterRequest(fullName, phoneNumber, email, password)
 }

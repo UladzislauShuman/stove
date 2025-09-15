@@ -1,4 +1,4 @@
-package com.example.stove.presentation.model
+package com.example.stove.presentation.dto
 
 data class ComponentUiModel(
     val id: Int,

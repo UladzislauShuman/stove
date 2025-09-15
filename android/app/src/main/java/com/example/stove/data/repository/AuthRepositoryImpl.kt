@@ -1,6 +1,7 @@
 package com.example.stove.data.repository
 
 import androidx.security.crypto.EncryptedSharedPreferences
+import coil.network.HttpException
 import com.example.stove.core.Resource
 import com.example.stove.data.dto.LoginRequest
 import com.example.stove.data.dto.RegisterRequest
@@ -21,13 +22,23 @@ class AuthRepositoryImpl @Inject constructor(
                 .putBoolean("IS_LOGGED_IN", true)
                 .apply()
             return Resource.SUCCESS(Unit)
-        } catch(e: Exception) {
+        } catch(e: RuntimeException) {
             return Resource.FAILURE(e)
         }
     }
 
     override suspend fun register(request: RegisterRequest): Resource<Unit> {
-        TODO("Not yet implemented")
+        try {
+            val response = authService.register(request)
+
+            secretPreferences.edit()
+                .putString("JWT_TOKEN", response.token)
+                .putBoolean("IS_LOGGED_IN", true)
+                .apply()
+            return Resource.SUCCESS(Unit)
+        } catch(e: RuntimeException) {
+            return Resource.FAILURE(e)
+        }
     }
 
 }

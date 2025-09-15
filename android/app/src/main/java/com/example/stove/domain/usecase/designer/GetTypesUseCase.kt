@@ -1,9 +1,9 @@
 package com.example.stove.domain.usecase.designer
 
 import com.example.stove.core.Resource
-import com.example.stove.domain.model.designer.Type
+import com.example.stove.domain.dto.designer.Type
 import com.example.stove.domain.repository.DesignerRepository
-import com.example.stove.presentation.model.TypeUiModel
+import com.example.stove.presentation.dto.TypeUiModel
 import javax.inject.Inject
 
 class GetTypesUseCase @Inject constructor(

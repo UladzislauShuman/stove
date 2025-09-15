@@ -1,4 +1,4 @@
-package com.example.stove.domain.model.designer
+package com.example.stove.domain.dto.designer
 
 
 data class Component(

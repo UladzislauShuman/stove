@@ -10,19 +10,36 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import com.example.stove.R
-import com.example.stove.domain.model.auth.Login
 import com.example.stove.presentation.ui.screens.CustomButton
 import com.example.stove.presentation.ui.screens.InputField
 import com.example.stove.presentation.ui.theme.StoveTheme
+import com.example.stove.presentation.ui.viewmodel.AuthViewModel
+import com.example.stove.presentation.ui.viewmodel.NavigationEvent
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    viewModel: AuthViewModel,
+    navController: NavController
+) {
+    LaunchedEffect(key1 = Unit) {
+        viewModel.navigationEvent.collect { event ->
+            when(event) {
+                is NavigationEvent.ToMainApp ->
+                    navController.navigate("Home")
+                is NavigationEvent.ToRegister ->
+                    TODO()
+            }
+        }
+    }
+
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -120,7 +137,7 @@ fun LoginScreenPreview() {
 //            modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            LoginScreen()
+//            LoginScreen()
         }
     }
 }
