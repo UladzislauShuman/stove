@@ -12,6 +12,7 @@ private val DarkColorScheme = darkColorScheme(
     secondaryContainer = DarkSecondaryContainerColor,
     onSecondaryContainer = OnDarkSecondaryContainerColor,
     background = DarkBackgroundSurface,
+    error = DarkError,
     surface = DarkBackgroundSurface
 )
 
@@ -21,6 +22,7 @@ private val LightColorScheme = lightColorScheme(
     onPrimaryContainer = RavenBlack,
     onSecondaryContainer = SlateBlue,
     background = White,
+    error = WhiteError,
     surface = White
 )
 

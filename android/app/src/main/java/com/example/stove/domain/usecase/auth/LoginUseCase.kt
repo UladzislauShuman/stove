@@ -4,8 +4,9 @@ import com.example.stove.core.Resource
 import com.example.stove.data.dto.LoginRequest
 import com.example.stove.domain.dto.auth.Login
 import com.example.stove.domain.repository.AuthRepository
+import javax.inject.Inject
 
-class LoginUseCase(
+class LoginUseCase @Inject constructor(
     private val repository: AuthRepository
 ) {
     suspend fun invoke(request: Login) : Resource<Unit> {

@@ -1,5 +1,6 @@
 package com.example.stove.data.repository
 
+import android.util.Log
 import com.example.stove.core.Resource
 import com.example.stove.data.dto.AddonDto
 import com.example.stove.data.dto.ComponentDto
@@ -23,6 +24,7 @@ class DesignerRepositoryImpl @Inject constructor(
             val remoteTypes = apiService.getTypes()
             Resource.SUCCESS(remoteTypes.map {it.toDomain()})
         } catch(e: HttpException) {
+            Log.e("DesignerRepository",e.message ?: "Unknown Error")
             Resource.FAILURE(e)
         }
     }
@@ -32,6 +34,7 @@ class DesignerRepositoryImpl @Inject constructor(
             val remoteComponents = apiService.getComponents(typeId)
             Resource.SUCCESS(remoteComponents.map {it.toDomain()})
         } catch(e: HttpException) {
+            Log.e("DesignerRepository",e.message ?: "Unknown Error")
             Resource.FAILURE(e)
         }
     }
@@ -40,6 +43,7 @@ class DesignerRepositoryImpl @Inject constructor(
             val remoteOptions = apiService.getOptions(componentId)
             Resource.SUCCESS(remoteOptions.map {it.toDomain()})
         } catch(e: HttpException) {
+            Log.e("DesignerRepository",e.message ?: "Unknown Error")
             Resource.FAILURE(e)
         }
     }
@@ -48,6 +52,7 @@ class DesignerRepositoryImpl @Inject constructor(
             val remoteTypes = apiService.getAddons()
             Resource.SUCCESS(remoteTypes.map {it.toDomain()})
         } catch(e: HttpException) {
+            Log.e("DesignerRepository",e.message ?: "Unknown Error")
             Resource.FAILURE(e)
         }
     }

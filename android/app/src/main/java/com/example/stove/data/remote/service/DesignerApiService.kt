@@ -9,19 +9,19 @@ import retrofit2.http.Path
 
 
 interface DesignerApiService {
-    @GET("stove-types")
+    @GET("constructor-data/stove-types")
     suspend fun getTypes() : List<TypeDto>
 
-    @GET("stove-types/{typeId}/components")
+    @GET("constructor-data/stove-types/{typeId}/components")
     suspend fun getComponents(
         @Path("typeId") typeId: Int
     ) : List<ComponentDto>
 
-    @GET("components/{componentId}/options")
+    @GET("constructor-data/components/{componentId}/options")
     suspend fun getOptions(
         @Path("componentId") componentId: Int
     ) : List<OptionDto>
 
-    @GET("addons")
+    @GET("constructor-data/addons")
     suspend fun getAddons() : List<AddonDto>
 }

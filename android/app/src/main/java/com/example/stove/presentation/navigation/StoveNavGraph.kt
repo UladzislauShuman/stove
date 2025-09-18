@@ -27,6 +27,8 @@ import com.example.stove.StoveBottomAppBar
 import com.example.stove.StoveTopAppBar
 import com.example.stove.presentation.model.StoveMenus
 import com.example.stove.presentation.ui.AppViewModelProvider
+import com.example.stove.presentation.ui.screens.authorization.LoginScreen
+import com.example.stove.presentation.ui.screens.authorization.RegisterScreen
 import com.example.stove.presentation.ui.screens.designer.DesignerAddonScreen
 import com.example.stove.presentation.ui.screens.designer.DesignerComponentScreen
 import com.example.stove.presentation.ui.screens.designer.DesignerEntryDestination
@@ -39,6 +41,7 @@ import com.example.stove.presentation.ui.screens.home.HomeScreen
 import com.example.stove.presentation.ui.screens.profile.ProfileDestination
 import com.example.stove.presentation.ui.screens.profile.ProfileFavouritesScreen
 import com.example.stove.presentation.ui.screens.profile.ProfileScreen
+import com.example.stove.presentation.ui.viewmodel.AuthViewModel
 import com.example.stove.presentation.ui.viewmodel.DesignerViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -62,15 +65,24 @@ fun StoveNavGraph(
 
     val screenOrder: Map<String, Int> =
         mapOf(
-            "Home" to 0,
-            "designer_graph/entry" to 1,
-            "designer_graph/type" to 2,
-            "designer_graph/component" to 3,
-            "designer_graph/option" to 4,
-            "designer_graph/addon" to 5,
-            "designer_graph/summary" to 6,
-            "profile_graph/main" to 7
+            "auth_graph/login" to 0,
+            "auth_graph/register" to 1,
+
+            "Home" to 2,
+
+            "designer_graph/entry" to 3,
+            "designer_graph/type" to 4,
+            "designer_graph/component" to 5,
+            "designer_graph/option" to 6,
+            "designer_graph/addon" to 7,
+            "designer_graph/summary" to 8,
+
+            "profile_graph/main" to 9
         )
+    val shouldShowNavigationBar = when(currentRoute) {
+        "auth_graph/login", "auth_graph/register" -> false
+        else -> true
+    }
 
     Scaffold(
         topBar = {
@@ -89,6 +101,12 @@ fun StoveNavGraph(
                         navigateUp = { navController.navigateUp() }
                     )
                 }
+                currentRoute?.startsWith("auth_graph/") == true -> {
+                    StoveTopAppBar(
+                        title = "Авторизация",
+                        canNavigateBack = false
+                    )
+                }
                 else -> {
                     StoveTopAppBar(
                         title = stringResource(HomeDestination.titleRes),
@@ -98,52 +116,54 @@ fun StoveNavGraph(
             }
         },
         bottomBar = {
-            StoveBottomAppBar(
-                /** Сделать оптимальным переход с графа на граф*/
-                navigateHome = {
-                    if(!isTransitionRunning && currentRoute != "Home") {
-                        isTransitionRunning = true
-                        navController.navigate(HomeDestination.route)
-                        CoroutineScope(Dispatchers.Main).launch {
-                            delay(210)
-                            isTransitionRunning = false
+            if(shouldShowNavigationBar) {
+                StoveBottomAppBar(
+                    /** Сделать оптимальным переход с графа на граф*/
+                    navigateHome = {
+                        if (!isTransitionRunning && currentRoute != "Home") {
+                            isTransitionRunning = true
+                            navController.navigate(HomeDestination.route)
+                            CoroutineScope(Dispatchers.Main).launch {
+                                delay(260)
+                                isTransitionRunning = false
+                            }
                         }
-                    }
-                },
-                navigateDesigner = {
-                    if(!isTransitionRunning && currentRoute != "designer_graph/entry")  {
-                        isTransitionRunning = true
-                        navController.navigate("designer_graph")
-                        CoroutineScope(Dispatchers.Main).launch {
-                            delay(210)
-                            isTransitionRunning = false
+                    },
+                    navigateDesigner = {
+                        if (!isTransitionRunning && currentRoute != "designer_graph/entry") {
+                            isTransitionRunning = true
+                            navController.navigate("designer_graph")
+                            CoroutineScope(Dispatchers.Main).launch {
+                                delay(260)
+                                isTransitionRunning = false
+                            }
                         }
-                    }
-                },
-                navigateProfile = {
-                    if(!isTransitionRunning && currentRoute != "profile_graph/main") {
-                        isTransitionRunning = true
-                        navController.navigate("profile_graph")
-                        CoroutineScope(Dispatchers.Main).launch {
-                            delay(210)
-                            isTransitionRunning = false
+                    },
+                    navigateProfile = {
+                        if (!isTransitionRunning && currentRoute != "profile_graph/main") {
+                            isTransitionRunning = true
+                            navController.navigate("profile_graph")
+                            CoroutineScope(Dispatchers.Main).launch {
+                                delay(260)
+                                isTransitionRunning = false
+                            }
                         }
-                    }
-                },
-                modifier = Modifier.height(72.dp),
-                isSelected =
-                    when {
-                        currentRoute == "Home" -> StoveMenus.HOME
-                        currentRoute?.startsWith("designer_graph") == true -> StoveMenus.DESIGNER
-                        currentRoute?.startsWith("profile_graph") == true-> StoveMenus.PROFILE
-                        else -> StoveMenus.HOME
-                    }
-            )
+                    },
+                    modifier = Modifier.height(72.dp),
+                    isSelected =
+                        when {
+                            currentRoute == "Home" -> StoveMenus.HOME
+                            currentRoute?.startsWith("designer_graph") == true -> StoveMenus.DESIGNER
+                            currentRoute?.startsWith("profile_graph") == true -> StoveMenus.PROFILE
+                            else -> StoveMenus.HOME
+                        }
+                )
+            }
         }
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = HomeDestination.route,
+            startDestination = "auth_graph",
             modifier = modifier.padding(innerPadding),
             enterTransition = {
                 val from = screenOrder[initialState.destination.route] ?: 0
@@ -151,13 +171,13 @@ fun StoveNavGraph(
                 if(to > from) {
                     slideInHorizontally(
                         initialOffsetX = { it },
-                        animationSpec = tween(200)
-                    ) + fadeIn(animationSpec = tween(200) )
+                        animationSpec = tween(250)
+                    ) + fadeIn(animationSpec = tween(250) )
                 } else {
                     slideInHorizontally(
                         initialOffsetX = { -it },
-                        animationSpec = tween(200)
-                    )+ fadeIn(animationSpec = tween(200) )
+                        animationSpec = tween(250)
+                    )+ fadeIn(animationSpec = tween(250) )
                 }
             },
             exitTransition = {
@@ -166,16 +186,42 @@ fun StoveNavGraph(
                 if(to > from) {
                     slideOutHorizontally(
                         targetOffsetX = { -it },
-                        animationSpec = tween(200)
-                    )+ fadeOut(animationSpec = tween(200) )
+                        animationSpec = tween(250)
+                    )+ fadeOut(animationSpec = tween(250) )
                 } else {
                     slideOutHorizontally(
                         targetOffsetX = { it },
-                        animationSpec = tween(200)
-                    ) + fadeOut(animationSpec = tween(200) )
+                        animationSpec = tween(250)
+                    ) + fadeOut(animationSpec = tween(250) )
                 }
             }
         ) {
+            navigation(startDestination = "auth_graph/login", route = "auth_graph") {
+                composable(route = "auth_graph/login") { backStackEntry ->
+                    val parentEntry = remember(backStackEntry) {
+                        navController.getBackStackEntry("auth_graph")
+                    }
+                    val authViewModel: AuthViewModel = hiltViewModel(
+                        viewModelStoreOwner = parentEntry
+                    )
+                    LoginScreen(
+                        authViewModel,
+                        navController
+                    )
+                }
+                composable(route = "auth_graph/register") { backStackEntry ->
+                    val parentEntry = remember(backStackEntry) {
+                        navController.getBackStackEntry("auth_graph")
+                    }
+                    val authViewModel: AuthViewModel = hiltViewModel(
+                        viewModelStoreOwner = parentEntry
+                    )
+                    RegisterScreen(
+                       authViewModel,
+                       navController
+                   )
+                }
+            }
             composable(
                 route = HomeDestination.route
             ) {

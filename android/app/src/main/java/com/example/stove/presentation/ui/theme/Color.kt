@@ -8,9 +8,15 @@ val RavenBlack = Color(0xFF121417)
 val SlateBlue = Color(0xFF61738A)
 val Amber = Color(0xFFFFAF3F)
 
+
+
 val DarkBackgroundSurface = RavenBlack
 val DarkPrimaryContainerColor = SlateBlue
 val DarkSecondaryContainerColor = Color(0xFF4A4458)
 val OnDarkPrimaryContainerColor = Color(0xFFFEEDD2)
 val OnDarkSecondaryContainerColor = White
+
+val DarkError = Color(0xFFFC3B2B)
+val WhiteError = Color(0xFFf0333d)
+
 val OnDarkColors = White

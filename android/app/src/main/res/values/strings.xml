@@ -2,7 +2,9 @@
     <string name="app_name">Stove</string>
 
     <string name="title_login">Вход</string>
-    <string name="hint_username">Имя пользователя</string>
+    <string name="hint_email">Email адрес</string>
+    <string name="hint_full_name">ФИО</string>
+    <string name="hint_phone_number">Номер телефона</string>
     <string name="hint_password">Пароль</string>
     <string name="link_forgot_password">Забыли пароль?</string>
     <string name="button_login">Войти</string>
@@ -25,6 +27,7 @@
 
     <string name="title_about_us">О нас</string>
     <string name="text_about_us">Мы специализируемся на создании и ремонте печей и каминов, обеспечивая тепло и уют в вашем доме.</string>
+    <string name="text_has_account">Уже есть аккаунт</string>
 
     <string name="title_services">Наши услуги</string>
     <string name="service_construction">Строительство печей</string>

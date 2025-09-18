@@ -2,18 +2,29 @@ package com.example.stove.presentation.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.Navigation
 import com.example.stove.core.Resource
 import com.example.stove.domain.dto.auth.Login
+import com.example.stove.domain.dto.auth.Register
 import com.example.stove.domain.usecase.auth.LoginUseCase
+import com.example.stove.domain.usecase.auth.RegisterUseCase
 import com.example.stove.presentation.dto.LoginUiModel
+import com.example.stove.presentation.dto.RegisterUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
 
+sealed class NavigationEvent {
+    data object ToMainApp : NavigationEvent()
+    data object ToRegister: NavigationEvent()
+    data object ToLogin: NavigationEvent()
+}
 
 data class InputInfo(
     val email: String = "",
@@ -22,21 +33,17 @@ data class InputInfo(
     val fullName: String = ""
 )
 
-sealed class NavigationEvent {
-    data object ToMainApp: NavigationEvent()
-    data object ToRegister: NavigationEvent()
-}
 
 sealed interface LoginUiState {
     data object Waiting : LoginUiState
-    data object Success: LoginUiState
-    data class Failure(val message: String): LoginUiState
+    data object Success : LoginUiState
+    data class Failure(val message: String) : LoginUiState
 }
 
 sealed interface RegisterUiState {
     data object Waiting : RegisterUiState
-    data object Success: RegisterUiState
-    data class Failure(val message: String): RegisterUiState
+    data object Success : RegisterUiState
+    data class Failure(val message: String) : RegisterUiState
 }
 
 sealed interface AuthUiState {
@@ -45,20 +52,21 @@ sealed interface AuthUiState {
 }
 
 @HiltViewModel
-class AuthViewModel @Inject constructor(
-
-) : ViewModel() {
+class AuthViewModel @Inject constructor() : ViewModel() {
     private val _navigationEvents = Channel<NavigationEvent>()
     val navigationEvent = _navigationEvents.receiveAsFlow()
 
-    private val _authUiState = MutableStateFlow(AuthUiState.Login(LoginUiState.Waiting))
+    private val _authUiState: MutableStateFlow<AuthUiState> = MutableStateFlow(AuthUiState.Login(LoginUiState.Waiting))
     val authUiState: StateFlow<AuthUiState> = _authUiState
 
     private val _inputInfo = MutableStateFlow(InputInfo())
-    val inputInfo: StateFlow<InputInfo> = _inputInfo
+    val inputInfo: StateFlow<InputInfo> = _inputInfo.asStateFlow()
 
     @Inject
     lateinit var loginCase: LoginUseCase
+
+    @Inject
+    lateinit var registerCase: RegisterUseCase
 
     fun login() {
         viewModelScope.launch {
@@ -84,6 +92,77 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+    fun register() {
+        viewModelScope.launch {
+            if(_inputInfo.value.email != "" &&
+                _inputInfo.value.password != "" &&
+                _inputInfo.value.fullName != "" &&
+                _inputInfo.value.phoneNumber != "") {
 
+                val request = RegisterUiModel(
+                    fullName = _inputInfo.value.fullName,
+                    phoneNumber = _inputInfo.value.phoneNumber,
+                    email = _inputInfo.value.email,
+                    password = _inputInfo.value.password
+                )
+
+                val result = registerCase.invoke(request.toDomain())
+                when(result) {
+                    is Resource.SUCCESS<*> -> {
+                        _authUiState.value = AuthUiState.Register(RegisterUiState.Success)
+                        _navigationEvents.send(NavigationEvent.ToMainApp)
+                    }
+                    is Resource.FAILURE -> {
+                        _authUiState.value = AuthUiState.Register(RegisterUiState.Failure(result.error.message ?: "Unknown error"))
+                    }
+                    else -> _authUiState.value = AuthUiState.Register(RegisterUiState.Waiting)
+                }
+            }
+        }
+    }
+
+
+    fun toRegistration() {
+        viewModelScope.launch {
+            _authUiState.value = AuthUiState.Register(state = RegisterUiState.Waiting)
+            _navigationEvents.send(NavigationEvent.ToRegister)
+        }
+    }
+
+    fun toLogin() {
+        viewModelScope.launch {
+            _authUiState.value = AuthUiState.Login(state = LoginUiState.Waiting)
+            _navigationEvents.send(NavigationEvent.ToLogin)
+        }
+    }
+
+    fun toMainApp() {
+        viewModelScope.launch {
+            _navigationEvents.send(NavigationEvent.ToMainApp)
+        }
+    }
+
+    fun onEmailChange(email: String) {
+        _inputInfo.update{
+            _inputInfo.value.copy(email = email)
+        }
+    }
+    fun onPasswordChange(password: String) {
+        _inputInfo.update {
+            _inputInfo.value.copy(password = password)
+        }
+    }
+    fun onFullNameChange(fullName: String) {
+        _inputInfo.update {
+            _inputInfo.value.copy(fullName = fullName)
+        }
+    }
+    fun onPhoneNumberChange(phoneNumber: String) {
+        _inputInfo.update {
+            _inputInfo.value.copy(phoneNumber = phoneNumber)
+        }
+    }
+
+    private fun RegisterUiModel.toDomain() = Register(fullName, phoneNumber, email, password)
     private fun LoginUiModel.toDomain() = Login(email, password)
 }

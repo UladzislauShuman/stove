@@ -4,11 +4,11 @@ import com.example.stove.core.Resource
 import com.example.stove.data.dto.RegisterRequest
 import com.example.stove.domain.dto.auth.Register
 import com.example.stove.domain.repository.AuthRepository
+import javax.inject.Inject
 
-class RegisterUseCase(
+class RegisterUseCase @Inject constructor(
     private val repository: AuthRepository
 ) {
-
     suspend fun invoke(request: Register) : Resource<Unit> {
         val response = repository.register(request.toData())
 

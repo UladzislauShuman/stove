@@ -1,11 +1,13 @@
 package com.example.stove.data.dto
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class RegisterRequest(
-    @SerializedName("full_name")
+    @Json(name = "full_name")
     val fullName: String,
-    @SerializedName("phone_number")
+    @Json(name = "phone_number")
     val phoneNumber: String,
     val email: String,
     val password: String
