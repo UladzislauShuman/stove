@@ -8,6 +8,7 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.example.stove.data.remote.service.AuthApiService
 import com.example.stove.data.remote.service.DesignerApiService
+import com.example.stove.data.remote.service.ProfileApiService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -19,8 +20,12 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.create
 import java.security.GeneralSecurityException
+import javax.inject.Qualifier
 import javax.inject.Singleton
+
+private const val baseUrl = "https://personal-lat-bottles-gaps.trycloudflare.com/"
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -33,7 +38,6 @@ object DataModule {
             .build()
     }
 
-
     @Singleton
     @Provides
     fun getLoggingInterceptor(): HttpLoggingInterceptor {
@@ -43,19 +47,45 @@ object DataModule {
 
     @Singleton
     @Provides
-    fun getOkHttpClient(
-        loggingInterceptor: HttpLoggingInterceptor
+    @PublicOkHttpClient
+    fun getPublicOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor,
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .build()
     }
 
+    @Singleton
+    @Provides
+    @AuthOkHttpClient
+    fun getAuthOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor,
+        authInterceptor: AuthInterceptor
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
+            .addInterceptor(authInterceptor)
+            .build()
+    }
+
     @Provides
     @Singleton
-    fun getRetrofit(moshi: Moshi, okHttpClient: OkHttpClient) : Retrofit {
+    @PublicRetrofit
+    fun getPublicRetrofit(moshi: Moshi, @PublicOkHttpClient okHttpClient: OkHttpClient) : Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://personal-lat-bottles-gaps.trycloudflare.com/")
+            .baseUrl(baseUrl)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .client(okHttpClient)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    @AuthRetrofit
+    fun getAuthRetrofit(moshi: Moshi, @AuthOkHttpClient okHttpClient: OkHttpClient) : Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(baseUrl)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .client(okHttpClient)
             .build()
@@ -94,13 +124,36 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun getDesignerService(retrofit: Retrofit) : DesignerApiService {
+    fun getDesignerService(@PublicRetrofit retrofit: Retrofit) : DesignerApiService {
         return retrofit.create(DesignerApiService::class.java)
     }
 
     @Provides
     @Singleton
-    fun getAuthService(retrofit: Retrofit) : AuthApiService {
+    fun getAuthService(@PublicRetrofit retrofit: Retrofit) : AuthApiService {
         return retrofit.create(AuthApiService::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun getProfileService(@AuthRetrofit retrofit: Retrofit) : ProfileApiService {
+        return retrofit.create(ProfileApiService::class.java)
+    }
+
+
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class AuthOkHttpClient
+
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class PublicOkHttpClient
+
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class PublicRetrofit
+
+    @Qualifier
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class AuthRetrofit
 }

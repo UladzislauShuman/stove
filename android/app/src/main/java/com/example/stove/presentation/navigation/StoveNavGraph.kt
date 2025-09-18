@@ -43,6 +43,7 @@ import com.example.stove.presentation.ui.screens.profile.ProfileFavouritesScreen
 import com.example.stove.presentation.ui.screens.profile.ProfileScreen
 import com.example.stove.presentation.ui.viewmodel.AuthViewModel
 import com.example.stove.presentation.ui.viewmodel.DesignerViewModel
+import com.example.stove.presentation.ui.viewmodel.ProfileViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -327,8 +328,18 @@ fun StoveNavGraph(
             navigation(startDestination = "profile_graph/main", route = "profile_graph") {
                 composable(
                     route = "profile_graph/main"
-                ) {
-                    ProfileScreen(onClickFavourites = { navController.navigate("profile_graph/favourites") })
+                ) { backStackEntry ->
+                    val parentEntry = remember(backStackEntry) {
+                        navController.getBackStackEntry("profile_graph")
+                    }
+                    val profileViewModel: ProfileViewModel = hiltViewModel(
+                        viewModelStoreOwner = parentEntry
+                    )
+                    ProfileScreen(
+                        viewModel = profileViewModel,
+                        navController = navController,
+                        onClickFavourites = { navController.navigate("profile_graph/favourites") }
+                    )
                 }
                 composable(route = "profile_graph/favourites") {
                     ProfileFavouritesScreen()

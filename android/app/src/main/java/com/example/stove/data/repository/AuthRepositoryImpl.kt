@@ -62,7 +62,7 @@ class AuthRepositoryImpl @Inject constructor(
                 }
             } else {
                 val errorBody = response.errorBody()?.string() ?: "Unknown error."
-                Log.e("AuthRepository", "Error from server: " + errorBody)
+                Log.e("AuthRepository", "Error from server: $errorBody")
                 // !!! Так делать не хорошо, надо потом сделать класс ApiError
                 return Resource.FAILURE(Throwable(errorBody))
             }

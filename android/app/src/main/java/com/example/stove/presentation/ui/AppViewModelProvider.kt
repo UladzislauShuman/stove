@@ -6,18 +6,13 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.stove.StoveApplication
 import com.example.stove.presentation.ui.viewmodel.DesignerViewModel
-import com.example.stove.presentation.ui.viewmodel.ProfileFavouritesViewModel
+import com.example.stove.presentation.ui.viewmodel.ProfileViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
             DesignerViewModel(
                 stoveApplication().container.favouriteRepository,
-            )
-        }
-        initializer {
-            ProfileFavouritesViewModel(
-                stoveApplication().container.favouriteRepository
             )
         }
     }

@@ -13,15 +13,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.stove.R
+import com.example.stove.data.favourite.Favourite
 import com.example.stove.presentation.ui.AppViewModelProvider
 import com.example.stove.presentation.ui.screens.FavouriteCard
-import com.example.stove.presentation.ui.viewmodel.ProfileFavouritesViewModel
+import com.example.stove.presentation.ui.viewmodel.ProfileViewModel
 
 @Composable
-fun ProfileFavouritesScreen(
-    viewModel: ProfileFavouritesViewModel = viewModel(factory = AppViewModelProvider.Factory)
-) {
-    val favouritesUiState by viewModel.favouritesUiState.collectAsState()
+fun ProfileFavouritesScreen() {
+    val favouritesList = listOf<Favourite>()
 
     Column(
         modifier = Modifier.padding(
@@ -37,7 +36,7 @@ fun ProfileFavouritesScreen(
             ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            items(items = favouritesUiState.favourites, key = { it.id }) { favourite ->
+            items(items = favouritesList, key = { it.id }) { favourite ->
                 FavouriteCard(
                     favourite = favourite,
                     modifier = Modifier.padding(
