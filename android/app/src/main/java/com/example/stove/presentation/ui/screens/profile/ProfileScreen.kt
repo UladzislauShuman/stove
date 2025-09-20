@@ -150,6 +150,7 @@ fun ProfileScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .clickable { viewModel.logout() }
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     IconWithBackground(

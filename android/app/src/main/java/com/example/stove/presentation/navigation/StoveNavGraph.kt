@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,6 +44,7 @@ import com.example.stove.presentation.ui.screens.profile.ProfileDestination
 import com.example.stove.presentation.ui.screens.profile.ProfileFavouritesScreen
 import com.example.stove.presentation.ui.screens.profile.ProfileScreen
 import com.example.stove.presentation.ui.viewmodel.AuthViewModel
+import com.example.stove.presentation.ui.viewmodel.AuthenticationViewModel
 import com.example.stove.presentation.ui.viewmodel.DesignerViewModel
 import com.example.stove.presentation.ui.viewmodel.ProfileViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -53,10 +56,12 @@ import kotlinx.coroutines.launch
 @Composable
 fun StoveNavGraph(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    mainViewModel: AuthenticationViewModel = hiltViewModel()
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     var isTransitionRunning by remember { mutableStateOf(false) }
+    val isAuthenticated by mainViewModel.isAuthenticated.collectAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
     val topLevelRoutes = setOf(
@@ -83,6 +88,18 @@ fun StoveNavGraph(
     val shouldShowNavigationBar = when(currentRoute) {
         "auth_graph/login", "auth_graph/register" -> false
         else -> true
+    }
+
+    LaunchedEffect(key1 = isAuthenticated) {
+        if (isAuthenticated) {
+            navController.navigate("Home") {
+                popUpTo(navController.graph.startDestinationId) { inclusive = true }
+            }
+        } else {
+            navController.navigate("auth_graph") {
+                popUpTo("Home") { inclusive = true }
+            }
+        }
     }
 
     Scaffold(
@@ -164,7 +181,7 @@ fun StoveNavGraph(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = "auth_graph",
+            startDestination = if(isAuthenticated) "Home" else "auth_graph",
             modifier = modifier.padding(innerPadding),
             enterTransition = {
                 val from = screenOrder[initialState.destination.route] ?: 0
@@ -252,7 +269,8 @@ fun StoveNavGraph(
                         viewModelStoreOwner = parentEntry
                     )
                     DesignerTypeScreen(
-                        backBehavior = { navController.navigate("designer_graph/entry") },
+                        backBehavior = {
+                            navController.navigate("designer_graph/entry") },
                         nextBehavior = {
                             designerViewModel.loadComponents()
                             navController.navigate("designer_graph/component")

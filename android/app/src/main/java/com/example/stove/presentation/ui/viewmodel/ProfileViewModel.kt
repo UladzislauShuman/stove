@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.stove.core.Resource
 import com.example.stove.data.favourite.Favourite
 import com.example.stove.data.favourite.FavouriteRepository
+import com.example.stove.domain.usecase.auth.LogoutUseCase
 import com.example.stove.domain.usecase.profile.GetUserInfoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,7 +33,8 @@ sealed interface UserUiState {
 }
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val getUserInfoCase: GetUserInfoUseCase
+    private val getUserInfoCase: GetUserInfoUseCase,
+    private val logoutUseCase: LogoutUseCase
 ) : ViewModel() {
     private val _profileUiState: MutableStateFlow<ProfileUiState> =
         MutableStateFlow(ProfileUiState.User(UserUiState.Loading))
@@ -69,5 +71,9 @@ class ProfileViewModel @Inject constructor(
                 else -> _profileUiState.value = ProfileUiState.User(UserUiState.Loading)
             }
         }
+    }
+
+    fun logout() {
+        logoutUseCase.invoke()
     }
 }

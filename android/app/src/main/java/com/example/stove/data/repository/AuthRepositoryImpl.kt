@@ -1,20 +1,22 @@
 package com.example.stove.data.repository
 
-import android.content.SharedPreferences
 import android.util.Log
-import androidx.security.crypto.EncryptedSharedPreferences
 import coil.network.HttpException
 import com.example.stove.core.Resource
+import com.example.stove.data.di.NetworkModule
 import com.example.stove.data.dto.LoginRequest
 import com.example.stove.data.dto.RegisterRequest
+import com.example.stove.data.local.TokenManager
 import com.example.stove.data.remote.service.AuthApiService
 import com.example.stove.domain.repository.AuthRepository
+import kotlinx.coroutines.runBlocking
+import okhttp3.OkHttpClient
 import okio.IOException
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val authService: AuthApiService,
-    private val secretPreferences: SharedPreferences
+    private val tokenManager: TokenManager
 ) : AuthRepository {
     override suspend fun login(request: LoginRequest): Resource<Unit> {
         try {
@@ -22,10 +24,7 @@ class AuthRepositoryImpl @Inject constructor(
 
             if(response.isSuccessful) {
                 if(!response.body()?.token.isNullOrEmpty()) {
-                    secretPreferences.edit()
-                        .putString("JWT_TOKEN", response.body()?.token)
-                        .putBoolean("IS_LOGGED_IN", true)
-                        .apply()
+                    tokenManager.putToken(response.body()?.token)
                     Log.i("AuthRepository", "Login success")
                     return Resource.SUCCESS(Unit)
                 } else {
@@ -50,10 +49,7 @@ class AuthRepositoryImpl @Inject constructor(
 
             if(response.isSuccessful) {
                 if(!response.body()?.token.isNullOrEmpty()) {
-                    secretPreferences.edit()
-                        .putString("JWT_TOKEN", response.body()?.token)
-                        .putBoolean("IS_LOGGED_IN", true)
-                        .apply()
+                    tokenManager.putToken(response.body()?.token)
                     Log.i("AuthRepository", "Register success")
                     return Resource.SUCCESS(Unit)
                 } else {
