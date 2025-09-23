@@ -1,4 +1,4 @@
-package com.example.stove.presentation.ui.screens.authorization
+package com.example.stove.presentation.ui.screens.authentication
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,16 +19,15 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.stove.R
-import com.example.stove.presentation.ui.screens.CustomButton
-import com.example.stove.presentation.ui.screens.InputField
+import com.example.stove.presentation.ui.screens.component.CustomButton
+import com.example.stove.presentation.ui.screens.component.InputField
 import com.example.stove.presentation.ui.theme.StoveTheme
-import com.example.stove.presentation.ui.viewmodel.AuthUiState
-import com.example.stove.presentation.ui.viewmodel.AuthViewModel
-import com.example.stove.presentation.ui.viewmodel.LoginUiState
-import com.example.stove.presentation.ui.viewmodel.NavigationEvent
+import com.example.stove.presentation.viewmodel.AuthUiState
+import com.example.stove.presentation.viewmodel.AuthViewModel
+import com.example.stove.presentation.viewmodel.LoginUiState
+import com.example.stove.presentation.viewmodel.AuthNavigatinoEvent
 
 @Composable
 fun LoginScreen(
@@ -38,9 +37,7 @@ fun LoginScreen(
     LaunchedEffect(key1 = Unit) {
         viewModel.navigationEvent.collect { event ->
             when(event) {
-                is NavigationEvent.ToMainApp ->
-                    navController.navigate("Home")
-                is NavigationEvent.ToRegister ->
+                is AuthNavigatinoEvent.ToRegister ->
                     navController.navigate("auth_graph/register")
                 else -> {  }
             }
@@ -114,7 +111,7 @@ fun LoginScreen(
                 CustomButton(
                     labelId = R.string.button_guest,
                     isActiveButton = false,
-                    onClickBehavior = { viewModel.toMainApp() },
+                    onClickBehavior = { TODO() },
                     textStyle = MaterialTheme.typography.labelMedium,
                     modifier = Modifier.fillMaxWidth().padding(
                         bottom = dimensionResource(R.dimen.padding_medium)

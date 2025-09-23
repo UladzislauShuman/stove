@@ -1,4 +1,4 @@
-package com.example.stove.presentation.ui.screens.authorization
+package com.example.stove.presentation.ui.screens.authentication
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,12 +17,12 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.example.stove.R
-import com.example.stove.presentation.ui.screens.CustomButton
-import com.example.stove.presentation.ui.screens.InputField
-import com.example.stove.presentation.ui.viewmodel.AuthUiState
-import com.example.stove.presentation.ui.viewmodel.AuthViewModel
-import com.example.stove.presentation.ui.viewmodel.NavigationEvent
-import com.example.stove.presentation.ui.viewmodel.RegisterUiState
+import com.example.stove.presentation.ui.screens.component.CustomButton
+import com.example.stove.presentation.ui.screens.component.InputField
+import com.example.stove.presentation.viewmodel.AuthUiState
+import com.example.stove.presentation.viewmodel.AuthViewModel
+import com.example.stove.presentation.viewmodel.AuthNavigatinoEvent
+import com.example.stove.presentation.viewmodel.RegisterUiState
 
 @Composable
 fun RegisterScreen(
@@ -32,9 +32,7 @@ fun RegisterScreen(
     LaunchedEffect(key1 = Unit) {
         viewModel.navigationEvent.collect { event ->
             when (event) {
-                is NavigationEvent.ToMainApp ->
-                    navController.navigate("Home")
-                is NavigationEvent.ToLogin ->
+                is AuthNavigatinoEvent.ToLogin ->
                     navController.navigate("auth_graph/login")
                 else -> { }
             }

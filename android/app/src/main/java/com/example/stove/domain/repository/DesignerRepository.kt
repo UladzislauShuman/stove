@@ -1,10 +1,10 @@
 package com.example.stove.domain.repository
 
 import com.example.stove.core.Resource
-import com.example.stove.domain.dto.designer.Addon
-import com.example.stove.domain.dto.designer.Component
-import com.example.stove.domain.dto.designer.Option
-import com.example.stove.domain.dto.designer.Type
+import com.example.stove.domain.model.designer.Addon
+import com.example.stove.domain.model.designer.Component
+import com.example.stove.domain.model.designer.Option
+import com.example.stove.domain.model.designer.Type
 
 interface DesignerRepository {
     suspend fun getTypes() : Resource<List<Type>>

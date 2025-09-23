@@ -6,17 +6,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.stove.R
 import com.example.stove.data.favourite.Favourite
-import com.example.stove.presentation.ui.AppViewModelProvider
-import com.example.stove.presentation.ui.screens.FavouriteCard
-import com.example.stove.presentation.ui.viewmodel.ProfileViewModel
+import com.example.stove.presentation.ui.screens.component.FavouriteCard
 
 @Composable
 fun ProfileFavouritesScreen() {

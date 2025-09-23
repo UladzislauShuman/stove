@@ -25,8 +25,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.stove.R
 import com.example.stove.presentation.navigation.NavigationDestination
-import com.example.stove.presentation.ui.screens.CustomButton
-import com.example.stove.presentation.ui.screens.IconWithBackground
+import com.example.stove.presentation.ui.screens.component.CustomButton
+import com.example.stove.presentation.ui.screens.component.IconWithBackground
 import com.example.stove.presentation.ui.theme.StoveTheme
 
 

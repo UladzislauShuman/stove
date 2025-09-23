@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -27,10 +26,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navigation
 import com.example.stove.StoveBottomAppBar
 import com.example.stove.StoveTopAppBar
+import com.example.stove.core.AuthState
 import com.example.stove.presentation.model.StoveMenus
-import com.example.stove.presentation.ui.AppViewModelProvider
-import com.example.stove.presentation.ui.screens.authorization.LoginScreen
-import com.example.stove.presentation.ui.screens.authorization.RegisterScreen
+import com.example.stove.presentation.ui.screens.authentication.LoginScreen
+import com.example.stove.presentation.ui.screens.authentication.RegisterScreen
 import com.example.stove.presentation.ui.screens.designer.DesignerAddonScreen
 import com.example.stove.presentation.ui.screens.designer.DesignerComponentScreen
 import com.example.stove.presentation.ui.screens.designer.DesignerEntryDestination
@@ -43,10 +42,10 @@ import com.example.stove.presentation.ui.screens.home.HomeScreen
 import com.example.stove.presentation.ui.screens.profile.ProfileDestination
 import com.example.stove.presentation.ui.screens.profile.ProfileFavouritesScreen
 import com.example.stove.presentation.ui.screens.profile.ProfileScreen
-import com.example.stove.presentation.ui.viewmodel.AuthViewModel
-import com.example.stove.presentation.ui.viewmodel.AuthenticationViewModel
-import com.example.stove.presentation.ui.viewmodel.DesignerViewModel
-import com.example.stove.presentation.ui.viewmodel.ProfileViewModel
+import com.example.stove.presentation.viewmodel.AuthViewModel
+import com.example.stove.presentation.viewmodel.AuthenticationViewModel
+import com.example.stove.presentation.viewmodel.DesignerViewModel
+import com.example.stove.presentation.viewmodel.ProfileViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -61,7 +60,7 @@ fun StoveNavGraph(
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     var isTransitionRunning by remember { mutableStateOf(false) }
-    val isAuthenticated by mainViewModel.isAuthenticated.collectAsState()
+    val authState by mainViewModel.authState.collectAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
     val topLevelRoutes = setOf(
@@ -90,14 +89,17 @@ fun StoveNavGraph(
         else -> true
     }
 
-    LaunchedEffect(key1 = isAuthenticated) {
-        if (isAuthenticated) {
-            navController.navigate("Home") {
-                popUpTo(navController.graph.startDestinationId) { inclusive = true }
+    LaunchedEffect(key1 = authState) {
+        when(authState) {
+            is AuthState.Authenticated -> {
+                navController.navigate("Home") {
+                    popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                }
             }
-        } else {
-            navController.navigate("auth_graph") {
-                popUpTo("Home") { inclusive = true }
+            is AuthState.Unauthenticated -> {
+                navController.navigate("auth_graph") {
+                    popUpTo("Home") { inclusive = true }
+                }
             }
         }
     }
@@ -181,7 +183,7 @@ fun StoveNavGraph(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = if(isAuthenticated) "Home" else "auth_graph",
+            startDestination = when(authState) { is AuthState.Authenticated -> "Home" else -> "auth_graph"},
             modifier = modifier.padding(innerPadding),
             enterTransition = {
                 val from = screenOrder[initialState.destination.route] ?: 0
@@ -331,7 +333,7 @@ fun StoveNavGraph(
                     val parentEntry = remember(backStackEntry) {
                         navController.getBackStackEntry("designer_graph")
                     }
-                    val designerViewModel: DesignerViewModel = viewModel(parentEntry, factory = AppViewModelProvider.Factory)
+                    val designerViewModel: DesignerViewModel = hiltViewModel(parentEntry)
 
                     DesignerSummaryScreen (
                         backBehavior = { navController.navigate("designer_graph/component") },
@@ -355,7 +357,6 @@ fun StoveNavGraph(
                     )
                     ProfileScreen(
                         viewModel = profileViewModel,
-                        navController = navController,
                         onClickFavourites = { navController.navigate("profile_graph/favourites") }
                     )
                 }

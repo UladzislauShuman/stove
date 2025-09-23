@@ -1,4 +1,4 @@
-package com.example.stove.domain.dto.profile
+package com.example.stove.domain.model.profile
 
 data class UserInfo(
     val fullName: String?,

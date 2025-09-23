@@ -15,6 +15,7 @@ val DarkPrimaryContainerColor = SlateBlue
 val DarkSecondaryContainerColor = Color(0xFF4A4458)
 val OnDarkPrimaryContainerColor = Color(0xFFFEEDD2)
 val OnDarkSecondaryContainerColor = White
+val DarkPlaceholderSurface = Color(0xFF040506)
 
 val DarkError = Color(0xFFFC3B2B)
 val WhiteError = Color(0xFFf0333d)

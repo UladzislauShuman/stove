@@ -1,7 +1,7 @@
 package com.example.stove.domain.usecase.profile
 
 import com.example.stove.core.Resource
-import com.example.stove.domain.dto.profile.UserInfo
+import com.example.stove.domain.model.profile.UserInfo
 import com.example.stove.domain.repository.ProfileRepository
 import com.example.stove.presentation.dto.UserInfoUiModel
 import javax.inject.Inject

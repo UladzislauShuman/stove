@@ -1,11 +1,10 @@
-package com.example.stove.presentation.ui.viewmodel
+package com.example.stove.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.Navigation
 import com.example.stove.core.Resource
-import com.example.stove.domain.dto.auth.Login
-import com.example.stove.domain.dto.auth.Register
+import com.example.stove.domain.model.auth.Login
+import com.example.stove.domain.model.auth.Register
 import com.example.stove.domain.usecase.auth.LoginUseCase
 import com.example.stove.domain.usecase.auth.RegisterUseCase
 import com.example.stove.presentation.dto.LoginUiModel
@@ -20,10 +19,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-sealed class NavigationEvent {
-    data object ToMainApp : NavigationEvent()
-    data object ToRegister: NavigationEvent()
-    data object ToLogin: NavigationEvent()
+sealed class AuthNavigatinoEvent {
+    data object ToRegister: AuthNavigatinoEvent()
+    data object ToLogin: AuthNavigatinoEvent()
 }
 
 data class InputInfo(
@@ -53,7 +51,7 @@ sealed interface AuthUiState {
 
 @HiltViewModel
 class AuthViewModel @Inject constructor() : ViewModel() {
-    private val _navigationEvents = Channel<NavigationEvent>()
+    private val _navigationEvents = Channel<AuthNavigatinoEvent>()
     val navigationEvent = _navigationEvents.receiveAsFlow()
 
     private val _authUiState: MutableStateFlow<AuthUiState> = MutableStateFlow(AuthUiState.Login(LoginUiState.Waiting))
@@ -81,7 +79,6 @@ class AuthViewModel @Inject constructor() : ViewModel() {
                 when(result) {
                     is Resource.SUCCESS<*> -> {
                         _authUiState.value = AuthUiState.Login(LoginUiState.Success)
-                        _navigationEvents.send(NavigationEvent.ToMainApp)
                     }
                     is Resource.FAILURE -> {
                         _authUiState.value = AuthUiState.Login(LoginUiState.Failure(result.error.message ?: "Unknown error"))
@@ -110,7 +107,6 @@ class AuthViewModel @Inject constructor() : ViewModel() {
                 when(result) {
                     is Resource.SUCCESS<*> -> {
                         _authUiState.value = AuthUiState.Register(RegisterUiState.Success)
-                        _navigationEvents.send(NavigationEvent.ToMainApp)
                     }
                     is Resource.FAILURE -> {
                         _authUiState.value = AuthUiState.Register(RegisterUiState.Failure(result.error.message ?: "Unknown error"))
@@ -125,20 +121,14 @@ class AuthViewModel @Inject constructor() : ViewModel() {
     fun toRegistration() {
         viewModelScope.launch {
             _authUiState.value = AuthUiState.Register(state = RegisterUiState.Waiting)
-            _navigationEvents.send(NavigationEvent.ToRegister)
+            _navigationEvents.send(AuthNavigatinoEvent.ToRegister)
         }
     }
 
     fun toLogin() {
         viewModelScope.launch {
             _authUiState.value = AuthUiState.Login(state = LoginUiState.Waiting)
-            _navigationEvents.send(NavigationEvent.ToLogin)
-        }
-    }
-
-    fun toMainApp() {
-        viewModelScope.launch {
-            _navigationEvents.send(NavigationEvent.ToMainApp)
+            _navigationEvents.send(AuthNavigatinoEvent.ToLogin)
         }
     }
 

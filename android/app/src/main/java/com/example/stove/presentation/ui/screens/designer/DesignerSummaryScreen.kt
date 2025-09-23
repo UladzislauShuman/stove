@@ -10,6 +10,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -18,9 +19,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.stove.R
 import com.example.stove.presentation.navigation.NavigationDestination
-import com.example.stove.presentation.ui.screens.CustomButton
+import com.example.stove.presentation.ui.screens.component.CustomButton
 import com.example.stove.presentation.ui.theme.StoveTheme
-import com.example.stove.presentation.ui.viewmodel.DesignerViewModel
+import com.example.stove.presentation.viewmodel.DesignerViewModel
 
 object DesignerSummaryDestination : NavigationDestination {
     override val route: String = "DesignerSummary"
@@ -29,12 +30,9 @@ object DesignerSummaryDestination : NavigationDestination {
 
 @Composable
 fun DesignerSummaryScreen(
-    viewModel: DesignerViewModel,
-    backBehavior: () -> Unit,
-    nextBehavior: () -> Unit
+    viewModel: DesignerViewModel
 ) {
-//    val selectedType = viewModel.selectedType.collectAsState()
-//    val selectedMaterial = viewModel.selectedMaterial.collectAsState()
+    val selectedItems by viewModel.selectedItems.collectAsState()
 
     Column(
         modifier = Modifier.padding(
@@ -42,63 +40,79 @@ fun DesignerSummaryScreen(
             end = dimensionResource(R.dimen.padding_large)
         )
     ) {
-//        Text(
-//            text = stringResource(R.string.title_summary),
-//            style = MaterialTheme.typography.headlineMedium,
-//            color = MaterialTheme.colorScheme.onPrimaryContainer,
-//            modifier = Modifier.padding(
-//                top = dimensionResource(R.dimen.padding_medium),
-//                bottom = dimensionResource(R.dimen.padding_small)
-//            )
-//        )
-//        Column(
-//            horizontalAlignment = Alignment.Start,
-//            verticalArrangement = Arrangement.Center,
-//            modifier = Modifier.padding(
-//                top = dimensionResource(R.dimen.padding_medium),
-//                bottom = dimensionResource(R.dimen.padding_medium)
-//            )
-//        ) {
-//            Text(
-//                text = "Тип печи: " + selectedType.value,
-//                style = MaterialTheme.typography.bodyLarge,
-//                color = MaterialTheme.colorScheme.onSecondaryContainer,
-//                modifier = Modifier
-//                    .padding(dimensionResource(R.dimen.padding_medium))
-//                    .align(Alignment.CenterHorizontally)
-//            )
-//            Text(
-//                text = "Материал печи: " + selectedMaterial.value,
-//                style = MaterialTheme.typography.bodyLarge,
-//                color = MaterialTheme.colorScheme.onSecondaryContainer,
-//                modifier = Modifier
-//                    .padding(dimensionResource(R.dimen.padding_medium))
-//                    .align(Alignment.CenterHorizontally)
-//            )
-//        }
-//        CustomButton(
-//            labelId = R.string.button_add_to_favourites,
-//            textStyle = MaterialTheme.typography.labelMedium,
-//            isActiveButton = true,
-//            onClickBehavior = nextBehavior,
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(
-//                    top = dimensionResource(R.dimen.padding_large),
-//                    bottom = dimensionResource(R.dimen.padding_medium)
-//                )
-//        )
-//        CustomButton(
-//            labelId = R.string.button_back,
-//            textStyle = MaterialTheme.typography.labelLarge,
-//            isActiveButton = false,
-//            onClickBehavior = backBehavior,
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(
-//                    bottom = dimensionResource(R.dimen.padding_medium)
-//                )
-//        )
+        Text(
+            text = stringResource(R.string.title_summary),
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            modifier = Modifier.padding(
+                top = dimensionResource(R.dimen.padding_medium),
+                bottom = dimensionResource(R.dimen.padding_small)
+            )
+        )
+        Column(
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(
+                top = dimensionResource(R.dimen.padding_medium),
+                bottom = dimensionResource(R.dimen.padding_medium)
+            )
+        ) {
+            Text(
+                text = "Тип печи: " + selectedItems.typeId,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                modifier = Modifier
+                    .padding(dimensionResource(R.dimen.padding_medium))
+                    .align(Alignment.CenterHorizontally)
+            )
+            Text(
+                text = "Компонент печи: " + selectedItems.componentName,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                modifier = Modifier
+                    .padding(dimensionResource(R.dimen.padding_medium))
+                    .align(Alignment.CenterHorizontally)
+            )
+            Text(
+                text = "Настройка компонента: " + selectedItems.optionName,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                modifier = Modifier
+                    .padding(dimensionResource(R.dimen.padding_medium))
+                    .align(Alignment.CenterHorizontally)
+            )
+            Text(
+                text = "Дополнительно: " + selectedItems.addonName,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                modifier = Modifier
+                    .padding(dimensionResource(R.dimen.padding_medium))
+                    .align(Alignment.CenterHorizontally)
+            )
+        }
+        CustomButton(
+            labelId = R.string.button_order,
+            textStyle = MaterialTheme.typography.labelMedium,
+            isActiveButton = true,
+            onClickBehavior = nextBehavior,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    top = dimensionResource(R.dimen.padding_large),
+                    bottom = dimensionResource(R.dimen.padding_medium)
+                )
+        )
+        CustomButton(
+            labelId = R.string.и,
+            textStyle = MaterialTheme.typography.labelLarge,
+            isActiveButton = false,
+            onClickBehavior = backBehavior,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    bottom = dimensionResource(R.dimen.padding_medium)
+                )
+        )
     }
 }
 

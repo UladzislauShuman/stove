@@ -2,7 +2,7 @@ package com.example.stove.domain.usecase.auth
 
 import com.example.stove.core.Resource
 import com.example.stove.data.dto.LoginRequest
-import com.example.stove.domain.dto.auth.Login
+import com.example.stove.domain.model.auth.Login
 import com.example.stove.domain.repository.AuthRepository
 import javax.inject.Inject
 

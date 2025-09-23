@@ -1,9 +1,9 @@
-package com.example.stove.presentation.ui.viewmodel
+package com.example.stove.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.example.stove.core.Resource
-import com.example.stove.data.favourite.FavouriteRepository
 import com.example.stove.domain.usecase.designer.GetAddonsUseCase
 import com.example.stove.domain.usecase.designer.GetComponentsUseCase
 import com.example.stove.domain.usecase.designer.GetOptionsUseCase
@@ -13,8 +13,10 @@ import com.example.stove.presentation.dto.ComponentUiModel
 import com.example.stove.presentation.dto.OptionUiModel
 import com.example.stove.presentation.dto.TypeUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,14 +29,25 @@ sealed class DesignerUiState {
     data class OPTION(val options: Resource<List<OptionUiModel>>) : DesignerUiState()
     data class ADDON(val addons: Resource<List<AddonUiModel>>) : DesignerUiState()
 
+    data object Summary : DesignerUiState()
+}
 
+sealed interface DesignerNavigationEvents {
+    data object ToStart : DesignerNavigationEvents
 }
 
 data class SelectedItems(
     val typeId: Int = -1,
+    val typeName: String = "",
+
     val componentId: Int = -1,
+    val componentName: String = "",
+
     val optionId: Int = -1,
-    val addonId: Int = -1
+    val optionName: String = "",
+
+    val addonId: Int = -1,
+    val addonName: String = ""
 )
 
 /**
@@ -42,8 +55,10 @@ data class SelectedItems(
  */
 @HiltViewModel
 class DesignerViewModel @Inject constructor(
-    private val favouriteRepository: FavouriteRepository,
+    private val navController: NavController
 ): ViewModel() {
+    private val _navigationEvent = Channel<DesignerNavigationEvents>()
+    val navigationEvent = _navigationEvent.receiveAsFlow()
 
     private val _designerUiState = MutableStateFlow<DesignerUiState>(DesignerUiState.ENTRY)
     val designerUiState: StateFlow<DesignerUiState> = _designerUiState
@@ -96,30 +111,33 @@ class DesignerViewModel @Inject constructor(
         }
     }
 
-    fun updateType(typeId: Int) {
+    fun updateType(typeId: Int, typeName: String) {
         _selectedItems.update {
-            selectedItems -> selectedItems.copy(typeId = typeId)
+            selectedItems -> selectedItems.copy(typeId = typeId, typeName = typeName)
         }
     }
 
-    fun updateComponent(componentId: Int) {
+    fun updateComponent(componentId: Int, componentName: String) {
         _selectedItems.update {
-            selectedItems -> selectedItems.copy(componentId = componentId)
+            selectedItems -> selectedItems.copy(componentId = componentId, componentName = componentName)
         }
     }
 
-    fun updateOption(optionId: Int) {
+    fun updateOption(optionId: Int, optionName: String) {
         _selectedItems.update {
-                selectedItems -> selectedItems.copy(optionId = optionId)
+                selectedItems -> selectedItems.copy(optionId = optionId, optionName = optionName)
         }
     }
 
-    fun updateAddon(addonId: Int) {
+    fun updateAddon(addonId: Int, addonName: String) {
         _selectedItems.update {
-                selectedItems -> selectedItems.copy(addonId = addonId)
+                selectedItems -> selectedItems.copy(addonId = addonId, addonName = addonName)
         }
     }
 
+    fun order() {
+
+    }
 
     fun addToFavourites() {
 //        val type = _selectedType.value

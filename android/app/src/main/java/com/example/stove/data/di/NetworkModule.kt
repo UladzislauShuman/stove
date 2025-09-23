@@ -1,13 +1,13 @@
 package com.example.stove.data.di
 
 import android.content.Context
+import com.example.stove.data.infrastructure.OkHttpCacheManager
 import com.example.stove.data.remote.interceptor.AuthAuthenticator
 import com.example.stove.data.remote.interceptor.AuthInterceptor
 import com.example.stove.data.remote.service.AuthApiService
 import com.example.stove.data.remote.service.DesignerApiService
 import com.example.stove.data.remote.service.ProfileApiService
-import com.example.stove.data.util.AuthenticationManager
-import com.example.stove.data.util.LogoutAction
+import com.example.stove.domain.infrastructure.NetworkCacheManager
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Binds
@@ -25,7 +25,7 @@ import java.io.File
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
-private const val baseUrl = "https://personal-lat-bottles-gaps.trycloudflare.com/"
+private const val baseUrl = "https://targeted-donate-maybe-physics.trycloudflare.com/"
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -95,6 +95,13 @@ object NetworkModule {
             .cache(cache)
             .build()
     }
+
+    @Singleton
+    @Provides
+    fun getOkHttpCacheManager(
+        @AuthOkHttpClient
+        okHttpClient: OkHttpClient
+    ) : NetworkCacheManager = OkHttpCacheManager(okHttpClient)
 
     @Provides
     @Singleton

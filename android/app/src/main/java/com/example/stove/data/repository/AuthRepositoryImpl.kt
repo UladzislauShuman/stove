@@ -2,15 +2,15 @@ package com.example.stove.data.repository
 
 import android.util.Log
 import coil.network.HttpException
+import com.example.stove.core.AuthState
 import com.example.stove.core.Resource
-import com.example.stove.data.di.NetworkModule
 import com.example.stove.data.dto.LoginRequest
 import com.example.stove.data.dto.RegisterRequest
 import com.example.stove.data.local.TokenManager
 import com.example.stove.data.remote.service.AuthApiService
 import com.example.stove.domain.repository.AuthRepository
-import kotlinx.coroutines.runBlocking
-import okhttp3.OkHttpClient
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import okio.IOException
 import javax.inject.Inject
 
@@ -18,6 +18,9 @@ class AuthRepositoryImpl @Inject constructor(
     private val authService: AuthApiService,
     private val tokenManager: TokenManager
 ) : AuthRepository {
+    private val _authState = MutableStateFlow<AuthState>(AuthState.Unauthenticated)
+    override val authState: StateFlow<AuthState> = _authState
+
     override suspend fun login(request: LoginRequest): Resource<Unit> {
         try {
             val response = authService.login(request)
@@ -26,6 +29,7 @@ class AuthRepositoryImpl @Inject constructor(
                 if(!response.body()?.token.isNullOrEmpty()) {
                     tokenManager.putToken(response.body()?.token)
                     Log.i("AuthRepository", "Login success")
+                    _authState.value = AuthState.Authenticated
                     return Resource.SUCCESS(Unit)
                 } else {
                     return Resource.FAILURE(Throwable("Authentification error."))
@@ -51,6 +55,7 @@ class AuthRepositoryImpl @Inject constructor(
                 if(!response.body()?.token.isNullOrEmpty()) {
                     tokenManager.putToken(response.body()?.token)
                     Log.i("AuthRepository", "Register success")
+                    _authState.value = AuthState.Authenticated
                     return Resource.SUCCESS(Unit)
                 } else {
                     Log.e("AuthRepository", "Auth error")
@@ -70,5 +75,21 @@ class AuthRepositoryImpl @Inject constructor(
             Log.e("AuthRepository", e.message ?: "IO error.")
             return Resource.FAILURE(Throwable("Network error. Check your connection."))
         }
+    }
+
+    override suspend fun checkAuthentication(): Boolean {
+        if(tokenManager.isLoggedIn()) {
+            _authState.value = AuthState.Authenticated
+            return true
+        } else {
+            _authState.value = AuthState.Unauthenticated
+            return false
+        }
+
+    }
+
+    override suspend fun logout() {
+        tokenManager.clearToken()
+        _authState.value = AuthState.Unauthenticated
     }
 }

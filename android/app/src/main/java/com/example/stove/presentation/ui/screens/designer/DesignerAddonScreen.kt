@@ -16,10 +16,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
 import com.example.stove.R
 import com.example.stove.core.Resource
-import com.example.stove.presentation.ui.screens.DesignerButtonsRow
-import com.example.stove.presentation.ui.screens.DesignerOptionCard
-import com.example.stove.presentation.ui.viewmodel.DesignerUiState
-import com.example.stove.presentation.ui.viewmodel.DesignerViewModel
+import com.example.stove.presentation.ui.screens.component.DesignerButtonsRow
+import com.example.stove.presentation.ui.screens.component.DesignerOptionCard
+import com.example.stove.presentation.viewmodel.DesignerUiState
+import com.example.stove.presentation.viewmodel.DesignerViewModel
 
 @Composable
 fun DesignerAddonScreen(

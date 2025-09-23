@@ -68,6 +68,7 @@
     <string name="button_create_new">Создать</string>
     <string name="button_next">Далее</string>
     <string name="button_back">Назад</string>
+    <string name="button_order">Заказать</string>
     <string name="button_choose_favorite">Выбрать из избранного</string>
     <string name="title_summary">Итог</string>
     <string name="title_option">Опции</string>

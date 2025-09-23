@@ -26,15 +26,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.example.stove.R
 import com.example.stove.presentation.navigation.NavigationDestination
-import com.example.stove.presentation.ui.screens.IconWithBackground
+import com.example.stove.presentation.ui.screens.component.IconWithBackground
+import com.example.stove.presentation.ui.screens.component.ProfilePlaceholder
 import com.example.stove.presentation.ui.theme.StoveTheme
-import com.example.stove.presentation.ui.viewmodel.LoginUiState
-import com.example.stove.presentation.ui.viewmodel.ProfileUiState
-import com.example.stove.presentation.ui.viewmodel.ProfileViewModel
-import com.example.stove.presentation.ui.viewmodel.UserUiState
+import com.example.stove.presentation.viewmodel.ProfileUiState
+import com.example.stove.presentation.viewmodel.ProfileViewModel
+import com.example.stove.presentation.viewmodel.UserUiState
 
 object ProfileDestination : NavigationDestination {
     override val route: String = "Profile"
@@ -43,7 +42,6 @@ object ProfileDestination : NavigationDestination {
 
 @Composable
 fun ProfileScreen(
-    navController: NavController,
     viewModel: ProfileViewModel,
     onClickFavourites: () -> Unit
 ) {
@@ -76,23 +74,29 @@ fun ProfileScreen(
             }
             val currentUiState = profileUiState
             if(currentUiState is ProfileUiState.User) {
-                if(currentUiState.state is UserUiState.Success) {
-                    Text(
-                        text = currentUiState.state.fullName ,
-                        style = MaterialTheme.typography.headlineLarge,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                    Text(
-                        text = currentUiState.state.phoneNumber,
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer
-                    )
-                } else if(currentUiState.state is UserUiState.Failure) {
-                    Text(
-                        text = "Ошибка: ${currentUiState.state.errorMessage}",
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.error
-                    )
+                when(currentUiState.state) {
+                    is UserUiState.Loading -> {
+                        ProfilePlaceholder()
+                    }
+                    is UserUiState.Failure -> {
+                        Text(
+                            text = "Ошибка: ${currentUiState.state.errorMessage}",
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                    is UserUiState.Success -> {
+                        Text(
+                            text = currentUiState.state.fullName ,
+                            style = MaterialTheme.typography.headlineLarge,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                        Text(
+                            text = currentUiState.state.phoneNumber,
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                        )
+                    }
                 }
             }
         }

@@ -5,6 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import com.example.stove.presentation.ui.theme.DarkPlaceholderSurface
 
 private val DarkColorScheme = darkColorScheme(
     primaryContainer = DarkPrimaryContainerColor,
@@ -13,7 +14,8 @@ private val DarkColorScheme = darkColorScheme(
     onSecondaryContainer = OnDarkSecondaryContainerColor,
     background = DarkBackgroundSurface,
     error = DarkError,
-    surface = DarkBackgroundSurface
+    surface = DarkBackgroundSurface,
+    surfaceContainer = DarkPlaceholderSurface
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -23,7 +25,8 @@ private val LightColorScheme = lightColorScheme(
     onSecondaryContainer = SlateBlue,
     background = White,
     error = WhiteError,
-    surface = White
+    surface = White,
+    surfaceContainer = CloudGray
 )
 
 @Composable

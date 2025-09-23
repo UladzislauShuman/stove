@@ -4,11 +4,10 @@ import android.util.Log
 import com.example.stove.core.Resource
 import com.example.stove.data.dto.UserInfoDto
 import com.example.stove.data.remote.service.ProfileApiService
-import com.example.stove.domain.dto.profile.UserInfo
+import com.example.stove.domain.model.profile.UserInfo
 import com.example.stove.domain.repository.ProfileRepository
 import okio.IOException
 import retrofit2.HttpException
-import retrofit2.Response
 import javax.inject.Inject
 
 const val PROFILE_TAG = "ProfileRepository"

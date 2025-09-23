@@ -1,4 +1,4 @@
-package com.example.stove.domain.dto.designer
+package com.example.stove.domain.model.designer
 
 data class Option(
     val id: Int,

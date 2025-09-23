@@ -1,7 +1,7 @@
 package com.example.stove.domain.usecase.designer
 
 import com.example.stove.core.Resource
-import com.example.stove.domain.dto.designer.Component
+import com.example.stove.domain.model.designer.Component
 import com.example.stove.domain.repository.DesignerRepository
 import com.example.stove.presentation.dto.ComponentUiModel
 import javax.inject.Inject

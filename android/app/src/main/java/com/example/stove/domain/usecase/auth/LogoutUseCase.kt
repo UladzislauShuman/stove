@@ -1,12 +1,15 @@
 package com.example.stove.domain.usecase.auth
 
-import com.example.stove.data.util.AuthenticationManager
+import com.example.stove.domain.infrastructure.NetworkCacheManager
+import com.example.stove.domain.repository.AuthRepository
 import javax.inject.Inject
 
 class LogoutUseCase @Inject constructor(
-    private val authenticationManager: AuthenticationManager
+    val authRepository: AuthRepository,
+    val networkCacheManager: NetworkCacheManager
 ) {
-    fun invoke() {
-        authenticationManager.logout()
+    suspend fun invoke() {
+        authRepository.logout()
+        networkCacheManager.clearCache()
     }
 }

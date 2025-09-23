@@ -1,10 +1,9 @@
-package com.example.stove.presentation.ui.viewmodel
+package com.example.stove.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stove.core.Resource
 import com.example.stove.data.favourite.Favourite
-import com.example.stove.data.favourite.FavouriteRepository
 import com.example.stove.domain.usecase.auth.LogoutUseCase
 import com.example.stove.domain.usecase.profile.GetUserInfoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -74,6 +73,8 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun logout() {
-        logoutUseCase.invoke()
+        viewModelScope.launch {
+            logoutUseCase.invoke()
+        }
     }
 }

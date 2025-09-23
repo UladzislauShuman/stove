@@ -1,4 +1,4 @@
-package com.example.stove.domain.dto.auth
+package com.example.stove.domain.model.auth
 
 data class Login(
     val email: String,
