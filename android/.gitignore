@@ -1,0 +1,71 @@
+# =========================
+# Android Studio / IntelliJ
+# =========================
+.idea/
+*.iml
+.idea/caches
+.idea/libraries
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+
+# =========================
+# Gradle
+# =========================
+.gradle/
+**/build/
+!gradle/wrapper/gradle-wrapper.jar  # оставляем wrapper
+
+# =========================
+# Local configuration
+# =========================
+local.properties
+*.keystore
+*.jks
+*.pem
+*.key
+*.p12
+
+# =========================
+# Kotlin/Java
+# =========================
+*.class
+*.jar
+*.war
+*.ear
+
+# =========================
+# Generated code (KSP, kapt, Room, etc.)
+# =========================
+**/build/generated/
+**/build/tmp/
+**/build/intermediates/
+
+# =========================
+# Jetpack Compose preview cache
+# =========================
+**/.compose-cache/
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# OS-specific
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# APK / AAB (если не хранишь релизы в репо)
+# =========================
+*.apk
+*.ap_
+*.aab
+
+# =========================
+# Misc
+# =========================
+captures/

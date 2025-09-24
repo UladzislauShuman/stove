@@ -3,6 +3,7 @@ package by.shumpanov.stove.stove_app_parent.constructor.model;
 import by.shumpanov.stove.stove_app_parent.security.model.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -57,6 +58,7 @@ public class Configuration implements Serializable {
     private List<ConfigurationChoice> choices = new ArrayList<>();
 
     @OneToMany(mappedBy = "configuration", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @BatchSize(size = 10)
     @Builder.Default
     private List<ConfigurationAddon> addons = new ArrayList<>();
 }
