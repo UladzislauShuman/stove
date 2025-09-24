@@ -43,7 +43,7 @@ import com.example.stove.presentation.ui.screens.profile.ProfileDestination
 import com.example.stove.presentation.ui.screens.profile.ProfileFavouritesScreen
 import com.example.stove.presentation.ui.screens.profile.ProfileScreen
 import com.example.stove.presentation.viewmodel.AuthViewModel
-import com.example.stove.presentation.viewmodel.AuthenticationViewModel
+import com.example.stove.presentation.viewmodel.GlobalViewModel
 import com.example.stove.presentation.viewmodel.DesignerViewModel
 import com.example.stove.presentation.viewmodel.ProfileViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -56,11 +56,11 @@ import kotlinx.coroutines.launch
 fun StoveNavGraph(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    mainViewModel: AuthenticationViewModel = hiltViewModel()
+    globalViewModel: GlobalViewModel = hiltViewModel()
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     var isTransitionRunning by remember { mutableStateOf(false) }
-    val authState by mainViewModel.authState.collectAsState()
+    val authState by globalViewModel.authState.collectAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
     val topLevelRoutes = setOf(
@@ -336,11 +336,11 @@ fun StoveNavGraph(
                     val designerViewModel: DesignerViewModel = hiltViewModel(parentEntry)
 
                     DesignerSummaryScreen (
-                        backBehavior = { navController.navigate("designer_graph/component") },
-                        nextBehavior = {
-                            designerViewModel.addToFavourites()
-                            navController.navigate("designer_graph")
-                        },
+//                        backBehavior = { navController.navigate("designer_graph/component") },
+//                        nextBehavior = {
+//                            designerViewModel.addToFavourites()
+//                            navController.navigate("designer_graph")
+//                        },
                         viewModel = designerViewModel
                     )
                 }

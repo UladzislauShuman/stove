@@ -30,6 +30,7 @@ import com.example.stove.R
 import com.example.stove.presentation.navigation.NavigationDestination
 import com.example.stove.presentation.ui.screens.component.IconWithBackground
 import com.example.stove.presentation.ui.screens.component.ProfilePlaceholder
+import com.example.stove.presentation.ui.screens.component.shimmer
 import com.example.stove.presentation.ui.theme.StoveTheme
 import com.example.stove.presentation.viewmodel.ProfileUiState
 import com.example.stove.presentation.viewmodel.ProfileViewModel
@@ -76,7 +77,7 @@ fun ProfileScreen(
             if(currentUiState is ProfileUiState.User) {
                 when(currentUiState.state) {
                     is UserUiState.Loading -> {
-                        ProfilePlaceholder()
+                        ProfilePlaceholder(modifier = Modifier.shimmer(8.dp))
                     }
                     is UserUiState.Failure -> {
                         Text(

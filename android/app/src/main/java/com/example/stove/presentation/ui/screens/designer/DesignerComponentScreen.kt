@@ -65,7 +65,7 @@ fun DesignerComponentScreen(
                                 imageUri = "".toUri(),
                                 isSelected = selectedItems.componentId == componentId,
                                 onClickBehavior = {
-                                    viewModel.updateComponent(componentId)
+                                    viewModel.updateComponent(componentId, component.name)
                                 }
                             )
                         }

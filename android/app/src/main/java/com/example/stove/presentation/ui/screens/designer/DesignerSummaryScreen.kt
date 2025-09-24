@@ -94,7 +94,7 @@ fun DesignerSummaryScreen(
             labelId = R.string.button_order,
             textStyle = MaterialTheme.typography.labelMedium,
             isActiveButton = true,
-            onClickBehavior = nextBehavior,
+            onClickBehavior = { },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
@@ -103,10 +103,10 @@ fun DesignerSummaryScreen(
                 )
         )
         CustomButton(
-            labelId = R.string.и,
+            labelId = R.string.button_add_to_favourites,
             textStyle = MaterialTheme.typography.labelLarge,
             isActiveButton = false,
-            onClickBehavior = backBehavior,
+            onClickBehavior = {   },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
@@ -125,8 +125,8 @@ fun DesignerSummaryScreenPreview() {
             color = MaterialTheme.colorScheme.background
         ) {
             DesignerSummaryScreen(
-                backBehavior = {},
-                nextBehavior = {},
+//                backBehavior = {},
+//                nextBehavior = {},
                 viewModel = viewModel()
             )
         }

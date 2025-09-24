@@ -2,9 +2,12 @@ package com.example.stove.data.remote.service
 
 import com.example.stove.data.dto.AddonDto
 import com.example.stove.data.dto.ComponentDto
+import com.example.stove.data.dto.CreateFavouriteRequestDto
 import com.example.stove.data.dto.OptionDto
 import com.example.stove.data.dto.TypeDto
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 
@@ -24,4 +27,7 @@ interface DesignerApiService {
 
     @GET("constructor-data/addons")
     suspend fun getAddons() : List<AddonDto>
+
+    @POST("api/v1/configurations")
+    suspend fun addFavourite(@Body createFavouriteRequest: CreateFavouriteRequestDto)
 }

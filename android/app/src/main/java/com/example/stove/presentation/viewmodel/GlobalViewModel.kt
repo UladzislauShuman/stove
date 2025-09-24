@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class AuthenticationViewModel @Inject constructor(
+class GlobalViewModel @Inject constructor(
     private val authAuthenticator: AuthAuthenticator,
 
     private val logoutUseCase: LogoutUseCase,

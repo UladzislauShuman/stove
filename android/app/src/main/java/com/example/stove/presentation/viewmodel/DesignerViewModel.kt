@@ -54,9 +54,7 @@ data class SelectedItems(
  * Когда ViewModel начнёт расти, нужно сделать реализацию через UI-модель
  */
 @HiltViewModel
-class DesignerViewModel @Inject constructor(
-    private val navController: NavController
-): ViewModel() {
+class DesignerViewModel @Inject constructor(): ViewModel() {
     private val _navigationEvent = Channel<DesignerNavigationEvents>()
     val navigationEvent = _navigationEvent.receiveAsFlow()
 

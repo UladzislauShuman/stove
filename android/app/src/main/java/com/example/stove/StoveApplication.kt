@@ -6,7 +6,6 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class StoveApplication : Application() {
-
     override fun onCreate() {
         super.onCreate()
         Log.d("StoveApp", "StoveApplication onCreate.")

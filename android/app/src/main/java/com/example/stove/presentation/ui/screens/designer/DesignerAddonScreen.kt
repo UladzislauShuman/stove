@@ -61,7 +61,7 @@ fun DesignerAddonScreen(
                                 imageUri = "".toUri(),
                                 isSelected = selectedItems.addonId == addonId,
                                 onClickBehavior = {
-                                    viewModel.updateAddon(addonId)
+                                    viewModel.updateAddon(addonId, addon.name)
                                 }
                             )
                         }

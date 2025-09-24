@@ -61,7 +61,7 @@ fun DesignerOptionScreen(
                                 imageUri = option.imageUrl.toUri(),
                                 isSelected = selectedItems.optionId == option.id,
                                 onClickBehavior = {
-                                    viewModel.updateOption(optionId)
+                                    viewModel.updateOption(optionId, option.name)
                                 }
                             )
                         }

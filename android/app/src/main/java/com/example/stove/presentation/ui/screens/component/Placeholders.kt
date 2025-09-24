@@ -2,6 +2,8 @@ package com.example.stove.presentation.ui.screens.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
@@ -11,6 +13,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun TextPlaceholder(text: String, style: TextStyle) {
@@ -29,4 +32,22 @@ fun TextPlaceholder(text: String, style: TextStyle) {
             .height(placeholderHeight)
             .background(MaterialTheme.colorScheme.surfaceContainer)
     )
+}
+
+@Composable
+fun ProfilePlaceholder(
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .width(250.dp)
+    ) {
+        TextPlaceholder(
+            "",
+            MaterialTheme.typography.headlineLarge)
+
+        TextPlaceholder(
+            "",
+            MaterialTheme.typography.titleSmall)
+    }
 }
