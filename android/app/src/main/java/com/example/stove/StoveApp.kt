@@ -26,7 +26,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.stove.presentation.model.StoveMenus
 import com.example.stove.presentation.navigation.StoveNavGraph
 
 
@@ -35,6 +34,11 @@ fun StoveApp(navController: NavHostController = rememberNavController()) {
     StoveNavGraph(navController = navController)
 }
 
+enum class StoveMenus(val number: Int) {
+    HOME(1),
+    DESIGNER(2),
+    PROFILE(3)
+}
 
 private data class MainScreen(
     val type: StoveMenus,

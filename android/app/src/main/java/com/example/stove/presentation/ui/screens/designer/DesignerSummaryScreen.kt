@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.stove.R
 import com.example.stove.presentation.navigation.NavigationDestination
-import com.example.stove.presentation.ui.screens.component.CustomButton
+import com.example.stove.presentation.ui.component.CustomButton
 import com.example.stove.presentation.ui.theme.StoveTheme
 import com.example.stove.presentation.viewmodel.DesignerViewModel
 

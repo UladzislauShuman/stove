@@ -28,9 +28,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.stove.R
 import com.example.stove.presentation.navigation.NavigationDestination
-import com.example.stove.presentation.ui.screens.component.IconWithBackground
-import com.example.stove.presentation.ui.screens.component.ProfilePlaceholder
-import com.example.stove.presentation.ui.screens.component.shimmer
+import com.example.stove.presentation.ui.component.IconWithBackground
+import com.example.stove.presentation.ui.component.ProfilePlaceholder
+import com.example.stove.presentation.ui.component.shimmer
 import com.example.stove.presentation.ui.theme.StoveTheme
 import com.example.stove.presentation.viewmodel.ProfileUiState
 import com.example.stove.presentation.viewmodel.ProfileViewModel

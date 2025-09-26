@@ -25,9 +25,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navigation
 import com.example.stove.StoveBottomAppBar
+import com.example.stove.StoveMenus
 import com.example.stove.StoveTopAppBar
 import com.example.stove.core.AuthState
-import com.example.stove.presentation.model.StoveMenus
 import com.example.stove.presentation.ui.screens.authentication.LoginScreen
 import com.example.stove.presentation.ui.screens.authentication.RegisterScreen
 import com.example.stove.presentation.ui.screens.designer.DesignerAddonScreen
@@ -43,8 +43,8 @@ import com.example.stove.presentation.ui.screens.profile.ProfileDestination
 import com.example.stove.presentation.ui.screens.profile.ProfileFavouritesScreen
 import com.example.stove.presentation.ui.screens.profile.ProfileScreen
 import com.example.stove.presentation.viewmodel.AuthViewModel
-import com.example.stove.presentation.viewmodel.GlobalViewModel
 import com.example.stove.presentation.viewmodel.DesignerViewModel
+import com.example.stove.presentation.viewmodel.GlobalViewModel
 import com.example.stove.presentation.viewmodel.ProfileViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

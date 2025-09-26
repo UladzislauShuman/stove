@@ -17,8 +17,8 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.example.stove.R
-import com.example.stove.presentation.ui.screens.component.CustomButton
-import com.example.stove.presentation.ui.screens.component.InputField
+import com.example.stove.presentation.ui.component.CustomButton
+import com.example.stove.presentation.ui.component.InputField
 import com.example.stove.presentation.viewmodel.AuthUiState
 import com.example.stove.presentation.viewmodel.AuthViewModel
 import com.example.stove.presentation.viewmodel.AuthNavigatinoEvent

@@ -1,4 +1,4 @@
-package com.example.stove.presentation.ui.screens.component
+package com.example.stove.presentation.ui.component
 
 import android.net.Uri
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -11,10 +11,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -39,6 +41,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -77,12 +80,14 @@ fun InputField(
     labelId: Int,
     onValueChange: (String) -> Unit,
     value: String,
+    visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
     TextField(
         modifier = modifier,
         value = value,
         onValueChange = onValueChange,
         placeholder = { Text(stringResource(labelId)) },
+        visualTransformation = visualTransformation,
         textStyle = MaterialTheme.typography.labelSmall,
         shape = MaterialTheme.shapes.medium,
         colors = TextFieldDefaults.colors(
@@ -224,7 +229,7 @@ fun DesignerButtonsRow(
 }
 
 @Composable
-fun FavouriteCard(
+fun LargeFavouriteCard(
     favourite: Favourite,
     modifier: Modifier = Modifier
 ) {
@@ -258,6 +263,55 @@ fun FavouriteCard(
                 modifier = Modifier
 //                .padding(dimensionResource(R.dimen.padding_medium))
             )
+        }
+    }
+}
+
+@Composable
+fun SmallFavouriteCard(
+    title: String,
+    description: String,
+    imageUrl: String,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        elevation = CardDefaults.elevatedCardElevation(dimensionResource(R.dimen.card_elevation)),
+        shape = MaterialTheme.shapes.small,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.background
+        ),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            AsyncImage(
+                model = imageUrl,
+                contentDescription = null,
+                // Need to add placeholder and error
+                modifier = Modifier.size(40.dp)
+            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    maxLines = 1
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.bodySmall,
+                    maxLines = 2
+                )
+            }
         }
     }
 }

@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import com.example.stove.R
 import com.example.stove.data.favourite.Favourite
-import com.example.stove.presentation.ui.screens.component.FavouriteCard
+import com.example.stove.presentation.ui.component.LargeFavouriteCard
 
 @Composable
 fun ProfileFavouritesScreen() {
@@ -32,7 +32,7 @@ fun ProfileFavouritesScreen() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             items(items = favouritesList, key = { it.id }) { favourite ->
-                FavouriteCard(
+                LargeFavouriteCard(
                     favourite = favourite,
                     modifier = Modifier.padding(
                         bottom = dimensionResource(R.dimen.padding_medium)

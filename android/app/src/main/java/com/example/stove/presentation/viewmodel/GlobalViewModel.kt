@@ -1,5 +1,6 @@
 package com.example.stove.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stove.core.AuthState
@@ -32,6 +33,7 @@ class GlobalViewModel @Inject constructor(
         }
         viewModelScope.launch {
             authAuthenticator.authEventFlow.collect {
+                Log.d("GlobalViewModel", "Received 401, calling logout!")
                 logoutUseCase.invoke()
             }
         }

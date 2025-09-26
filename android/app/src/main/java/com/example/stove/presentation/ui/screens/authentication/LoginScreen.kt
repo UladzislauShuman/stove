@@ -17,12 +17,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.stove.R
-import com.example.stove.presentation.ui.screens.component.CustomButton
-import com.example.stove.presentation.ui.screens.component.InputField
+import com.example.stove.presentation.ui.component.CustomButton
+import com.example.stove.presentation.ui.component.InputField
 import com.example.stove.presentation.ui.theme.StoveTheme
 import com.example.stove.presentation.viewmodel.AuthUiState
 import com.example.stove.presentation.viewmodel.AuthViewModel
@@ -73,6 +74,7 @@ fun LoginScreen(
                     labelId = R.string.hint_password,
                     onValueChange = { viewModel.onPasswordChange(it) },
                     value = inputInfo.password,
+                    visualTransformation = PasswordVisualTransformation(),
                     modifier = Modifier.fillMaxWidth().padding(
                         bottom = dimensionResource(R.dimen.padding_medium)
                     )

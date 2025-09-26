@@ -10,14 +10,18 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class AuthAuthenticator @Inject constructor() : Authenticator {
+@Singleton
+class AuthAuthenticator @Inject constructor(
+    private val applicationScope: CoroutineScope
+) : Authenticator {
     private val _authEventFlow = MutableSharedFlow<Unit>()
     val authEventFlow: SharedFlow<Unit> = _authEventFlow
 
     override fun authenticate(route: Route?, response: Response): Request? {
-        if(response.code == 401 || response.code == 200) {
-            CoroutineScope(Dispatchers.IO).launch {
+        if(response.code == 401) {
+            applicationScope.launch {
                 _authEventFlow.emit(Unit)
             }
 

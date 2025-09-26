@@ -29,5 +29,5 @@ interface DesignerApiService {
     suspend fun getAddons() : List<AddonDto>
 
     @POST("api/v1/configurations")
-    suspend fun addFavourite(@Body createFavouriteRequest: CreateFavouriteRequestDto)
+    suspend fun createFavourite(@Body createFavouriteRequest: CreateFavouriteRequestDto)
 }
