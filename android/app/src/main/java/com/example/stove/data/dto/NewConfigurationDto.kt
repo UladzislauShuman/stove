@@ -4,9 +4,9 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class CreateFavouriteRequestDto(
+data class NewConfigurationDto(
     @Json(name = "stove_type_id")
-    val stoveTypeId: String,
+    val stoveTypeId: Int,
     val name: String,
     val choices: List<OptionIdDto>,
     val addons: List<AddonIdDto>

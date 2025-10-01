@@ -6,6 +6,7 @@
     <string name="hint_full_name">ФИО</string>
     <string name="hint_phone_number">Номер телефона</string>
     <string name="hint_password">Пароль</string>
+    <string name="hint_draft_name">Имя конфигурации</string>
     <string name="link_forgot_password">Забыли пароль?</string>
     <string name="button_login">Войти</string>
     <string name="button_guest">Продолжить без аккаунта</string>

@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.stove.core.Resource
 import com.example.stove.data.dto.AddonDto
 import com.example.stove.data.dto.ComponentDto
+import com.example.stove.data.dto.NewConfigurationDto
 import com.example.stove.data.dto.OptionDto
 import com.example.stove.data.dto.TypeDto
 import com.example.stove.data.remote.service.DesignerApiService
@@ -12,12 +13,29 @@ import com.example.stove.domain.model.designer.Component
 import com.example.stove.domain.model.designer.Option
 import com.example.stove.domain.model.designer.Type
 import com.example.stove.domain.repository.DesignerRepository
+import okio.IOException
 import retrofit2.HttpException
 import javax.inject.Inject
 
 class DesignerRepositoryImpl @Inject constructor(
     private val apiService: DesignerApiService
 ) : DesignerRepository {
+
+    override suspend fun putConfiguration(configuration: NewConfigurationDto): Resource<Unit> {
+        return try {
+            val response = apiService.putConfiguration(configuration)
+            if(response.isSuccessful) {
+                Resource.SUCCESS(Unit)
+            } else {
+                val errorBody = response.errorBody()
+                Resource.FAILURE(Throwable(errorBody.toString()))
+            }
+        } catch(e: HttpException) {
+            Resource.FAILURE(Throwable(e.message))
+        } catch(e: IOException) {
+            Resource.FAILURE(Throwable("Network error. Check your connection."))
+        }
+    }
 
     override suspend fun getTypes(): Resource<List<Type>> {
         return try {

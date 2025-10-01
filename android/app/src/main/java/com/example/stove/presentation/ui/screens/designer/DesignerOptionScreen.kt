@@ -21,79 +21,79 @@ import com.example.stove.presentation.ui.component.DesignerOptionCard
 import com.example.stove.presentation.viewmodel.DesignerUiState
 import com.example.stove.presentation.viewmodel.DesignerViewModel
 
-@Composable
-fun DesignerOptionScreen(
-    viewModel: DesignerViewModel,
-    backBehavior: () -> Unit,
-    nextBehavior: () -> Unit
-) {
-    val selectedItems by viewModel.selectedItems.collectAsState()
-    val uiState by viewModel.designerUiState.collectAsState()
-
-    Column(
-        modifier = Modifier
-            .padding(
-                start = dimensionResource(R.dimen.padding_large),
-                end = dimensionResource(R.dimen.padding_large)
-            )
-    ) {
-        Text(
-            text = stringResource(R.string.title_option),
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
-            modifier = Modifier.padding(
-                top = dimensionResource(R.dimen.padding_medium),
-                bottom = dimensionResource(R.dimen.padding_small)
-            )
-        )
-        val currentState = uiState
-        if(currentState is DesignerUiState.OPTION) {
-            when(currentState.options) {
-                is Resource.SUCCESS -> {
-                    LazyVerticalGrid(
-                        columns = GridCells.Adaptive(dimensionResource(R.dimen.cell_size)),
-                    ) {
-                        items(items = currentState.options.data, key = { option -> option.id}) { option ->
-                            val optionId = option.id
-
-                            DesignerOptionCard(
-                                title = option.name,
-                                imageUri = option.imageUrl.toUri(),
-                                isSelected = selectedItems.optionId == option.id,
-                                onClickBehavior = {
-                                    viewModel.updateOption(optionId, option.name)
-                                }
-                            )
-                        }
-                    }
-                }
-                is Resource.FAILURE -> {
-                    Text(
-                        text = "Ошибка загрузки: ${currentState.options.error.message}",
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        modifier = Modifier.padding(
-                            top = dimensionResource(R.dimen.padding_medium),
-                            bottom = dimensionResource(R.dimen.padding_small)
-                        )
-                    )
-                }
-                is Resource.LOADING -> {
-                    Text(
-                        text = "Загрузка...",
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        modifier = Modifier.padding(
-                            top = dimensionResource(R.dimen.padding_medium),
-                            bottom = dimensionResource(R.dimen.padding_small)
-                        )
-                    )
-                }
-            }
-        }
-        DesignerButtonsRow(
-            backBehavior = { backBehavior() },
-            nextBehavior = { nextBehavior() }
-        )
-    }
-}
+//@Composable
+//fun DesignerOptionScreen(
+//    viewModel: DesignerViewModel,
+//    backBehavior: () -> Unit,
+//    nextBehavior: () -> Unit
+//) {
+//    val selectedItems by viewModel.draft.collectAsState()
+//    val uiState by viewModel.designerUiState.collectAsState()
+//
+//    Column(
+//        modifier = Modifier
+//            .padding(
+//                start = dimensionResource(R.dimen.padding_large),
+//                end = dimensionResource(R.dimen.padding_large)
+//            )
+//    ) {
+//        Text(
+//            text = stringResource(R.string.title_option),
+//            style = MaterialTheme.typography.headlineMedium,
+//            color = MaterialTheme.colorScheme.onPrimaryContainer,
+//            modifier = Modifier.padding(
+//                top = dimensionResource(R.dimen.padding_medium),
+//                bottom = dimensionResource(R.dimen.padding_small)
+//            )
+//        )
+//        val currentState = uiState
+//        if(currentState is DesignerUiState.OPTION) {
+//            when(currentState.options) {
+//                is Resource.SUCCESS -> {
+//                    LazyVerticalGrid(
+//                        columns = GridCells.Adaptive(dimensionResource(R.dimen.cell_size)),
+//                    ) {
+//                        items(items = currentState.options.data, key = { option -> option.id}) { option ->
+//                            val optionId = option.id
+//
+//                            DesignerOptionCard(
+//                                title = option.name,
+//                                imageUri = option.imageUrl.toUri(),
+//                                isSelected = selectedItems.optionId == option.id,
+//                                onClickBehavior = {
+//                                    viewModel.updateOption(optionId, option.name)
+//                                }
+//                            )
+//                        }
+//                    }
+//                }
+//                is Resource.FAILURE -> {
+//                    Text(
+//                        text = "Ошибка загрузки: ${currentState.options.error.message}",
+//                        style = MaterialTheme.typography.titleLarge,
+//                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+//                        modifier = Modifier.padding(
+//                            top = dimensionResource(R.dimen.padding_medium),
+//                            bottom = dimensionResource(R.dimen.padding_small)
+//                        )
+//                    )
+//                }
+//                is Resource.LOADING -> {
+//                    Text(
+//                        text = "Загрузка...",
+//                        style = MaterialTheme.typography.titleLarge,
+//                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+//                        modifier = Modifier.padding(
+//                            top = dimensionResource(R.dimen.padding_medium),
+//                            bottom = dimensionResource(R.dimen.padding_small)
+//                        )
+//                    )
+//                }
+//            }
+//        }
+//        DesignerButtonsRow(
+//            backBehavior = { backBehavior() },
+//            nextBehavior = { nextBehavior() }
+//        )
+//    }
+//}

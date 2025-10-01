@@ -20,6 +20,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.stove.R
 import com.example.stove.presentation.navigation.NavigationDestination
 import com.example.stove.presentation.ui.component.CustomButton
+import com.example.stove.presentation.ui.component.InputField
 import com.example.stove.presentation.ui.theme.StoveTheme
 import com.example.stove.presentation.viewmodel.DesignerViewModel
 
@@ -32,7 +33,7 @@ object DesignerSummaryDestination : NavigationDestination {
 fun DesignerSummaryScreen(
     viewModel: DesignerViewModel
 ) {
-    val selectedItems by viewModel.selectedItems.collectAsState()
+    val draft by viewModel.draft.collectAsState()
 
     Column(
         modifier = Modifier.padding(
@@ -52,37 +53,34 @@ fun DesignerSummaryScreen(
         Column(
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Center,
-            modifier = Modifier.padding(
-                top = dimensionResource(R.dimen.padding_medium),
-                bottom = dimensionResource(R.dimen.padding_medium)
-            )
+            modifier = Modifier.padding(vertical = dimensionResource(R.dimen.padding_medium))
         ) {
+            InputField(
+                labelId = R.string.hint_draft_name,
+                onValueChange = { viewModel.updateDraftName(it) },
+                value = draft.draftName,
+                modifier = Modifier.padding(vertical = dimensionResource(R.dimen.padding_medium))
+            )
             Text(
-                text = "Тип печи: " + selectedItems.typeId,
+                text = "Тип печи: " + draft.type?.second,
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
                 modifier = Modifier
                     .padding(dimensionResource(R.dimen.padding_medium))
                     .align(Alignment.CenterHorizontally)
             )
+            draft.componentOptions.forEach { component ->
+                Text(
+                    text = component.value.componentName + ": " + component.value.optionName,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    modifier = Modifier
+                        .padding(dimensionResource(R.dimen.padding_medium))
+                        .align(Alignment.CenterHorizontally)
+                )
+            }
             Text(
-                text = "Компонент печи: " + selectedItems.componentName,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
-                modifier = Modifier
-                    .padding(dimensionResource(R.dimen.padding_medium))
-                    .align(Alignment.CenterHorizontally)
-            )
-            Text(
-                text = "Настройка компонента: " + selectedItems.optionName,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
-                modifier = Modifier
-                    .padding(dimensionResource(R.dimen.padding_medium))
-                    .align(Alignment.CenterHorizontally)
-            )
-            Text(
-                text = "Дополнительно: " + selectedItems.addonName,
+                text = "Дополнительно: " + draft.addons.forEach { addon -> addon.value + ", "},
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
                 modifier = Modifier
@@ -106,7 +104,7 @@ fun DesignerSummaryScreen(
             labelId = R.string.button_add_to_favourites,
             textStyle = MaterialTheme.typography.labelLarge,
             isActiveButton = false,
-            onClickBehavior = {   },
+            onClickBehavior = { viewModel.putConfiguration() },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(

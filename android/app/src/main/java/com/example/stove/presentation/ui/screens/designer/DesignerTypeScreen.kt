@@ -37,7 +37,7 @@ fun DesignerTypeScreen(
     backBehavior: () -> Unit,
     nextBehavior: () -> Unit
 ) {
-    val selectedItems by viewModel.selectedItems.collectAsState()
+    val draft by viewModel.draft.collectAsState()
     val uiState by viewModel.designerUiState.collectAsState()
 
     Column(
@@ -69,7 +69,7 @@ fun DesignerTypeScreen(
                             DesignerOptionCard(
                                 title = type.name,
                                 imageUri = type.imageUrl.toUri(),
-                                isSelected = selectedItems.typeId == typeId,
+                                isSelected = draft.type?.first == typeId,
                                 onClickBehavior = {
                                     viewModel.updateType(typeId, type.name)
                                 }

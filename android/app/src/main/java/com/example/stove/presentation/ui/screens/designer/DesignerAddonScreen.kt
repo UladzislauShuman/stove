@@ -27,7 +27,7 @@ fun DesignerAddonScreen(
     backBehavior: () -> Unit,
     nextBehavior: () -> Unit
 ) {
-    val selectedItems by viewModel.selectedItems.collectAsState()
+    val draft by viewModel.draft.collectAsState()
     val uiState by viewModel.designerUiState.collectAsState()
 
     Column(
@@ -59,7 +59,7 @@ fun DesignerAddonScreen(
                             DesignerOptionCard(
                                 title = addon.name,
                                 imageUri = "".toUri(),
-                                isSelected = selectedItems.addonId == addonId,
+                                isSelected = draft.addons.containsKey(addonId),
                                 onClickBehavior = {
                                     viewModel.updateAddon(addonId, addon.name)
                                 }

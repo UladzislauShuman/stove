@@ -8,6 +8,7 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -34,7 +35,6 @@ import com.example.stove.presentation.ui.screens.designer.DesignerAddonScreen
 import com.example.stove.presentation.ui.screens.designer.DesignerComponentScreen
 import com.example.stove.presentation.ui.screens.designer.DesignerEntryDestination
 import com.example.stove.presentation.ui.screens.designer.DesignerEntryScreen
-import com.example.stove.presentation.ui.screens.designer.DesignerOptionScreen
 import com.example.stove.presentation.ui.screens.designer.DesignerSummaryScreen
 import com.example.stove.presentation.ui.screens.designer.DesignerTypeScreen
 import com.example.stove.presentation.ui.screens.home.HomeDestination
@@ -46,6 +46,7 @@ import com.example.stove.presentation.viewmodel.AuthViewModel
 import com.example.stove.presentation.viewmodel.DesignerViewModel
 import com.example.stove.presentation.viewmodel.GlobalViewModel
 import com.example.stove.presentation.viewmodel.ProfileViewModel
+import com.example.stove.presentation.viewmodel.SnackbarEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -87,6 +88,20 @@ fun StoveNavGraph(
     val shouldShowNavigationBar = when(currentRoute) {
         "auth_graph/login", "auth_graph/register" -> false
         else -> true
+    }
+
+    val snackbarHostState = globalViewModel.snackbarHostState
+
+    LaunchedEffect(Unit) {
+        globalViewModel.snackbarEventBus.snackbarEvent.collect { event ->
+            when(event) {
+                is SnackbarEvent.ShowSnackbar ->
+                    snackbarHostState.showSnackbar(
+                        message = event.message,
+                        duration = SnackbarDuration.Short
+                    )
+            }
+        }
     }
 
     LaunchedEffect(key1 = authState) {
@@ -292,28 +307,28 @@ fun StoveNavGraph(
                             designerViewModel.loadTypes()
                             navController.navigate("designer_graph/type") },
                         nextBehavior = {
-                            designerViewModel.loadOptions()
-                            navController.navigate("designer_graph/option") },
-                        viewModel = designerViewModel
-                    )
-                }
-                composable(route = "designer_graph/option") { backStackEntry ->
-                    val parentEntry = remember(backStackEntry) {
-                        navController.getBackStackEntry("designer_graph")
-                    }
-                    val designerViewModel: DesignerViewModel = hiltViewModel(
-                        viewModelStoreOwner = parentEntry
-                    )
-                    DesignerOptionScreen(
-                        backBehavior = {
-                            designerViewModel.loadComponents()
-                            navController.navigate("designer_graph/component") },
-                        nextBehavior = {
                             designerViewModel.loadAddons()
                             navController.navigate("designer_graph/addon") },
                         viewModel = designerViewModel
                     )
                 }
+//                composable(route = "designer_graph/option") { backStackEntry ->
+//                    val parentEntry = remember(backStackEntry) {
+//                        navController.getBackStackEntry("designer_graph")
+//                    }
+//                    val designerViewModel: DesignerViewModel = hiltViewModel(
+//                        viewModelStoreOwner = parentEntry
+//                    )
+//                    DesignerOptionScreen(
+//                        backBehavior = {
+//                            designerViewModel.loadComponents()
+//                            navController.navigate("designer_graph/component") },
+//                        nextBehavior = {
+//                            designerViewModel.loadAddons()
+//                            navController.navigate("designer_graph/addon") },
+//                        viewModel = designerViewModel
+//                    )
+//                }
                 composable(route = "designer_graph/addon") { backStackEntry ->
                     val parentEntry = remember(backStackEntry) {
                         navController.getBackStackEntry("designer_graph")
@@ -323,7 +338,7 @@ fun StoveNavGraph(
                     )
                     DesignerAddonScreen(
                         backBehavior = {
-                            designerViewModel.loadOptions()
+                            designerViewModel.loadComponents()
                             navController.navigate("designer_graph/option") },
                         nextBehavior = { navController.navigate("designer_graph/summary") },
                         viewModel = designerViewModel

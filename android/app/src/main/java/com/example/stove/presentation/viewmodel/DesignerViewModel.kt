@@ -1,15 +1,19 @@
 package com.example.stove.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import com.example.stove.core.Resource
+import com.example.stove.domain.model.designer.Configuration
 import com.example.stove.domain.usecase.designer.GetAddonsUseCase
 import com.example.stove.domain.usecase.designer.GetComponentsUseCase
 import com.example.stove.domain.usecase.designer.GetOptionsUseCase
 import com.example.stove.domain.usecase.designer.GetTypesUseCase
+import com.example.stove.domain.usecase.designer.PutConfigurationUseCase
 import com.example.stove.presentation.dto.AddonUiModel
+import com.example.stove.presentation.dto.ComponentOption
 import com.example.stove.presentation.dto.ComponentUiModel
+import com.example.stove.presentation.dto.ConfigDraft
 import com.example.stove.presentation.dto.OptionUiModel
 import com.example.stove.presentation.dto.TypeUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +25,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-/** Вот и она, UI-модель */
 sealed class DesignerUiState {
     data object ENTRY : DesignerUiState()
     data class TYPE(val types: Resource<List<TypeUiModel>>) : DesignerUiState()
@@ -36,43 +39,35 @@ sealed interface DesignerNavigationEvents {
     data object ToStart : DesignerNavigationEvents
 }
 
-data class SelectedItems(
-    val typeId: Int = -1,
-    val typeName: String = "",
-
-    val componentId: Int = -1,
-    val componentName: String = "",
-
-    val optionId: Int = -1,
-    val optionName: String = "",
-
-    val addonId: Int = -1,
-    val addonName: String = ""
-)
-
-/**
- * Когда ViewModel начнёт расти, нужно сделать реализацию через UI-модель
- */
 @HiltViewModel
-class DesignerViewModel @Inject constructor(): ViewModel() {
+class DesignerViewModel @Inject constructor(
+    private val getTypesCase: GetTypesUseCase,
+    private val getComponentsCase: GetComponentsUseCase,
+    private val getOptionsCase: GetOptionsUseCase,
+    private val getAddonsCase: GetAddonsUseCase,
+    private val putConfigurationCase: PutConfigurationUseCase,
+    private val snackbarEventSource: SnackbarEventSource
+): ViewModel() {
     private val _navigationEvent = Channel<DesignerNavigationEvents>()
     val navigationEvent = _navigationEvent.receiveAsFlow()
 
     private val _designerUiState = MutableStateFlow<DesignerUiState>(DesignerUiState.ENTRY)
     val designerUiState: StateFlow<DesignerUiState> = _designerUiState
 
+    private val _draft = MutableStateFlow(ConfigDraft())
+    val draft: StateFlow<ConfigDraft> = _draft
 
-    private val _selectedItems = MutableStateFlow(SelectedItems())
-    val selectedItems: StateFlow<SelectedItems> = _selectedItems
-
-    @Inject
-    lateinit var getTypesCase: GetTypesUseCase
-    @Inject
-    lateinit var getComponentsCase: GetComponentsUseCase
-    @Inject
-    lateinit var getOptionsCase: GetOptionsUseCase
-    @Inject
-    lateinit var getAddonsCase: GetAddonsUseCase
+    fun putConfiguration() {
+        viewModelScope.launch {
+            val response = putConfigurationCase.invoke(_draft.value.toDomain())
+            if(response is Resource.SUCCESS) {
+                snackbarEventSource.postSnackbar("Конфигурация успешно добавлена.")
+            } else if(response is Resource.FAILURE){
+                snackbarEventSource.postSnackbar("Ошибка при добавлении конфигурации.")
+                Log.e("DesignerViewModel", "Error while adding configuration: " + (response.error.message ?: "Unknown error."))
+            }
+        }
+    }
 
     fun loadTypes() {
         viewModelScope.launch {
@@ -82,21 +77,38 @@ class DesignerViewModel @Inject constructor(): ViewModel() {
             )
         }
     }
+
+
     fun loadComponents() {
         viewModelScope.launch {
             _designerUiState.value = DesignerUiState.COMPONENT(Resource.LOADING())
-            _designerUiState.value = DesignerUiState.COMPONENT(
-                getComponentsCase.invoke(_selectedItems.value.typeId)
-            )
+            val type = _draft.value.type
+            if(type != null) {
+                _designerUiState.value = DesignerUiState.COMPONENT(
+                    getComponentsCase.invoke(type.first)
+                )
+            } else {
+                _designerUiState.value = DesignerUiState.COMPONENT(
+                    Resource.FAILURE(Throwable("Type id is null."))
+                )
+            }
+
         }
     }
 
     fun loadOptions() {
         viewModelScope.launch {
             _designerUiState.value = DesignerUiState.OPTION(Resource.LOADING())
-            _designerUiState.value = DesignerUiState.OPTION(
-                getOptionsCase.invoke(componentId = _selectedItems.value.componentId)
-            )
+            val component = _draft.value.selectedComponent
+            if(component != null) {
+                _designerUiState.value = DesignerUiState.OPTION(
+                    getOptionsCase.invoke(componentId = component.first)
+                )
+            } else {
+                _designerUiState.value = DesignerUiState.OPTION(
+                    Resource.FAILURE(Throwable("Component id is null."))
+                )
+            }
         }
     }
 
@@ -110,48 +122,45 @@ class DesignerViewModel @Inject constructor(): ViewModel() {
     }
 
     fun updateType(typeId: Int, typeName: String) {
-        _selectedItems.update {
-            selectedItems -> selectedItems.copy(typeId = typeId, typeName = typeName)
+        _draft.update {
+            draft -> draft.copy(type = Pair(typeId, typeName))
         }
     }
 
     fun updateComponent(componentId: Int, componentName: String) {
-        _selectedItems.update {
-            selectedItems -> selectedItems.copy(componentId = componentId, componentName = componentName)
+        _draft.update {
+            draft -> draft.copy(selectedComponent = Pair(componentId, componentName))
         }
     }
 
     fun updateOption(optionId: Int, optionName: String) {
-        _selectedItems.update {
-                selectedItems -> selectedItems.copy(optionId = optionId, optionName = optionName)
+        val component = _draft.value.selectedComponent
+        if(component == null) { return }
+        val newComponentOptions = _draft.value.componentOptions +
+                (component.first to ComponentOption(component.second, optionId, optionName))
+        _draft.update { draft ->
+            draft.copy(componentOptions = newComponentOptions)
         }
     }
 
     fun updateAddon(addonId: Int, addonName: String) {
-        _selectedItems.update {
-                selectedItems -> selectedItems.copy(addonId = addonId, addonName = addonName)
+        val newAddons = _draft.value.addons + (addonId to addonName)
+        _draft.update {
+                draft -> draft.copy(addons = newAddons)
         }
     }
 
-    fun order() {
-
+    fun updateDraftName(draftName: String) {
+        _draft.update { draft ->
+            draft.copy(draftName = draftName)
+        }
     }
 
-    fun addToFavourites() {
-//        val type = _selectedType.value
-//        val material = _selectedMaterial.value
-//
-//        viewModelScope.launch {
-//            if(type == null || material == null) {
-//                return@launch
-//            } else {
-//                val favourite =
-//                    Favourite(
-//                        type = type,
-//                        material = material
-//                    )
-//                favouriteRepository.insert(favourite)
-//            }
-//        }
-    }
+    fun ConfigDraft.toDomain() = Configuration(
+        type?.first,
+        componentOptions.keys.toList(),
+        addons.keys.toList(),
+        draftName
+        )
+
 }
