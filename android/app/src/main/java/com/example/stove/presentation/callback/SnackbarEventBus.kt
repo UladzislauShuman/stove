@@ -1,5 +1,6 @@
 package com.example.stove.presentation.callback
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.stove.presentation.viewmodel.SnackbarEvent
 import com.example.stove.presentation.viewmodel.SnackbarEventSource
@@ -20,6 +21,7 @@ class SnackbarEventBus @Inject constructor(
     override fun postSnackbar(message: String) {
         applicationScope.launch {
             _snackBarEvents.send(SnackbarEvent.ShowSnackbar(message))
+            Log.i("SnackbarEvent", "Snackbar event with message $message send.")
         }
     }
 }

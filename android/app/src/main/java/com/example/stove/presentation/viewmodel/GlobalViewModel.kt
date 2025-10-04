@@ -32,13 +32,12 @@ class GlobalViewModel @Inject constructor(
 
     private val observeAuthStateUseCase: ObserveAuthStateUseCase,
 
-    private val checkAuthUseCase: CheckAuthUseCase
+    private val checkAuthUseCase: CheckAuthUseCase,
+
+    val snackbarEventBus: SnackbarEventBus
 ) : ViewModel(){
     val authState: StateFlow<AuthState> = observeAuthStateUseCase.invoke()
     val snackbarHostState = SnackbarHostState()
-
-    @Inject
-    lateinit var snackbarEventBus: SnackbarEventBus
 
     init {
         viewModelScope.launch {

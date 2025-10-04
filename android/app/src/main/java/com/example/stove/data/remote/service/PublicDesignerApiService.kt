@@ -13,7 +13,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 
-interface DesignerApiService {
+interface PublicDesignerApiService {
     @GET("constructor-data/stove-types")
     suspend fun getTypes() : List<TypeDto>
 
@@ -29,7 +29,4 @@ interface DesignerApiService {
 
     @GET("constructor-data/addons")
     suspend fun getAddons() : List<AddonDto>
-
-    @POST("api/v1/configurations")
-    suspend fun putConfiguration(@Body newConfigurationDto: NewConfigurationDto) : Response<NewConfigurationResponse>
 }

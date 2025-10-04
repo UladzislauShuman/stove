@@ -7,7 +7,7 @@ import com.example.stove.core.Resource
 import com.example.stove.data.dto.LoginRequest
 import com.example.stove.data.dto.RegisterRequest
 import com.example.stove.data.local.TokenManager
-import com.example.stove.data.remote.service.AuthApiService
+import com.example.stove.data.remote.service.AuthenticationApiService
 import com.example.stove.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +15,7 @@ import okio.IOException
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
-    private val authService: AuthApiService,
+    private val authService: AuthenticationApiService,
     private val tokenManager: TokenManager
 ) : AuthRepository {
     private val _authState = MutableStateFlow<AuthState>(AuthState.Unauthenticated)

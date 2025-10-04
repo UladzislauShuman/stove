@@ -13,6 +13,7 @@ val Amber = Color(0xFFFFAF3F)
 val DarkBackgroundSurface = RavenBlack
 val DarkPrimaryContainerColor = SlateBlue
 val DarkSecondaryContainerColor = Color(0xFF4A4458)
+val DarkTertiaryContainerColor = Color(0x554A4458)
 val OnDarkPrimaryContainerColor = Color(0xFFFEEDD2)
 val OnDarkSecondaryContainerColor = White
 val DarkPlaceholderSurface = Color(0xFF040506)

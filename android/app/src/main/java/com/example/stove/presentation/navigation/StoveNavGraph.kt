@@ -79,7 +79,6 @@ fun StoveNavGraph(
             "designer_graph/entry" to 3,
             "designer_graph/type" to 4,
             "designer_graph/component" to 5,
-            "designer_graph/option" to 6,
             "designer_graph/addon" to 7,
             "designer_graph/summary" to 8,
 
@@ -312,23 +311,6 @@ fun StoveNavGraph(
                         viewModel = designerViewModel
                     )
                 }
-//                composable(route = "designer_graph/option") { backStackEntry ->
-//                    val parentEntry = remember(backStackEntry) {
-//                        navController.getBackStackEntry("designer_graph")
-//                    }
-//                    val designerViewModel: DesignerViewModel = hiltViewModel(
-//                        viewModelStoreOwner = parentEntry
-//                    )
-//                    DesignerOptionScreen(
-//                        backBehavior = {
-//                            designerViewModel.loadComponents()
-//                            navController.navigate("designer_graph/component") },
-//                        nextBehavior = {
-//                            designerViewModel.loadAddons()
-//                            navController.navigate("designer_graph/addon") },
-//                        viewModel = designerViewModel
-//                    )
-//                }
                 composable(route = "designer_graph/addon") { backStackEntry ->
                     val parentEntry = remember(backStackEntry) {
                         navController.getBackStackEntry("designer_graph")
@@ -339,7 +321,7 @@ fun StoveNavGraph(
                     DesignerAddonScreen(
                         backBehavior = {
                             designerViewModel.loadComponents()
-                            navController.navigate("designer_graph/option") },
+                            navController.navigate("designer_graph/component") },
                         nextBehavior = { navController.navigate("designer_graph/summary") },
                         viewModel = designerViewModel
                     )

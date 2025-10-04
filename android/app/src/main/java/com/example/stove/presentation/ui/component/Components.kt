@@ -42,6 +42,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -162,41 +163,45 @@ fun DesignerOptionCard(
     onClickBehavior: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Card (
-        shape = MaterialTheme.shapes.medium,
-        colors = CardDefaults.cardColors(
-            containerColor =
-                if(isSelected) MaterialTheme.colorScheme.secondaryContainer
-                else MaterialTheme.colorScheme.background,
-        ),
-        modifier = modifier.clickable{ onClickBehavior() }
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+    Box(modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))) {
+        Card(
+            shape = MaterialTheme.shapes.medium,
+            colors = CardDefaults.cardColors(
+                containerColor =
+                    if (isSelected) MaterialTheme.colorScheme.tertiaryContainer
+                    else MaterialTheme.colorScheme.background,
+            ),
+            modifier = modifier
+                .clickable { onClickBehavior() }
         ) {
-            Card(
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.background
-                ),
-                shape = MaterialTheme.shapes.large,
-                modifier = Modifier
-                    .padding(
-                        bottom = dimensionResource(R.dimen.padding_medium)
-                    )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
             ) {
-                AsyncImage(
-                    model = imageUri,
-                    contentDescription = null,
-                    contentScale = ContentScale.Fit
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.background
+                    ),
+                    shape = MaterialTheme.shapes.large,
+                    modifier = Modifier
+                        .padding(
+                            bottom = dimensionResource(R.dimen.padding_medium)
+                        )
+                ) {
+                    AsyncImage(
+                        model = imageUri,
+                        contentDescription = null,
+                        contentScale = ContentScale.Fit
+                    )
+                }
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    textAlign = TextAlign.Center
                 )
             }
-            Text(
-                text = title,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
         }
     }
 }
@@ -255,13 +260,6 @@ fun LargeFavouriteCard(
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier
                     .padding(end = dimensionResource(R.dimen.padding_small))
-            )
-            Text(
-                text = "Материал: " + favourite.material,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
-                modifier = Modifier
-//                .padding(dimensionResource(R.dimen.padding_medium))
             )
         }
     }

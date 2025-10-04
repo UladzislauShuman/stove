@@ -4,13 +4,13 @@ import android.content.Context
 import com.example.stove.data.infrastructure.OkHttpCacheManager
 import com.example.stove.data.remote.interceptor.AuthAuthenticator
 import com.example.stove.data.remote.interceptor.AuthInterceptor
-import com.example.stove.data.remote.service.AuthApiService
-import com.example.stove.data.remote.service.DesignerApiService
+import com.example.stove.data.remote.service.AuthDesignerApiService
+import com.example.stove.data.remote.service.AuthenticationApiService
+import com.example.stove.data.remote.service.PublicDesignerApiService
 import com.example.stove.data.remote.service.ProfileApiService
 import com.example.stove.domain.infrastructure.NetworkCacheManager
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,7 +25,7 @@ import java.io.File
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
-private const val baseUrl = "https://targeted-donate-maybe-physics.trycloudflare.com/"
+private const val baseUrl = "https://verse-twice-lou-capacity.trycloudflare.com/"
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -128,14 +128,20 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun getDesignerService(@PublicRetrofit retrofit: Retrofit) : DesignerApiService {
-        return retrofit.create(DesignerApiService::class.java)
+    fun getPublicDesignerService(@PublicRetrofit retrofit: Retrofit) : PublicDesignerApiService {
+        return retrofit.create(PublicDesignerApiService::class.java)
     }
 
     @Provides
     @Singleton
-    fun getAuthService(@PublicRetrofit retrofit: Retrofit) : AuthApiService {
-        return retrofit.create(AuthApiService::class.java)
+    fun getAuthDesignerService(@AuthRetrofit retrofit: Retrofit) : AuthDesignerApiService {
+        return retrofit.create(AuthDesignerApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun getAuthService(@PublicRetrofit retrofit: Retrofit) : AuthenticationApiService {
+        return retrofit.create(AuthenticationApiService::class.java)
     }
 
     @Provides

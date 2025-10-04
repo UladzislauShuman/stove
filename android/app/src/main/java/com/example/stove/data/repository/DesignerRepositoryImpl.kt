@@ -7,7 +7,8 @@ import com.example.stove.data.dto.ComponentDto
 import com.example.stove.data.dto.NewConfigurationDto
 import com.example.stove.data.dto.OptionDto
 import com.example.stove.data.dto.TypeDto
-import com.example.stove.data.remote.service.DesignerApiService
+import com.example.stove.data.remote.service.AuthDesignerApiService
+import com.example.stove.data.remote.service.PublicDesignerApiService
 import com.example.stove.domain.model.designer.Addon
 import com.example.stove.domain.model.designer.Component
 import com.example.stove.domain.model.designer.Option
@@ -18,12 +19,13 @@ import retrofit2.HttpException
 import javax.inject.Inject
 
 class DesignerRepositoryImpl @Inject constructor(
-    private val apiService: DesignerApiService
+    private val publicApiService: PublicDesignerApiService,
+    private val authApiService: AuthDesignerApiService
 ) : DesignerRepository {
 
     override suspend fun putConfiguration(configuration: NewConfigurationDto): Resource<Unit> {
         return try {
-            val response = apiService.putConfiguration(configuration)
+            val response = authApiService.putConfiguration(configuration)
             if(response.isSuccessful) {
                 Resource.SUCCESS(Unit)
             } else {
@@ -39,7 +41,7 @@ class DesignerRepositoryImpl @Inject constructor(
 
     override suspend fun getTypes(): Resource<List<Type>> {
         return try {
-            val remoteTypes = apiService.getTypes()
+            val remoteTypes = publicApiService.getTypes()
             Resource.SUCCESS(remoteTypes.map {it.toDomain()})
         } catch(e: HttpException) {
             Log.e("DesignerRepository",e.message ?: "Unknown Error")
@@ -49,7 +51,7 @@ class DesignerRepositoryImpl @Inject constructor(
 
     override suspend fun getComponents(typeId: Int): Resource<List<Component>> {
         return try {
-            val remoteComponents = apiService.getComponents(typeId)
+            val remoteComponents = publicApiService.getComponents(typeId)
             Resource.SUCCESS(remoteComponents.map {it.toDomain()})
         } catch(e: HttpException) {
             Log.e("DesignerRepository",e.message ?: "Unknown Error")
@@ -58,7 +60,7 @@ class DesignerRepositoryImpl @Inject constructor(
     }
     override suspend fun getOptions(componentId: Int): Resource<List<Option>> {
         return try {
-            val remoteOptions = apiService.getOptions(componentId)
+            val remoteOptions = publicApiService.getOptions(componentId)
             Resource.SUCCESS(remoteOptions.map {it.toDomain()})
         } catch(e: HttpException) {
             Log.e("DesignerRepository",e.message ?: "Unknown Error")
@@ -67,7 +69,7 @@ class DesignerRepositoryImpl @Inject constructor(
     }
     override suspend fun getAddons(): Resource<List<Addon>> {
         return try {
-            val remoteTypes = apiService.getAddons()
+            val remoteTypes = publicApiService.getAddons()
             Resource.SUCCESS(remoteTypes.map {it.toDomain()})
         } catch(e: HttpException) {
             Log.e("DesignerRepository",e.message ?: "Unknown Error")
