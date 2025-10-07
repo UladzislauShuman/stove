@@ -1,4 +1,4 @@
-package com.example.stove.presentation.dto
+package com.example.stove.presentation.model
 
 data class OptionUiModel(
     val id: Int,

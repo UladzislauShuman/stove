@@ -3,7 +3,7 @@ package com.example.stove.domain.usecase.designer
 import com.example.stove.core.Resource
 import com.example.stove.domain.model.designer.Addon
 import com.example.stove.domain.repository.DesignerRepository
-import com.example.stove.presentation.dto.AddonUiModel
+import com.example.stove.presentation.model.AddonUiModel
 import javax.inject.Inject
 
 class GetAddonsUseCase @Inject constructor(

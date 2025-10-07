@@ -3,7 +3,7 @@ package com.example.stove.domain.usecase.profile
 import com.example.stove.core.Resource
 import com.example.stove.domain.model.profile.UserInfo
 import com.example.stove.domain.repository.ProfileRepository
-import com.example.stove.presentation.dto.UserInfoUiModel
+import com.example.stove.presentation.model.UserInfoUiModel
 import javax.inject.Inject
 
 class GetUserInfoUseCase @Inject constructor(

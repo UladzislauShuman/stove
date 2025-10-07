@@ -2,14 +2,9 @@ package com.example.stove.data.remote.service
 
 import com.example.stove.data.dto.AddonDto
 import com.example.stove.data.dto.ComponentDto
-import com.example.stove.data.dto.NewConfigurationDto
-import com.example.stove.data.dto.NewConfigurationResponse
 import com.example.stove.data.dto.OptionDto
 import com.example.stove.data.dto.TypeDto
-import retrofit2.Response
-import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.POST
 import retrofit2.http.Path
 
 

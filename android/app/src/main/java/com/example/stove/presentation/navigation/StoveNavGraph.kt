@@ -35,6 +35,7 @@ import com.example.stove.presentation.ui.screens.designer.DesignerAddonScreen
 import com.example.stove.presentation.ui.screens.designer.DesignerComponentScreen
 import com.example.stove.presentation.ui.screens.designer.DesignerEntryDestination
 import com.example.stove.presentation.ui.screens.designer.DesignerEntryScreen
+import com.example.stove.presentation.ui.screens.designer.DesignerNameScreen
 import com.example.stove.presentation.ui.screens.designer.DesignerSummaryScreen
 import com.example.stove.presentation.ui.screens.designer.DesignerTypeScreen
 import com.example.stove.presentation.ui.screens.home.HomeDestination
@@ -79,7 +80,8 @@ fun StoveNavGraph(
             "designer_graph/entry" to 3,
             "designer_graph/type" to 4,
             "designer_graph/component" to 5,
-            "designer_graph/addon" to 7,
+            "designer_graph/addon" to 6,
+            "designer_graph/name" to 7,
             "designer_graph/summary" to 8,
 
             "profile_graph/main" to 9
@@ -322,7 +324,23 @@ fun StoveNavGraph(
                         backBehavior = {
                             designerViewModel.loadComponents()
                             navController.navigate("designer_graph/component") },
-                        nextBehavior = { navController.navigate("designer_graph/summary") },
+                        nextBehavior = { navController.navigate("designer_graph/name") },
+                        viewModel = designerViewModel
+                    )
+                }
+                composable(route = "designer_graph/name") { backStackEntry ->
+                    val parentEntry = remember(backStackEntry) {
+                        navController.getBackStackEntry("designer_graph")
+                    }
+                    val designerViewModel: DesignerViewModel = hiltViewModel(parentEntry)
+
+                    DesignerNameScreen(
+                        backBehavior = {
+                            navController.navigate("designer_graph/addon")
+                            designerViewModel.loadAddons() },
+                        nextBehavior = {
+                            navController.navigate("designer_graph/summary")
+                            designerViewModel.putConfiguration() },
                         viewModel = designerViewModel
                     )
                 }

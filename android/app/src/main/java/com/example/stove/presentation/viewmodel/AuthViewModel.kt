@@ -7,8 +7,8 @@ import com.example.stove.domain.model.auth.Login
 import com.example.stove.domain.model.auth.Register
 import com.example.stove.domain.usecase.auth.LoginUseCase
 import com.example.stove.domain.usecase.auth.RegisterUseCase
-import com.example.stove.presentation.dto.LoginUiModel
-import com.example.stove.presentation.dto.RegisterUiModel
+import com.example.stove.presentation.model.LoginUiModel
+import com.example.stove.presentation.model.RegisterUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow

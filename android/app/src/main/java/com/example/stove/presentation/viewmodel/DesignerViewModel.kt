@@ -1,7 +1,6 @@
 package com.example.stove.presentation.viewmodel
 
 import android.util.Log
-import androidx.activity.compose.PredictiveBackHandler
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stove.core.Resource
@@ -11,12 +10,13 @@ import com.example.stove.domain.usecase.designer.GetComponentsUseCase
 import com.example.stove.domain.usecase.designer.GetOptionsUseCase
 import com.example.stove.domain.usecase.designer.GetTypesUseCase
 import com.example.stove.domain.usecase.designer.PutConfigurationUseCase
-import com.example.stove.presentation.dto.AddonUiModel
-import com.example.stove.presentation.dto.ComponentOption
-import com.example.stove.presentation.dto.ComponentUiModel
-import com.example.stove.presentation.dto.ConfigDraft
-import com.example.stove.presentation.dto.OptionUiModel
-import com.example.stove.presentation.dto.TypeUiModel
+import com.example.stove.presentation.model.AddonUiModel
+import com.example.stove.presentation.model.ComponentOption
+import com.example.stove.presentation.model.ComponentUiModel
+import com.example.stove.presentation.model.ConfigDraft
+import com.example.stove.presentation.model.ExtendedConfigUiModel
+import com.example.stove.presentation.model.OptionUiModel
+import com.example.stove.presentation.model.TypeUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,7 +24,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.io.Serializable
 import javax.inject.Inject
 
 sealed class DesignerUiState {
@@ -36,7 +35,9 @@ sealed class DesignerUiState {
     ) : DesignerUiState()
     data class ADDON(val addons: Resource<List<AddonUiModel>>) : DesignerUiState()
 
-    data object Summary : DesignerUiState()
+    data object NAME : DesignerUiState()
+
+    data class SUMMARY(val extendedConfig: Resource<ExtendedConfigUiModel>) : DesignerUiState()
 }
 
 sealed interface DesignerNavigationEvents {
@@ -63,10 +64,16 @@ class DesignerViewModel @Inject constructor(
 
     fun putConfiguration() {
         viewModelScope.launch {
+            _designerUiState.value = DesignerUiState.SUMMARY(Resource.LOADING())
             val response = putConfigurationCase.invoke(_draft.value.toDomain())
             if(response is Resource.SUCCESS) {
+                if(_designerUiState.value is DesignerUiState.SUMMARY) {
+                    _designerUiState.value =
+                        DesignerUiState.SUMMARY(Resource.SUCCESS(response.data))
+                }
                 snackbarEventSource.postSnackbar("Конфигурация успешно добавлена.")
             } else if(response is Resource.FAILURE){
+                _designerUiState.value = DesignerUiState.SUMMARY(Resource.FAILURE(response.error))
                 Log.e("DesignerViewModel", "Error adding configuration.")
                 snackbarEventSource.postSnackbar("Ошибка при добавлении конфигурации.")
                 Log.e("DesignerViewModel", "Error while adding configuration: " + (response.error.message ?: "Unknown error."))

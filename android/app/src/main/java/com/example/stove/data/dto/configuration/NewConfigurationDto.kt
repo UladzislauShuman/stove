@@ -1,5 +1,7 @@
-package com.example.stove.data.dto
+package com.example.stove.data.dto.configuration
 
+import com.example.stove.data.dto.AddonIdDto
+import com.example.stove.data.dto.OptionIdDto
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 

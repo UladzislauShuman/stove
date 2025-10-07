@@ -25,7 +25,7 @@ import java.io.File
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
-private const val baseUrl = "https://verse-twice-lou-capacity.trycloudflare.com/"
+private const val baseUrl = "https://local-abs-broadcast-ide.trycloudflare.com/"
 
 @Module
 @InstallIn(SingletonComponent::class)
